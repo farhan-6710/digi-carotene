@@ -20,7 +20,7 @@ export function HomePage() {
     <section className="space-y-8">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">
-          Post Management
+          Posts Management
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Snapshot of monthly post performance and client activity.
