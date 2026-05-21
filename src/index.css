@@ -1,0 +1,251 @@
+@import url("https://fonts.googleapis.com/css2?family=Ovo&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(95.122% 0.01709 67.481); /* Warm Sand/Parchment */
+  --foreground: oklch(0.15 0.04 45); /* Deep Espresso */
+  --card: oklch(0.97 0.01 70);
+  --card-foreground: oklch(0.15 0.04 45);
+  --popover: oklch(0.97 0.01 70);
+  --popover-foreground: oklch(0.15 0.04 45);
+  --primary: oklch(0.28 0.05 45); /* Roasted Bean */
+  --primary-foreground: oklch(0.98 0.01 70);
+  --secondary: oklch(0.85 0.04 80); /* Latte Cream */
+  --secondary-foreground: oklch(0.28 0.05 45);
+  --muted: oklch(93.834% 0.02403 67.432);
+  --muted-foreground: oklch(0.45 0.03 45);
+  --accent: oklch(0.7 0.12 70); /* Caramel Gold */
+  --accent-foreground: oklch(0.2 0.04 45);
+  --destructive: oklch(0.45 0.12 25);
+  --destructive-foreground: oklch(0.98 0.01 70);
+  --border: oklch(0.85 0.03 50);
+  --input: oklch(0.85 0.03 50);
+  --ring: oklch(0.28 0.05 45);
+  --chart-1: oklch(0.55 0.15 45);
+  --chart-2: oklch(0.65 0.12 70);
+  --chart-3: oklch(0.45 0.08 30);
+  --chart-4: oklch(0.75 0.1 80);
+  --chart-5: oklch(0.35 0.05 45);
+  --status-draft: oklch(0.72 0.02 60);
+  --status-scheduled: oklch(0.62 0.12 235);
+  --status-posted: oklch(0.62 0.14 150);
+  --status-missed: oklch(0.58 0.18 25);
+  /* ── Sidebar: light parchment ── */
+  --sidebar: oklch(
+    0.97 0.01 70
+  ); /* barely-there warm white, slightly cooler than card */
+  --sidebar-foreground: oklch(
+    0.2 0.04 45
+  ); /* same deep espresso as --foreground */
+  --sidebar-border: oklch(
+    0.88 0.02 60
+  ); /* a touch warmer/deeper than --border */
+
+  --sidebar-primary: oklch(0.28 0.05 45); /* matches --primary */
+  --sidebar-primary-foreground: oklch(0.98 0.01 70);
+
+  --sidebar-accent: oklch(
+    0.91 0.018 65
+  ); /* active nav item bg — warm sand dip */
+  --sidebar-accent-foreground: oklch(
+    0.22 0.05 45
+  ); /* dark roast text on active */
+
+  --sidebar-ring: oklch(0.7 0.12 70); /* caramel gold, same as --accent */
+  --font-sans: "Ovo", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Ovo", ui-serif, Georgia, serif;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular, monospace;
+  --radius: 0.5rem;
+  --shadow-x: 0;
+  --shadow-y: 1px;
+  --shadow-blur: 3px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.1;
+  --shadow-color: oklch(0.2 0.05 45);
+  --shadow-2xs: 0 1px 3px 0px oklch(0.2 0.05 45 / 0.06);
+  --shadow-xs: 0 1px 3px 0px oklch(0.2 0.05 45 / 0.08);
+  --shadow-sm:
+    0 1px 3px 0px oklch(0.2 0.05 45 / 0.1),
+    0 1px 2px -1px oklch(0.2 0.05 45 / 0.08);
+  --shadow:
+    0 1px 3px 0px oklch(0.2 0.05 45 / 0.12),
+    0 1px 2px -1px oklch(0.2 0.05 45 / 0.1);
+  --shadow-md:
+    0 1px 3px 0px oklch(0.2 0.05 45 / 0.12),
+    0 2px 4px -1px oklch(0.2 0.05 45 / 0.12);
+  --shadow-lg:
+    0 2px 6px 0px oklch(0.2 0.05 45 / 0.14),
+    0 4px 8px -1px oklch(0.2 0.05 45 / 0.12);
+  --shadow-xl:
+    0 2px 8px 0px oklch(0.2 0.05 45 / 0.14),
+    0 8px 16px -2px oklch(0.2 0.05 45 / 0.14);
+  --shadow-2xl: 0 4px 16px 0px oklch(0.2 0.05 45 / 0.22);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  /* ✨ Warm golden shimmer */
+  --glitter-1: oklch(0.7 0.12 70 / 0.3);
+  --glitter-2: oklch(0.85 0.06 80 / 0.2);
+  --glitter-3: oklch(0.95 0.02 70 / 0.1);
+  --shimmer-start: oklch(0.25 0.04 45);
+  --shimmer-mid: oklch(0.7 0.12 70);
+  --shimmer-end: oklch(0.25 0.04 45);
+}
+
+.dark {
+  /* ── Surfaces: one hue, stepping up in luminance ── */
+  --background: oklch(13.293% 0.01452 30.821);
+  --card: oklch(16.268% 0.01374 44.477);
+  --popover: oklch(0.14 0.018 42);
+  --muted: oklch(0.23 0.02 42); /* +4L above card */
+  --accent: oklch(0.22 0.024 42); /* hover/pressed states */
+  --border: oklch(0.28 0.02 40);
+  --input: oklch(0.18 0.02 42); /* same as muted */
+
+  /* ── Sidebar: one stop darker than bg ── */
+  --sidebar: oklch(15.688% 0.01139 39.451);
+  --sidebar-border: oklch(0.28 0.02 40);
+  --sidebar-accent: oklch(0.16 0.02 42); /* active nav item bg */
+  --sidebar-accent-foreground: oklch(0.75 0.13 68);
+
+  /* ── Foreground: warm cream, not cold white ── */
+  --foreground: oklch(0.93 0.018 78);
+  --card-foreground: oklch(0.93 0.018 78);
+  --popover-foreground: oklch(0.93 0.018 78);
+  --muted-foreground: oklch(0.62 0.025 75);
+  --accent-foreground: oklch(0.88 0.018 78);
+  --sidebar-foreground: oklch(0.9 0.018 78);
+
+  /* ── Primary: golden caramel (unchanged, it was perfect) ── */
+  --primary: oklch(0.75 0.13 68);
+  --primary-foreground: #060302;
+  --sidebar-primary: oklch(0.75 0.13 68);
+  --sidebar-primary-foreground: oklch(0.1 0.012 42);
+  --ring: oklch(0.75 0.13 68);
+  --sidebar-ring: oklch(0.75 0.13 68);
+
+  /* ── Secondary: card-level surface with cream text ── */
+  --secondary: oklch(0.3 0.022 42);
+  --secondary-foreground: oklch(0.88 0.018 78);
+
+  /* ── Destructive ── */
+  --destructive: oklch(0.42 0.16 25);
+  --destructive-foreground: oklch(0.93 0.018 78);
+
+  /* ── Charts: all warm, graduating from primary outward ── */
+  --chart-1: oklch(0.75 0.13 68); /* caramel gold */
+  --chart-2: oklch(0.68 0.1 58); /* toasted amber */
+  --chart-3: oklch(0.58 0.08 45); /* dark roast */
+  --chart-4: oklch(0.48 0.06 35); /* mahogany */
+  --chart-5: oklch(0.85 0.05 82); /* steamed milk */
+  --status-draft: oklch(0.6 0.02 70);
+  --status-scheduled: oklch(0.7 0.12 235);
+  --status-posted: oklch(0.7 0.14 150);
+  --status-missed: oklch(0.68 0.18 25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-status-draft: var(--status-draft);
+  --color-status-scheduled: var(--status-scheduled);
+  --color-status-posted: var(--status-posted);
+  --color-status-missed: var(--status-missed);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.main-content {
+  min-height: 100dvh;
+}
+
+/* custom scrollbar css */
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
