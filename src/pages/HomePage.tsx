@@ -50,7 +50,9 @@ export function HomePage() {
         </div>
 
         {/* Needs attention */}
-        <CustomerRequests />
+        <div className="lg:col-span-1">
+          <CustomerRequests />
+        </div>
       </div>
     </section>
   );

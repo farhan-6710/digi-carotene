@@ -94,6 +94,11 @@ export const topClients: TopClient[] = [
   { name: "Nova Design", posts: 18, scheduled: 4, missed: 2 },
   { name: "Reverb Labs", posts: 16, scheduled: 3, missed: 1 },
   { name: "Marlow & Co.", posts: 14, scheduled: 2, missed: 1 },
+  { name: "Summit Studio", posts: 13, scheduled: 3, missed: 0 },
+  { name: "Harbor & Co.", posts: 12, scheduled: 2, missed: 1 },
+  { name: "Lumen Works", posts: 11, scheduled: 2, missed: 0 },
+  { name: "Cedar Lane", posts: 10, scheduled: 1, missed: 1 },
+  { name: "Northwind", posts: 9, scheduled: 1, missed: 0 },
 ];
 
 export type RecentOrder = {
