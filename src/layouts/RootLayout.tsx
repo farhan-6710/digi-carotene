@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { Outlet } from "react-router";
 import { Menu, Search } from "lucide-react";
 import { appMeta } from "../constants/navigation";
@@ -15,18 +15,6 @@ export function RootLayout() {
   const [isDarkMode, setIsDarkMode] = useState(() =>
     document.body.classList.contains("dark"),
   );
-
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "d" || event.key === "D") {
-        document.body.classList.toggle("dark");
-        setIsDarkMode(document.body.classList.contains("dark"));
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
 
   return (
     <div className="h-dvh overflow-hidden bg-background text-foreground">
