@@ -1,16 +1,17 @@
 import { recentOrders } from "@/constants/dashboard";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
-type OrdersProps = {
+
+type RecentOrdersProps = {
   title?: string;
   showViewAllLink?: boolean;
   variant?: "dashboard" | "page";
 };
 
-const Orders = ({
+const RecentOrders = ({
   title = "Recent Orders",
   showViewAllLink = true,
   variant = "dashboard",
-}: OrdersProps) => {
+}: RecentOrdersProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { orderId } = useParams();
@@ -113,4 +114,4 @@ const Orders = ({
   );
 };
 
-export default Orders;
+export default RecentOrders;

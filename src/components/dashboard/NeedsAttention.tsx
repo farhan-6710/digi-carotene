@@ -1,4 +1,4 @@
-import { recentCustomerRequests } from "@/constants/dashboard";
+import { needsAttentionPosts } from "@/constants/dashboard";
 import { Link } from "react-router";
 
 const statusStyles: Record<string, { dot: string; text: string }> = {
@@ -7,7 +7,7 @@ const statusStyles: Record<string, { dot: string; text: string }> = {
   "Needs Review": { dot: "bg-status-draft", text: "text-status-draft" },
 };
 
-const CustomerRequests = () => {
+const NeedsAttention = () => {
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div className="flex items-center justify-between">
@@ -20,7 +20,7 @@ const CustomerRequests = () => {
         </Link>
       </div>
       <div className="mt-4 space-y-4">
-        {recentCustomerRequests.map((row) => {
+        {needsAttentionPosts.map((row) => {
           const styles = statusStyles[row.status];
 
           return (
@@ -57,4 +57,4 @@ const CustomerRequests = () => {
   );
 };
 
-export default CustomerRequests;
+export default NeedsAttention;

@@ -1,5 +1,5 @@
 import { dashboardStats } from "../constants/dashboard";
-import CustomerRequests from "@/components/dashboard/CustomerRequests";
+import NeedsAttention from "@/components/dashboard/NeedsAttention";
 import TopClients from "@/components/dashboard/TopClients";
 import { ArrowUp } from "lucide-react";
 
@@ -51,7 +51,7 @@ export function HomePage() {
 
         {/* Needs attention */}
         <div className="lg:col-span-1">
-          <CustomerRequests />
+          <NeedsAttention />
         </div>
       </div>
     </section>

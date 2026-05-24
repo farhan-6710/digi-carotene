@@ -32,13 +32,13 @@ export const dashboardStats: StatCard[] = [
   },
 ];
 
-export type CustomerRequest = {
+export type NeedsAttentionPosts = {
   time: string;
   from: string;
   status: "Missed" | "Due Today" | "Needs Review";
 };
 
-export const recentCustomerRequests: CustomerRequest[] = [
+export const needsAttentionPosts: NeedsAttentionPosts[] = [
   {
     time: "09:00 AM",
     from: "Pulse Co. - Spring launch",

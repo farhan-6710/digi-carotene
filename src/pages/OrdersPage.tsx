@@ -1,4 +1,4 @@
-import Orders from "@/components/dashboard/Orders";
+import RecentOrders from "@/components/dashboard/RecentOrders";
 import OrderDetails from "@/components/orders/OrderDetails";
 import { recentOrders } from "@/constants/dashboard";
 import { useParams } from "react-router";
@@ -17,7 +17,7 @@ export function OrdersPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <Orders title="Orders" showViewAllLink={false} variant="page" />
+        <RecentOrders title="Orders" showViewAllLink={false} variant="page" />
         <OrderDetails order={selectedOrder} />
       </div>
     </section>
