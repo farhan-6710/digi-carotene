@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router";
 import {
   BarChart3,
   CalendarDays,
+  CheckSquare,
   FileText,
   LayoutDashboard,
   Settings,
@@ -14,6 +15,7 @@ const icons: Record<NavIconKey, (props: { className?: string }) => ReactNode> =
   {
     dashboard: (props) => <LayoutDashboard {...props} aria-hidden="true" />,
     posts: (props) => <CalendarDays {...props} aria-hidden="true" />,
+    tasks: (props) => <CheckSquare {...props} aria-hidden="true" />,
     analytics: (props) => <BarChart3 {...props} aria-hidden="true" />,
     reports: (props) => <FileText {...props} aria-hidden="true" />,
     settings: (props) => <Settings {...props} aria-hidden="true" />,

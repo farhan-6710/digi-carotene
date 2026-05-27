@@ -35,6 +35,13 @@
   --status-scheduled: oklch(0.62 0.12 235);
   --status-posted: oklch(0.62 0.14 150);
   --status-missed: oklch(0.58 0.18 25);
+  --status-upcoming: oklch(0.62 0.12 235);
+  --status-done: oklch(0.62 0.14 150);
+  --status-muted: oklch(0.9 0.015 70);
+  --contrib-1: oklch(0.78 0.07 145);
+  --contrib-2: oklch(0.7 0.1 148);
+  --contrib-3: oklch(0.62 0.13 150);
+  --contrib-4: oklch(0.52 0.15 152);
   /* ── Sidebar: light parchment ── */
   --sidebar: oklch(
     0.97 0.01 70
@@ -147,6 +154,13 @@
   --status-scheduled: oklch(0.7 0.12 235);
   --status-posted: oklch(0.7 0.14 150);
   --status-missed: oklch(0.68 0.18 25);
+  --status-upcoming: oklch(0.7 0.12 235);
+  --status-done: oklch(0.7 0.14 150);
+  --status-muted: oklch(0.22 0.015 42);
+  --contrib-1: oklch(0.32 0.05 150);
+  --contrib-2: oklch(0.42 0.08 150);
+  --contrib-3: oklch(0.52 0.11 150);
+  --contrib-4: oklch(0.62 0.14 150);
 }
 
 @theme inline {
@@ -178,6 +192,13 @@
   --color-status-scheduled: var(--status-scheduled);
   --color-status-posted: var(--status-posted);
   --color-status-missed: var(--status-missed);
+  --color-status-upcoming: var(--status-upcoming);
+  --color-status-done: var(--status-done);
+  --color-status-muted: var(--status-muted);
+  --color-contrib-1: var(--contrib-1);
+  --color-contrib-2: var(--contrib-2);
+  --color-contrib-3: var(--contrib-3);
+  --color-contrib-4: var(--contrib-4);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);

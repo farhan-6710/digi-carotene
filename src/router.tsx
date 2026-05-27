@@ -8,6 +8,8 @@ import { PlaceholderPage } from "./pages/PlaceholderPage";
 import { ProjectPage } from "./pages/ProjectPage";
 import { PostsManagementPage } from "./pages/PostsManagementPage";
 import { PostsManagementPage2 } from "./pages/PostsManagementPage2";
+import { TasksManagementPage } from "./pages/TasksManagementPage";
+import { AnalyticsPage } from "./pages/AnalyticsPage";
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +20,7 @@ export const router = createBrowserRouter([
       { path: "dashboard", element: <HomePage /> },
       {
         path: "analytics",
-        element: <PlaceholderPage title="Analytics" />,
+        element: <AnalyticsPage />,
       },
       {
         path: "reports",
@@ -29,6 +31,7 @@ export const router = createBrowserRouter([
         element: <PlaceholderPage title="Settings" />,
       },
       { path: "posts-management", element: <PostsManagementPage /> },
+      { path: "tasks-management", element: <TasksManagementPage /> },
       { path: "posts-management-2", element: <PostsManagementPage2 /> },
       { path: "projects/:projectId", element: <ProjectPage /> },
       { path: "about", element: <AboutPage /> },

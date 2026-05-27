@@ -1,0 +1,106 @@
+import {
+  CONTRIBUTION_YEAR,
+  contributionMonthLabels,
+  contributionWeeks,
+  weekdayLabels,
+} from "@/constants/Analytics/taskContributions";
+import {
+  contributionLevelClasses,
+  formatContributionDate,
+} from "@/lib/analytics/contributionLevels";
+import type { DayContribution } from "@/types/Analytics/types";
+import { ContributionLegend } from "./ContributionLegend";
+
+const CELL_SIZE = "size-[11px]";
+
+function ContributionCell({ day }: { day: DayContribution | null }) {
+  if (!day) {
+    return <span className={`${CELL_SIZE} rounded-sm bg-transparent`} />;
+  }
+
+  const levelClass = contributionLevelClasses[day.level];
+  const tooltip = day.isFuture
+    ? `${formatContributionDate(day.date)} · Upcoming`
+    : `${formatContributionDate(day.date)} · ${day.completedCount} task${
+        day.completedCount === 1 ? "" : "s"
+      } completed`;
+
+  return (
+    <span
+      title={tooltip}
+      aria-label={tooltip}
+      className={`${CELL_SIZE} rounded-sm ${levelClass} transition-opacity hover:opacity-80`}
+    />
+  );
+}
+
+export function TaskContributionGraph() {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight">
+            {CONTRIBUTION_YEAR} task activity
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Each square is one day. Darker greens mean more tasks completed.
+          </p>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Based on daily task completions
+        </p>
+      </div>
+
+      <div className="overflow-x-auto pb-2">
+        <div className="inline-flex min-w-max flex-col gap-2">
+          <div className="flex pl-9">
+            {contributionWeeks.map((week) => {
+              const monthLabel = contributionMonthLabels.find(
+                (label) => label.columnIndex === week.index,
+              );
+
+              return (
+                <div
+                  key={`month-${week.index}`}
+                  className="w-[13px] shrink-0 text-[11px] text-muted-foreground"
+                >
+                  {monthLabel?.label ?? ""}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex gap-1">
+            <div className="flex w-8 shrink-0 flex-col gap-1 text-[11px] leading-none text-muted-foreground">
+              {weekdayLabels.map((label, index) => (
+                <span
+                  key={label}
+                  className={`${CELL_SIZE} flex items-center ${
+                    index % 2 === 0 ? "invisible" : ""
+                  }`}
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+
+            {contributionWeeks.map((week) => (
+              <div key={week.index} className="flex flex-col gap-1">
+                {week.days.map((day, dayIndex) => (
+                  <ContributionCell
+                    key={`${week.index}-${dayIndex}-${day?.date ?? "empty"}`}
+                    day={day}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 border-t border-border pt-4">
+        <ContributionLegend />
+      </div>
+    </div>
+  );
+}
