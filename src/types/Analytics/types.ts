@@ -14,7 +14,8 @@ export type ContributionWeek = {
 
 export type MonthLabel = {
   label: string;
-  columnIndex: number;
+  startColumn: number;
+  endColumn: number;
 };
 
 export type ContributionSummary = {
@@ -23,4 +24,15 @@ export type ContributionSummary = {
   bestDay: { date: string; count: number };
   currentStreak: number;
   longestStreak: number;
+  missedDays: number;
+};
+
+export type AnalyticsStatTrend = "positive" | "negative";
+
+export type AnalyticsStatCard = {
+  label: string;
+  value: string;
+  delta: string;
+  deltaLabel: string;
+  trend: AnalyticsStatTrend;
 };

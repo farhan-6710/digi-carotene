@@ -1,32 +1,37 @@
 import { TaskContributionGraph } from "@/components/analytics/TaskContributionGraph";
-import {
-  CONTRIBUTION_YEAR,
-  contributionSummary,
-} from "@/constants/Analytics/taskContributions";
-import { formatContributionDate } from "@/lib/analytics/contributionLevels";
+import { analyticsStats } from "@/constants/Analytics/taskContributions";
+import type { AnalyticsStatTrend } from "@/types/Analytics/types";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
-const summaryCards = [
-  {
-    label: "Tasks completed",
-    value: contributionSummary.totalCompleted.toLocaleString(),
-    hint: `In ${CONTRIBUTION_YEAR} so far`,
-  },
-  {
-    label: "Active days",
-    value: contributionSummary.activeDays.toLocaleString(),
-    hint: "Days with at least one task done",
-  },
-  {
-    label: "Current streak",
-    value: `${contributionSummary.currentStreak} days`,
-    hint: "Consecutive days with activity",
-  },
-  {
-    label: "Best day",
-    value: `${contributionSummary.bestDay.count} tasks`,
-    hint: formatContributionDate(contributionSummary.bestDay.date),
-  },
-];
+function Trend({
+  delta,
+  label,
+  trend,
+}: {
+  delta: string;
+  label: string;
+  trend: AnalyticsStatTrend;
+}) {
+  const isPositive = trend === "positive";
+
+  return (
+    <div className="mt-3 flex items-center gap-2 text-xs">
+      <span
+        className={`inline-flex items-center gap-1 font-medium ${
+          isPositive ? "text-status-done" : "text-status-missed"
+        }`}
+      >
+        {isPositive ? (
+          <ArrowUp className="size-3.5 rotate-45" aria-hidden="true" />
+        ) : (
+          <ArrowDown className="size-3.5 -rotate-45" aria-hidden="true" />
+        )}
+        {delta}
+      </span>
+      <span className="text-muted-foreground">{label}</span>
+    </div>
+  );
+}
 
 export function AnalyticsPage() {
   return (
@@ -40,18 +45,22 @@ export function AnalyticsPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {summaryCards.map((card) => (
+        {analyticsStats.map((stat) => (
           <div
-            key={card.label}
+            key={stat.label}
             className="rounded-2xl border border-border bg-card p-6 shadow-sm"
           >
             <div className="text-xs font-semibold tracking-wider text-muted-foreground">
-              {card.label.toUpperCase()}
+              {stat.label.toUpperCase()}
             </div>
             <div className="mt-4 text-3xl font-semibold tracking-tight">
-              {card.value}
+              {stat.value}
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">{card.hint}</p>
+            <Trend
+              delta={stat.delta}
+              label={stat.deltaLabel}
+              trend={stat.trend}
+            />
           </div>
         ))}
       </div>

@@ -10,6 +10,7 @@ import { PostsManagementPage } from "./pages/PostsManagementPage";
 import { PostsManagementPage2 } from "./pages/PostsManagementPage2";
 import { TasksManagementPage } from "./pages/TasksManagementPage";
 import { AnalyticsPage } from "./pages/AnalyticsPage";
+import { AppointmentBookingPage } from "./pages/AppointmentBookingPage";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
       },
       { path: "posts-management", element: <PostsManagementPage /> },
       { path: "tasks-management", element: <TasksManagementPage /> },
+      { path: "appointment-booking", element: <AppointmentBookingPage /> },
       { path: "posts-management-2", element: <PostsManagementPage2 /> },
       { path: "projects/:projectId", element: <ProjectPage /> },
       { path: "about", element: <AboutPage /> },

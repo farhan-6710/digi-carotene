@@ -1,4 +1,5 @@
 import type {
+  AnalyticsStatCard,
   ContributionSummary,
   ContributionWeek,
   DayContribution,
@@ -83,21 +84,25 @@ function generateCompletedCount(date: Date): number {
   return Math.floor(random * 3) + 6;
 }
 
-function buildDailyCounts(): Record<string, number> {
+function buildDailyCountsForYear(
+  year: number,
+  endMonth: number,
+  endDay: number,
+) {
   const counts: Record<string, number> = {};
-  const today = new Date(CONTRIBUTION_YEAR, 4, 27);
+  const today = new Date(year, endMonth, endDay);
 
   for (let month = 0; month < 12; month += 1) {
-    const daysInMonth = new Date(CONTRIBUTION_YEAR, month + 1, 0).getDate();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     for (let day = 1; day <= daysInMonth; day += 1) {
-      const date = new Date(CONTRIBUTION_YEAR, month, day);
+      const date = new Date(year, month, day);
 
       if (date > today) {
         continue;
       }
 
-      const dateKey = formatDateKey(CONTRIBUTION_YEAR, month, day);
+      const dateKey = formatDateKey(year, month, day);
       counts[dateKey] = generateCompletedCount(date);
     }
   }
@@ -105,12 +110,18 @@ function buildDailyCounts(): Record<string, number> {
   return counts;
 }
 
-export const dailyContributionCounts = buildDailyCounts();
+function buildDailyCounts(): Record<string, number> {
+  return buildDailyCountsForYear(CONTRIBUTION_YEAR, 4, 27);
+}
 
-function buildDayContribution(
-  date: Date,
-  isFuture: boolean,
-): DayContribution {
+export const dailyContributionCounts = buildDailyCounts();
+export const priorYearDailyCounts = buildDailyCountsForYear(
+  CONTRIBUTION_YEAR - 1,
+  4,
+  27,
+);
+
+function buildDayContribution(date: Date, isFuture: boolean): DayContribution {
   const dateKey = formatDateKey(
     date.getFullYear(),
     date.getMonth(),
@@ -135,7 +146,7 @@ export function buildContributionWeeks(): ContributionWeek[] {
   const gridStart = new Date(yearStart);
   gridStart.setDate(gridStart.getDate() - gridStart.getDay());
 
-  let cursor = new Date(gridStart);
+  const cursor = new Date(gridStart);
   let weekIndex = 0;
 
   while (cursor <= yearEnd || cursor.getDay() !== 0) {
@@ -148,9 +159,7 @@ export function buildContributionWeeks(): ContributionWeek[] {
         cursor <= yearEnd;
 
       if (inYear) {
-        days.push(
-          buildDayContribution(cursor, cursor > today),
-        );
+        days.push(buildDayContribution(cursor, cursor > today));
       } else {
         days.push(null);
       }
@@ -170,40 +179,113 @@ export function buildContributionWeeks(): ContributionWeek[] {
 }
 
 export function buildMonthLabels(weeks: ContributionWeek[]): MonthLabel[] {
-  const labels: MonthLabel[] = [];
+  const monthRanges = new Map<number, { min: number; max: number }>();
 
   weeks.forEach((week, columnIndex) => {
     for (const day of week.days) {
-      if (!day || day.isFuture) {
+      if (!day) {
         continue;
       }
 
-      const [, month, date] = day.date.split("-").map(Number);
+      const [, month] = day.date.split("-").map(Number);
+      const existing = monthRanges.get(month);
 
-      if (date === 1) {
-        labels.push({
-          label: monthLabels[month - 1],
-          columnIndex,
-        });
-        break;
+      if (!existing) {
+        monthRanges.set(month, { min: columnIndex, max: columnIndex });
+        continue;
       }
+
+      existing.min = Math.min(existing.min, columnIndex);
+      existing.max = Math.max(existing.max, columnIndex);
     }
   });
 
-  return labels;
+  return Array.from(monthRanges.entries())
+    .sort(([monthA], [monthB]) => monthA - monthB)
+    .map(([month, range]) => ({
+      label: monthLabels[month - 1],
+      startColumn: range.min,
+      endColumn: range.max,
+    }));
+}
+
+function sumCounts(counts: Record<string, number>): number {
+  return Object.values(counts).reduce((sum, count) => sum + count, 0);
+}
+
+function countActiveDays(counts: Record<string, number>): number {
+  return Object.values(counts).filter((count) => count > 0).length;
+}
+
+function countMissedDays(counts: Record<string, number>): number {
+  return Object.values(counts).filter((count) => count === 0).length;
+}
+
+function formatPercentChange(current: number, previous: number): string {
+  if (previous === 0) {
+    return current > 0 ? "+100%" : "0%";
+  }
+
+  const change = ((current - previous) / previous) * 100;
+  const rounded =
+    Math.abs(change) >= 10 ? change.toFixed(0) : change.toFixed(1);
+
+  if (Number(rounded) > 0) {
+    return `+${rounded}%`;
+  }
+
+  if (Number(rounded) < 0) {
+    return `${rounded}%`;
+  }
+
+  return "0%";
+}
+
+function formatDayChange(current: number, previous: number): string {
+  const change = current - previous;
+
+  if (change > 0) {
+    return `+${change}`;
+  }
+
+  if (change < 0) {
+    return `${change}`;
+  }
+
+  return "0";
+}
+
+function getStreakEndingOn(
+  counts: Record<string, number>,
+  endDateKey: string,
+): number {
+  const sortedDates = Object.keys(counts).sort();
+  const endIndex = sortedDates.indexOf(endDateKey);
+
+  if (endIndex === -1) {
+    return 0;
+  }
+
+  let streak = 0;
+
+  for (let index = endIndex; index >= 0; index -= 1) {
+    if ((counts[sortedDates[index]] ?? 0) > 0) {
+      streak += 1;
+    } else {
+      break;
+    }
+  }
+
+  return streak;
 }
 
 function buildSummary(): ContributionSummary {
   const entries = Object.entries(dailyContributionCounts);
-  const totalCompleted = entries.reduce(
-    (sum, [, count]) => sum + count,
-    0,
-  );
+  const totalCompleted = entries.reduce((sum, [, count]) => sum + count, 0);
   const activeDays = entries.filter(([, count]) => count > 0).length;
 
   const bestDay = entries.reduce(
-    (best, [date, count]) =>
-      count > best.count ? { date, count } : best,
+    (best, [date, count]) => (count > best.count ? { date, count } : best),
     { date: entries[0]?.[0] ?? "", count: entries[0]?.[1] ?? 0 },
   );
 
@@ -238,9 +320,54 @@ function buildSummary(): ContributionSummary {
     bestDay,
     currentStreak,
     longestStreak,
+    missedDays: entries.filter(([, count]) => count === 0).length,
   };
+}
+
+function buildAnalyticsStats(
+  summary: ContributionSummary,
+): AnalyticsStatCard[] {
+  const priorTotal = sumCounts(priorYearDailyCounts);
+  const priorActiveDays = countActiveDays(priorYearDailyCounts);
+  const priorMissedDays = countMissedDays(priorYearDailyCounts);
+  const lastMonthStreak = getStreakEndingOn(
+    dailyContributionCounts,
+    `${CONTRIBUTION_YEAR}-04-30`,
+  );
+
+  return [
+    {
+      label: "Tasks Completed",
+      value: summary.totalCompleted.toLocaleString(),
+      delta: formatPercentChange(summary.totalCompleted, priorTotal),
+      deltaLabel: "vs last year",
+      trend: summary.totalCompleted >= priorTotal ? "positive" : "negative",
+    },
+    {
+      label: "Active Days",
+      value: summary.activeDays.toLocaleString(),
+      delta: formatDayChange(summary.activeDays, priorActiveDays),
+      deltaLabel: "vs last year",
+      trend: summary.activeDays >= priorActiveDays ? "positive" : "negative",
+    },
+    {
+      label: "Current Streak",
+      value: `${summary.currentStreak} days`,
+      delta: formatDayChange(summary.currentStreak, lastMonthStreak),
+      deltaLabel: "vs last month",
+      trend: summary.currentStreak >= lastMonthStreak ? "positive" : "negative",
+    },
+    {
+      label: "Missed Days",
+      value: summary.missedDays.toLocaleString(),
+      delta: formatDayChange(summary.missedDays, priorMissedDays),
+      deltaLabel: "from last year",
+      trend: summary.missedDays <= priorMissedDays ? "positive" : "negative",
+    },
+  ];
 }
 
 export const contributionWeeks = buildContributionWeeks();
 export const contributionMonthLabels = buildMonthLabels(contributionWeeks);
 export const contributionSummary = buildSummary();
+export const analyticsStats = buildAnalyticsStats(contributionSummary);

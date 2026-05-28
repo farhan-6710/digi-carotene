@@ -11,7 +11,7 @@ import {
 import type { DayContribution } from "@/types/Analytics/types";
 import { ContributionLegend } from "./ContributionLegend";
 
-const CELL_SIZE = "size-[11px]";
+const CELL_SIZE = "size-[11px] shrink-0";
 
 function ContributionCell({ day }: { day: DayContribution | null }) {
   if (!day) {
@@ -29,12 +29,14 @@ function ContributionCell({ day }: { day: DayContribution | null }) {
     <span
       title={tooltip}
       aria-label={tooltip}
-      className={`${CELL_SIZE} rounded-sm ${levelClass} transition-opacity hover:opacity-80`}
+      className={`${CELL_SIZE} block rounded-sm ${levelClass} transition-opacity hover:opacity-80`}
     />
   );
 }
 
 export function TaskContributionGraph() {
+  const weekCount = contributionWeeks.length;
+
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -53,21 +55,26 @@ export function TaskContributionGraph() {
 
       <div className="overflow-x-auto pb-2">
         <div className="inline-flex min-w-max flex-col gap-2">
-          <div className="flex pl-9">
-            {contributionWeeks.map((week) => {
-              const monthLabel = contributionMonthLabels.find(
-                (label) => label.columnIndex === week.index,
-              );
+          <div
+            className="grid w-max gap-1"
+            style={{
+              gridTemplateColumns: `2rem repeat(${weekCount}, 11px)`,
+            }}
+          >
+            <div aria-hidden="true" />
 
-              return (
-                <div
-                  key={`month-${week.index}`}
-                  className="w-[13px] shrink-0 text-[11px] text-muted-foreground"
-                >
-                  {monthLabel?.label ?? ""}
-                </div>
-              );
-            })}
+            {contributionMonthLabels.map((month) => (
+              <div
+                key={month.label}
+                className="flex items-end justify-center text-[11px] leading-none text-muted-foreground"
+                style={{
+                  gridColumn: `${month.startColumn + 2} / ${month.endColumn + 3}`,
+                  gridRow: 1,
+                }}
+              >
+                {month.label}
+              </div>
+            ))}
           </div>
 
           <div className="flex gap-1">
