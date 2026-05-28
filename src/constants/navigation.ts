@@ -1,7 +1,5 @@
 export type NavIconKey =
   | "dashboard"
-  | "posts"
-  | "tasks"
   | "appointments"
   | "analytics"
   | "reports"
@@ -15,10 +13,8 @@ export type NavItem = {
 
 export const primaryNav: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: "dashboard" },
-  { label: "Posts Management", to: "/posts-management", icon: "posts" },
-  { label: "Tasks Management", to: "/tasks-management", icon: "tasks" },
   {
-    label: "Appointment Booking",
+    label: "Appointments",
     to: "/appointment-booking",
     icon: "appointments",
   },

@@ -4,8 +4,6 @@ import { Link, NavLink } from "react-router";
 import {
   BarChart3,
   CalendarClock,
-  CalendarDays,
-  CheckSquare,
   FileText,
   LayoutDashboard,
   Settings,
@@ -15,8 +13,6 @@ import { appMeta, primaryNav, type NavIconKey } from "../constants/navigation";
 const icons: Record<NavIconKey, (props: { className?: string }) => ReactNode> =
   {
     dashboard: (props) => <LayoutDashboard {...props} aria-hidden="true" />,
-    posts: (props) => <CalendarDays {...props} aria-hidden="true" />,
-    tasks: (props) => <CheckSquare {...props} aria-hidden="true" />,
     appointments: (props) => <CalendarClock {...props} aria-hidden="true" />,
     analytics: (props) => <BarChart3 {...props} aria-hidden="true" />,
     reports: (props) => <FileText {...props} aria-hidden="true" />,
@@ -38,7 +34,7 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
       className={[
         "hidden h-full shrink-0 border-r border-sidebar-border/80 bg-sidebar text-sidebar-foreground md:block",
         "transition-[width] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
-        collapsed ? "w-20" : "w-72",
+        collapsed ? "w-20" : "w-64",
       ].join(" ")}
     >
       <div className={"flex h-full flex-col"}>
