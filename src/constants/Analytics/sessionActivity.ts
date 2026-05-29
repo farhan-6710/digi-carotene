@@ -8,7 +8,7 @@ import type {
 import { getContributionLevel } from "@/lib/analytics/contributionLevels";
 
 export const CONTRIBUTION_YEAR = 2026;
-export const MAX_DAILY_TASKS = 8;
+export const MAX_DAILY_SESSIONS = 8;
 
 export const monthLabels = [
   "Jan",
@@ -337,14 +337,14 @@ function buildAnalyticsStats(
 
   return [
     {
-      label: "Tasks Completed",
+      label: "Sessions Completed",
       value: summary.totalCompleted.toLocaleString(),
       delta: formatPercentChange(summary.totalCompleted, priorTotal),
       deltaLabel: "vs last year",
       trend: summary.totalCompleted >= priorTotal ? "positive" : "negative",
     },
     {
-      label: "Active Days",
+      label: "Active Clinic Days",
       value: summary.activeDays.toLocaleString(),
       delta: formatDayChange(summary.activeDays, priorActiveDays),
       deltaLabel: "vs last year",
@@ -358,7 +358,7 @@ function buildAnalyticsStats(
       trend: summary.currentStreak >= lastMonthStreak ? "positive" : "negative",
     },
     {
-      label: "Missed Days",
+      label: "No-Show Days",
       value: summary.missedDays.toLocaleString(),
       delta: formatDayChange(summary.missedDays, priorMissedDays),
       deltaLabel: "from last year",

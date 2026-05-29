@@ -39,7 +39,8 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
     >
       <div className={"flex h-full flex-col"}>
         <div className="flex items-center justify-center border-b border-sidebar-border/80 p-4.5">
-          <div
+          <Link
+            to="/admin/dashboard"
             className={
               "flex items-center justify-center " + (collapsed ? "" : "gap-3")
             }
@@ -51,7 +52,7 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
                 (collapsed ? "" : "hidden")
               }
             >
-              D
+              {appMeta.userInitials}
             </div>
             <div
               className={
@@ -61,7 +62,7 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
             >
               {appMeta.name}
             </div>
-          </div>
+          </Link>
         </div>
 
         <nav className="flex-1 space-y-2 p-4">
@@ -94,13 +95,13 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
             <div className="mt-4 rounded-2xl border border-primary/40 bg-muted p-4 shadow-sm">
               <div className="text-sm font-semibold">Quick Actions</div>
               <p className="mt-1 text-xs text-muted-foreground">
-                Jump back into the order queue.
+                Review today&apos;s patient appointments and session schedule.
               </p>
               <Link
-                to="/orders"
+                to="/admin/appointment-booking"
                 className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
               >
-                View Orders
+                View Appointments
               </Link>
             </div>
           </div>

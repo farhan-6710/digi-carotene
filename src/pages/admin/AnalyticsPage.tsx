@@ -1,5 +1,5 @@
-import { TaskContributionGraph } from "@/components/analytics/TaskContributionGraph";
-import { analyticsStats } from "@/constants/Analytics/taskContributions";
+import { SessionActivityGraph } from "@/components/analytics/SessionActivityGraph";
+import { analyticsStats } from "@/constants/Analytics/sessionActivity";
 import type { AnalyticsStatTrend } from "@/types/Analytics/types";
 import { ArrowDown, ArrowUp } from "lucide-react";
 
@@ -39,8 +39,8 @@ export function AnalyticsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Year-at-a-glance view of your task consistency, styled like a
-          contribution graph.
+          Year-at-a-glance view of Reviva session volume and appointment
+          consistency across the clinic.
         </p>
       </div>
 
@@ -65,7 +65,7 @@ export function AnalyticsPage() {
         ))}
       </div>
 
-      <TaskContributionGraph />
+      <SessionActivityGraph />
     </section>
   );
 }

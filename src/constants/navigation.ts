@@ -11,19 +11,21 @@ export type NavItem = {
   icon: NavIconKey;
 };
 
+export const adminBasePath = "/admin";
+
 export const primaryNav: NavItem[] = [
-  { label: "Dashboard", to: "/dashboard", icon: "dashboard" },
+  { label: "Dashboard", to: `${adminBasePath}/dashboard`, icon: "dashboard" },
   {
     label: "Appointments",
-    to: "/appointment-booking",
+    to: `${adminBasePath}/appointment-booking`,
     icon: "appointments",
   },
-  { label: "Analytics", to: "/analytics", icon: "analytics" },
-  { label: "Reports", to: "/reports", icon: "reports" },
-  { label: "Settings", to: "/settings", icon: "settings" },
+  { label: "Analytics", to: `${adminBasePath}/analytics`, icon: "analytics" },
+  { label: "Reports", to: `${adminBasePath}/reports`, icon: "reports" },
+  { label: "Settings", to: `${adminBasePath}/settings`, icon: "settings" },
 ];
 
 export const appMeta = {
-  name: "Digi Carotene",
-  userInitials: "DC",
+  name: "Reviva",
+  userInitials: "R",
 } as const;

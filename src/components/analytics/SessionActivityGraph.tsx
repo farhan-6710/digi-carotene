@@ -3,17 +3,17 @@ import {
   contributionMonthLabels,
   contributionWeeks,
   weekdayLabels,
-} from "@/constants/Analytics/taskContributions";
+} from "@/constants/Analytics/sessionActivity";
 import {
   contributionLevelClasses,
   formatContributionDate,
 } from "@/lib/analytics/contributionLevels";
 import type { DayContribution } from "@/types/Analytics/types";
-import { ContributionLegend } from "./ContributionLegend";
+import { SessionActivityLegend } from "./SessionActivityLegend";
 
 const CELL_SIZE = "size-[11px] shrink-0";
 
-function ContributionCell({ day }: { day: DayContribution | null }) {
+function ActivityCell({ day }: { day: DayContribution | null }) {
   if (!day) {
     return <span className={`${CELL_SIZE} rounded-sm bg-transparent`} />;
   }
@@ -21,7 +21,7 @@ function ContributionCell({ day }: { day: DayContribution | null }) {
   const levelClass = contributionLevelClasses[day.level];
   const tooltip = day.isFuture
     ? `${formatContributionDate(day.date)} · Upcoming`
-    : `${formatContributionDate(day.date)} · ${day.completedCount} task${
+    : `${formatContributionDate(day.date)} · ${day.completedCount} session${
         day.completedCount === 1 ? "" : "s"
       } completed`;
 
@@ -34,7 +34,7 @@ function ContributionCell({ day }: { day: DayContribution | null }) {
   );
 }
 
-export function TaskContributionGraph() {
+export function SessionActivityGraph() {
   const weekCount = contributionWeeks.length;
 
   return (
@@ -42,14 +42,15 @@ export function TaskContributionGraph() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold tracking-tight">
-            {CONTRIBUTION_YEAR} task activity
+            {CONTRIBUTION_YEAR} sessions &amp; appointments activity
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Each square is one day. Darker greens mean more tasks completed.
+            Each square is one day. Darker greens mean more rehab sessions
+            delivered.
           </p>
         </div>
         <p className="text-xs text-muted-foreground">
-          Based on daily task completions
+          Based on daily session completions
         </p>
       </div>
 
@@ -94,7 +95,7 @@ export function TaskContributionGraph() {
             {contributionWeeks.map((week) => (
               <div key={week.index} className="flex flex-col gap-1">
                 {week.days.map((day, dayIndex) => (
-                  <ContributionCell
+                  <ActivityCell
                     key={`${week.index}-${dayIndex}-${day?.date ?? "empty"}`}
                     day={day}
                   />
@@ -106,7 +107,7 @@ export function TaskContributionGraph() {
       </div>
 
       <div className="mt-4 border-t border-border pt-4">
-        <ContributionLegend />
+        <SessionActivityLegend />
       </div>
     </div>
   );

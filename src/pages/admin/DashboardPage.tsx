@@ -1,6 +1,6 @@
-import { dashboardStats } from "../constants/dashboard";
+import { dashboardStats } from "@/constants/dashboard";
 import NeedsAttention from "@/components/dashboard/NeedsAttention";
-import TopClients from "@/components/dashboard/TopClients";
+import TopPatients from "@/components/dashboard/TopPatients";
 import { ArrowUp } from "lucide-react";
 
 function Trend({ delta, label }: { delta: string; label: string }) {
@@ -15,15 +15,16 @@ function Trend({ delta, label }: { delta: string; label: string }) {
   );
 }
 
-export function HomePage() {
+export function DashboardPage() {
   return (
     <section className="space-y-8">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">
-          Posts Management
+          Clinic Dashboard
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Snapshot of monthly post performance and client activity.
+          Snapshot of monthly session performance and patient activity at
+          Reviva.
         </p>
       </div>
 
@@ -46,10 +47,9 @@ export function HomePage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <TopClients />
+          <TopPatients />
         </div>
 
-        {/* Needs attention */}
         <div className="lg:col-span-1">
           <NeedsAttention />
         </div>

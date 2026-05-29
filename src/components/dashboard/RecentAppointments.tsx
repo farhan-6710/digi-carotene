@@ -1,21 +1,22 @@
-import { recentOrders } from "@/constants/dashboard";
+import { recentAppointments } from "@/constants/dashboard";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
 
-type RecentOrdersProps = {
+type RecentAppointmentsProps = {
   title?: string;
   showViewAllLink?: boolean;
   variant?: "dashboard" | "page";
 };
 
-const RecentOrders = ({
-  title = "Recent Orders",
+const RecentAppointments = ({
+  title = "Recent Appointments",
   showViewAllLink = true,
   variant = "dashboard",
-}: RecentOrdersProps) => {
+}: RecentAppointmentsProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { orderId } = useParams();
-  const isOrdersRoute = location.pathname.startsWith("/orders");
+  const { appointmentId } = useParams();
+  const isAppointmentsRoute =
+    location.pathname.startsWith("/admin/appointment-booking");
 
   return (
     <div
@@ -28,7 +29,7 @@ const RecentOrders = ({
         <div className="text-sm font-semibold">{title}</div>
         {showViewAllLink ? (
           <Link
-            to="/orders"
+            to="/admin/appointment-booking"
             className="text-sm font-medium text-primary hover:opacity-90"
           >
             View all <span aria-hidden="true">↗</span>
@@ -39,14 +40,15 @@ const RecentOrders = ({
       <div className="border-t border-border">
         <div className="border-b grid grid-cols-[110px_1fr_1fr_92px] gap-4 bg-muted px-6 py-3 text-xs font-semibold tracking-wider text-muted-foreground">
           <div>TIME</div>
-          <div>FROM</div>
-          <div>ORDER</div>
-          <div className="text-right">TOTAL</div>
+          <div>PATIENT</div>
+          <div>APPOINTMENT</div>
+          <div className="text-right">STATUS</div>
         </div>
 
         <div className="divide-y divide-border">
-          {recentOrders.map((order) => {
-            const isSelected = isOrdersRoute && orderId === order.id;
+          {recentAppointments.map((appointment) => {
+            const isSelected =
+              isAppointmentsRoute && appointmentId === appointment.id;
 
             const mutedTextClass = isSelected
               ? "text-primary-foreground"
@@ -58,15 +60,10 @@ const RecentOrders = ({
 
             return (
               <button
-                key={order.id}
+                key={appointment.id}
                 type="button"
                 onClick={() => {
-                  if (isOrdersRoute) {
-                    navigate(`/orders/${order.id}`, { replace: true });
-                    return;
-                  }
-
-                  navigate(`/orders/${order.id}`);
+                  navigate("/admin/appointment-booking");
                 }}
                 className={[
                   "group block w-full text-left",
@@ -79,21 +76,21 @@ const RecentOrders = ({
                   <div
                     className={["font-mono text-sm", mutedTextClass].join(" ")}
                   >
-                    {order.time}
+                    {appointment.time}
                   </div>
                   <div
                     className={["font-mono text-sm", mutedTextClass].join(" ")}
                   >
-                    {order.from}
+                    {appointment.patient}
                   </div>
                   <div className="flex items-center gap-2">
                     <div
                       className={["font-mono text-sm", mainTextClass].join(" ")}
                     >
-                      {order.id}
+                      {appointment.id}
                     </div>
                     <div className={["text-xs", mutedTextClass].join(" ")}>
-                      • {order.status}
+                      • {appointment.sessionType}
                     </div>
                   </div>
                   <div
@@ -102,7 +99,7 @@ const RecentOrders = ({
                       mutedTextClass,
                     ].join(" ")}
                   >
-                    {order.total}
+                    {appointment.status}
                   </div>
                 </div>
               </button>
@@ -114,4 +111,4 @@ const RecentOrders = ({
   );
 };
 
-export default RecentOrders;
+export default RecentAppointments;

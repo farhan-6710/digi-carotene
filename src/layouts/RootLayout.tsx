@@ -43,7 +43,7 @@ export function RootLayout() {
                 </span>
                 <input
                   type="search"
-                  placeholder="Search posts or clients..."
+                  placeholder="Search patients or appointments..."
                   className="h-10 w-full rounded-full border border-ring bg-muted/40 pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-ring"
                 />
               </div>
