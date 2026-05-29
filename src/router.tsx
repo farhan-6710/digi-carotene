@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router";
 
+import { AdminLayout } from "./layouts/AdminLayout";
 import { PublicLayout } from "./layouts/PublicLayout";
-import { RootLayout } from "./layouts/RootLayout";
 import { DashboardPage } from "./pages/admin/DashboardPage";
 import { AnalyticsPage } from "./pages/admin/AnalyticsPage";
 import { PostsManagementPage } from "./pages/admin/PostsManagementPage";
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <RootLayout />,
+    element: <AdminLayout />,
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },
       { path: "dashboard", element: <DashboardPage /> },

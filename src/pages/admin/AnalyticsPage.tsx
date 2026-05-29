@@ -1,6 +1,6 @@
-import { SessionActivityGraph } from "@/components/analytics/SessionActivityGraph";
-import { analyticsStats } from "@/constants/Analytics/sessionActivity";
-import type { AnalyticsStatTrend } from "@/types/Analytics/types";
+import { SessionActivityGraph } from "@/components/admin/analytics/SessionActivityGraph";
+import { analyticsStats } from "@/constants/admin/analytics/sessionActivity";
+import type { AnalyticsStatTrend } from "@/types/admin/analytics/types";
 import { ArrowDown, ArrowUp } from "lucide-react";
 
 function Trend({
@@ -37,7 +37,7 @@ export function AnalyticsPage() {
   return (
     <section className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Analytics</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Year-at-a-glance view of Digi Carotene post volume and publishing
           consistency across the agency.

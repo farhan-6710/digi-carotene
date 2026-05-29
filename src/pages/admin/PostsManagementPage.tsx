@@ -1,14 +1,14 @@
-import { ClientDialog } from "@/components/posts-management/ClientDialog";
-import { PostsManagementWeeksTable } from "@/components/posts-management/PostsManagementWeeksTable";
-import { SendDailyReportDialog } from "@/components/posts-management/SendDailyReportDialog";
+import { ClientDialog } from "@/components/admin/posts-management/ClientDialog";
+import { PostsManagementWeeksTable } from "@/components/admin/posts-management/PostsManagementWeeksTable";
+import { SendDailyReportDialog } from "@/components/admin/posts-management/SendDailyReportDialog";
 import {
   days,
   initialSlots,
   statusColors,
   statusText,
   weeks,
-} from "@/constants/PostsManagementPage/PostsManagement";
-import { usePostsManagement } from "@/hooks/usePostsManagement";
+} from "@/constants/admin/posts-management/postsManagement";
+import { usePostsManagement } from "@/hooks/admin/usePostsManagement";
 
 export function PostsManagementPage() {
   const {
@@ -36,7 +36,7 @@ export function PostsManagementPage() {
     <section className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
             Posts Management
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">

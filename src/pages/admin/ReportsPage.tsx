@@ -1,12 +1,12 @@
-import { ReportStatCards } from "@/components/reports/ReportStatCards";
-import { ReportsTable } from "@/components/reports/ReportsTable";
-import { reportStats } from "@/constants/Reports/reports";
+import { ReportStatCards } from "@/components/admin/reports/ReportStatCards";
+import { ReportsTable } from "@/components/admin/reports/ReportsTable";
+import { reportStats } from "@/constants/admin/reports/reports";
 
 export function ReportsPage() {
   return (
     <section className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Reports</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Review agency performance summaries, billing exports, and compliance
           documents generated for Digi Carotene.

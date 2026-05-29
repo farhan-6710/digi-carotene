@@ -1,5 +1,5 @@
-import { SettingsSectionCard } from "@/components/settings/SettingsSectionCard";
-import { useSettingsPreferences } from "@/hooks/useSettingsPreferences";
+import { SettingsSectionCard } from "@/components/admin/settings/SettingsSectionCard";
+import { useSettingsPreferences } from "@/hooks/admin/useSettingsPreferences";
 
 export function SettingsPage() {
   const { sections, isToggleEnabled, setToggleEnabled } =
@@ -8,7 +8,7 @@ export function SettingsPage() {
   return (
     <section className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Settings</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Manage notifications, appearance, and agency workflow preferences for
           the Digi Carotene team portal.

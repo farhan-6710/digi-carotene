@@ -1,6 +1,6 @@
-import { dashboardStats } from "@/constants/dashboard";
-import NeedsAttention from "@/components/dashboard/NeedsAttention";
-import TopClients from "@/components/dashboard/TopClients";
+import { dashboardStats } from "@/constants/admin/dashboard";
+import NeedsAttention from "@/components/admin/dashboard/NeedsAttention";
+import TopClients from "@/components/admin/dashboard/TopClients";
 import { ArrowUp } from "lucide-react";
 
 function Trend({ delta, label }: { delta: string; label: string }) {
@@ -19,8 +19,8 @@ export function DashboardPage() {
   return (
     <section className="space-y-8">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Agency Dashboard
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+          Digi Carotene Admin Panel
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Snapshot of monthly post performance and client activity at Digi
