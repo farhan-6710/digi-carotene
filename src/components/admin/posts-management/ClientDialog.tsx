@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+import { PostSchedulePicker } from "@/components/admin/posts-management/PostSchedulePicker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,11 +12,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { StatusKey } from "@/types/admin/posts-management/types";
+import { cn } from "@/lib/utils";
+
+const fieldClassName = cn(
+  "mt-2 w-full rounded-lg border border-ring/60 bg-background px-3 py-2 text-sm text-foreground shadow-xs outline-none transition-colors",
+  "placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/25",
+  "dark:border-input dark:bg-muted/40",
+);
 
 type ClientDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isEditing: boolean;
+  slotYear: number;
+  slotMonth: number;
+  slotDate: number;
   clientId: string;
   clientName: string;
   clientTime: string;
@@ -25,12 +37,16 @@ type ClientDialogProps = {
   onClientStatusChange: (value: StatusKey) => void;
   onSave: () => void;
   onDelete?: () => void;
+  isSaving?: boolean;
 };
 
 export function ClientDialog({
   open,
   onOpenChange,
   isEditing,
+  slotYear,
+  slotMonth,
+  slotDate,
   clientId,
   clientName,
   clientTime,
@@ -41,6 +57,7 @@ export function ClientDialog({
   onClientStatusChange,
   onSave,
   onDelete,
+  isSaving = false,
 }: ClientDialogProps) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -64,25 +81,27 @@ export function ClientDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent>
+        <DialogContent className="overflow-visible">
           <DialogHeader>
             <DialogTitle>
               {isEditing ? "Edit Client" : "Add Client"}
             </DialogTitle>
             <DialogDescription>
-              Set the client name, post time, and status for this day.
+              Set the client name, schedule, and status for this day.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
-            <label className="block text-xs font-semibold text-muted-foreground">
-              Client ID
-              <input
-                value={clientId}
-                readOnly
-                className="mt-2 w-full rounded-lg border border-input bg-muted/40 px-3 py-2 text-sm text-foreground outline-none"
-              />
-            </label>
+            {isEditing ? (
+              <label className="block text-xs font-semibold text-muted-foreground">
+                Client ID
+                <input
+                  value={clientId}
+                  readOnly
+                  className={cn(fieldClassName, "bg-muted/40 dark:bg-muted/50")}
+                />
+              </label>
+            ) : null}
 
             <label className="block text-xs font-semibold text-muted-foreground">
               Client name
@@ -90,19 +109,23 @@ export function ClientDialog({
                 value={clientName}
                 onChange={(event) => onClientNameChange(event.target.value)}
                 placeholder="e.g. Bloom Skincare"
-                className="mt-2 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring"
+                className={fieldClassName}
               />
             </label>
 
-            <label className="block text-xs font-semibold text-muted-foreground">
-              Time
-              <input
-                value={clientTime}
-                onChange={(event) => onClientTimeChange(event.target.value)}
-                placeholder="e.g. 9:30 am"
-                className="mt-2 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring"
+            <div className="space-y-2">
+              <span className="block text-xs font-semibold text-muted-foreground">
+                Date & time
+              </span>
+              <PostSchedulePicker
+                year={slotYear}
+                month={slotMonth}
+                date={slotDate}
+                selectedTime={clientTime}
+                onTimeChange={onClientTimeChange}
+                disabled={isSaving}
               />
-            </label>
+            </div>
 
             <label className="block text-xs font-semibold text-muted-foreground">
               Status
@@ -111,7 +134,7 @@ export function ClientDialog({
                 onChange={(event) =>
                   onClientStatusChange(event.target.value as StatusKey)
                 }
-                className="mt-2 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring"
+                className={fieldClassName}
               >
                 {statusOptions.map((option) => (
                   <option key={option} value={option}>
@@ -128,19 +151,26 @@ export function ClientDialog({
                 variant="destructive"
                 onClick={handleDeleteClick}
                 className="mr-auto"
+                disabled={isSaving}
               >
                 Remove Client
               </Button>
             ) : null}
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" disabled={isSaving}>
+                Cancel
+              </Button>
             </DialogClose>
             <Button
               onClick={onSave}
-              disabled={!clientName.trim() || !clientTime.trim()}
+              disabled={!clientName.trim() || !clientTime.trim() || isSaving}
               className="rounded-full"
             >
-              {isEditing ? "Save Changes" : "Add Client"}
+              {isSaving
+                ? "Saving..."
+                : isEditing
+                  ? "Save Changes"
+                  : "Add Client"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -159,7 +189,11 @@ export function ClientDialog({
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button variant="destructive" onClick={handleConfirmDelete}>
+            <Button
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={isSaving}
+            >
               Remove Client
             </Button>
           </DialogFooter>

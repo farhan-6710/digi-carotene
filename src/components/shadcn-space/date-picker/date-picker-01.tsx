@@ -36,22 +36,22 @@ const DateAndTimePickerDemo = () => {
           </Label>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger
+              asChild
               onPointerDown={() => setBookingStatus("idle")}
-              render={
-                <Button
-                  variant="outline"
-                  id="date"
-                  className={cn(
-                    "w-full justify-start text-left font-normal h-10 transition-all hover:bg-muted/50 cursor-pointer",
-                    !date && "text-muted-foreground",
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
-                  {date ? format(date, "PPP") : <span>Select a date</span>}
-                  <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
-                </Button>
-              }
-            />
+            >
+              <Button
+                variant="outline"
+                id="date"
+                className={cn(
+                  "w-full justify-start text-left font-normal h-10 transition-all hover:bg-muted/50 cursor-pointer",
+                  !date && "text-muted-foreground",
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+                {date ? format(date, "PPP") : <span>Select a date</span>}
+                <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
             <PopoverContent
               className="w-auto p-0 border-muted-foreground/10 shadow-2xl"
               align="start"

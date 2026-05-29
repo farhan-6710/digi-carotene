@@ -1,194 +1,226 @@
-import { useState } from "react";
-import type {
-  ActiveSlot,
-  Slot,
-  StatusKey,
-} from "@/types/admin/posts-management/types";
+import { useCallback, useEffect, useState } from "react";
+
+import type { ActiveSlot, StatusKey } from "@/types/admin/posts-management/types";
+import { DEFAULT_POST_TIME } from "@/constants/admin/posts-management/postSchedule";
 import { getDayLabel } from "@/utils/admin/posts-management/calendarUtils";
+import { normalizePostTime, isValidPostTime } from "@/utils/admin/posts-management/postScheduleUtils";
+import {
+  createPost,
+  deletePost,
+  fetchPostsForMonth,
+  postsToSlots,
+  toScheduledDate,
+  updatePost,
+} from "@/utils/admin/posts-management/postsRepository";
 
 const statusOptions: StatusKey[] = ["Draft", "Scheduled", "Posted", "Missed"];
 
-function buildEmptySlot(
-  year: number,
-  month: number,
-  date: number,
-  day: string,
-): Slot {
-  return { year, month, date, day, clients: [] };
-}
-
-function createClientId() {
-  return `cli-${Date.now()}`;
-}
-
-function matchesSlot(
-  slot: Slot,
-  year: number,
-  month: number,
-  date: number,
-) {
-  return slot.year === year && slot.month === month && slot.date === date;
-}
-
-export function usePostsManagement(initialSlots: Slot[]) {
-  const [slots, setSlots] = useState<Slot[]>(initialSlots);
+export function usePostsManagement(year: number, month: number) {
+  const [slots, setSlots] = useState(() => postsToSlots([], year, month));
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<ActiveSlot | null>(null);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [clientId, setClientId] = useState("");
   const [clientName, setClientName] = useState("");
   const [clientTime, setClientTime] = useState("");
   const [clientStatus, setClientStatus] = useState<StatusKey>("Draft");
 
-  const getSlot = (year: number, month: number, date: number) =>
-    slots.find((slot) => matchesSlot(slot, year, month, date));
+  const loadPosts = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
 
-  const handleDialogOpenChange = (open: boolean) => {
-    setIsDialogOpen(open);
-    if (!open) {
-      setActiveSlot(null);
-      setEditingIndex(null);
-      setClientId("");
-      setClientName("");
-      setClientTime("");
-      setClientStatus("Draft");
+    try {
+      const posts = await fetchPostsForMonth(year, month);
+      setSlots(postsToSlots(posts, year, month));
+    } catch (loadError) {
+      const message =
+        loadError instanceof Error
+          ? loadError.message
+          : "Failed to load posts for this month.";
+      setError(message);
+      setSlots(postsToSlots([], year, month));
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [year, month]);
 
-  const openAddDialog = (year: number, month: number, date: number) => {
-    const day = getDayLabel(year, month, date);
-    setActiveSlot({ year, month, date, day });
-    setEditingIndex(null);
-    setClientId(createClientId());
+  useEffect(() => {
+    void loadPosts();
+  }, [loadPosts]);
+
+  const getSlot = useCallback(
+    (slotYear: number, slotMonth: number, date: number) =>
+      slots.find(
+        (slot) =>
+          slot.year === slotYear &&
+          slot.month === slotMonth &&
+          slot.date === date,
+      ),
+    [slots],
+  );
+
+  const resetDialogState = useCallback(() => {
+    setActiveSlot(null);
+    setEditingPostId(null);
+    setClientId("");
     setClientName("");
     setClientTime("");
     setClientStatus("Draft");
-    setIsDialogOpen(true);
-  };
+  }, []);
 
-  const openEditDialog = (
-    year: number,
-    month: number,
-    date: number,
-    clientIndex: number,
-  ) => {
-    const slot = getSlot(year, month, date);
-    const client = slot?.clients[clientIndex];
+  const handleDialogOpenChange = useCallback(
+    (open: boolean) => {
+      setIsDialogOpen(open);
+      if (!open) {
+        resetDialogState();
+      }
+    },
+    [resetDialogState],
+  );
 
-    if (!client) {
-      return;
-    }
+  const openAddDialog = useCallback(
+    (slotYear: number, slotMonth: number, date: number) => {
+      setActiveSlot({
+        year: slotYear,
+        month: slotMonth,
+        date,
+        day: getDayLabel(slotYear, slotMonth, date),
+      });
+      setEditingPostId(null);
+      setClientId("");
+      setClientName("");
+      setClientTime(DEFAULT_POST_TIME);
+      setClientStatus("Draft");
+      setIsDialogOpen(true);
+    },
+    [],
+  );
 
-    setActiveSlot({
-      year,
-      month,
-      date,
-      day: slot?.day ?? getDayLabel(year, month, date),
-    });
-    setEditingIndex(clientIndex);
-    setClientId(client.id);
-    setClientName(client.name);
-    setClientTime(client.time);
-    setClientStatus(client.status);
-    setIsDialogOpen(true);
-  };
+  const openEditDialog = useCallback(
+    (slotYear: number, slotMonth: number, date: number, postId: string) => {
+      const slot = slots.find(
+        (entry) =>
+          entry.year === slotYear &&
+          entry.month === slotMonth &&
+          entry.date === date,
+      );
+      const client = slot?.clients.find((entry) => entry.id === postId);
 
-  const saveClient = () => {
-    if (!activeSlot) {
+      if (!client) {
+        return;
+      }
+
+      setActiveSlot({
+        year: slotYear,
+        month: slotMonth,
+        date,
+        day: slot?.day ?? getDayLabel(slotYear, slotMonth, date),
+      });
+      setEditingPostId(postId);
+      setClientId(client.id);
+      setClientName(client.name);
+      setClientTime(normalizePostTime(client.time));
+      setClientStatus(client.status);
+      setIsDialogOpen(true);
+    },
+    [slots],
+  );
+
+  const saveClient = useCallback(async () => {
+    if (!activeSlot || isSaving) {
       return;
     }
 
     const trimmedName = clientName.trim();
-    const trimmedTime = clientTime.trim();
-    if (!trimmedName || !trimmedTime) {
+    if (!trimmedName || !isValidPostTime(clientTime)) {
       return;
     }
 
-    setSlots((prev) => {
-      const existingIndex = prev.findIndex((slot) =>
-        matchesSlot(slot, activeSlot.year, activeSlot.month, activeSlot.date),
-      );
+    const trimmedTime = normalizePostTime(clientTime);
 
-      const next = [...prev];
-      const targetIndex =
-        existingIndex === -1
-          ? next.push(
-              buildEmptySlot(
-                activeSlot.year,
-                activeSlot.month,
-                activeSlot.date,
-                activeSlot.day,
-              ),
-            ) - 1
-          : existingIndex;
+    setIsSaving(true);
+    setError(null);
 
-      const targetSlot = next[targetIndex];
-      const updatedClients = [...targetSlot.clients];
-
-      if (editingIndex === null) {
-        updatedClients.push({
-          id: clientId || createClientId(),
-          name: trimmedName,
-          time: trimmedTime,
+    try {
+      if (editingPostId) {
+        await updatePost(editingPostId, {
+          clientName: trimmedName,
+          scheduledTime: trimmedTime,
           status: clientStatus,
         });
-      } else if (updatedClients[editingIndex]) {
-        updatedClients[editingIndex] = {
-          id: clientId,
-          name: trimmedName,
-          time: trimmedTime,
+      } else {
+        await createPost({
+          clientName: trimmedName,
+          scheduledDate: toScheduledDate(
+            activeSlot.year,
+            activeSlot.month,
+            activeSlot.date,
+          ),
+          scheduledTime: trimmedTime,
           status: clientStatus,
-        };
+        });
       }
 
-      next[targetIndex] = { ...targetSlot, clients: updatedClients };
-      return next;
-    });
+      await loadPosts();
+      handleDialogOpenChange(false);
+    } catch (saveError) {
+      const message =
+        saveError instanceof Error
+          ? saveError.message
+          : "Failed to save this post.";
+      setError(message);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [
+    activeSlot,
+    clientName,
+    clientStatus,
+    clientTime,
+    editingPostId,
+    handleDialogOpenChange,
+    isSaving,
+    loadPosts,
+  ]);
 
-    handleDialogOpenChange(false);
-  };
-
-  const deleteClient = () => {
-    if (!activeSlot || editingIndex === null) {
+  const deleteClient = useCallback(async () => {
+    if (!editingPostId || isSaving) {
       return;
     }
 
-    setSlots((prev) => {
-      const existingIndex = prev.findIndex((slot) =>
-        matchesSlot(slot, activeSlot.year, activeSlot.month, activeSlot.date),
-      );
+    setIsSaving(true);
+    setError(null);
 
-      if (existingIndex === -1) {
-        return prev;
-      }
-
-      const next = [...prev];
-      const targetSlot = next[existingIndex];
-      const updatedClients = targetSlot.clients.filter(
-        (_, index) => index !== editingIndex,
-      );
-
-      if (updatedClients.length === 0) {
-        next.splice(existingIndex, 1);
-      } else {
-        next[existingIndex] = { ...targetSlot, clients: updatedClients };
-      }
-
-      return next;
-    });
-
-    handleDialogOpenChange(false);
-  };
+    try {
+      await deletePost(editingPostId);
+      await loadPosts();
+      handleDialogOpenChange(false);
+    } catch (deleteError) {
+      const message =
+        deleteError instanceof Error
+          ? deleteError.message
+          : "Failed to delete this post.";
+      setError(message);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [editingPostId, handleDialogOpenChange, isSaving, loadPosts]);
 
   return {
-    slots,
     statusOptions,
+    isLoading,
+    error,
+    isSaving,
     isDialogOpen,
+    activeSlot,
     clientId,
     clientName,
     clientTime,
     clientStatus,
-    editingIndex,
+    editingPostId,
     setClientName,
     setClientTime,
     setClientStatus,
@@ -198,5 +230,6 @@ export function usePostsManagement(initialSlots: Slot[]) {
     saveClient,
     deleteClient,
     handleDialogOpenChange,
+    reloadPosts: loadPosts,
   };
 }

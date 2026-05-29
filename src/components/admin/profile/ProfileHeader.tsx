@@ -1,5 +1,10 @@
 import type { User } from "@supabase/supabase-js";
+import { Loader2, LogOut } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/providers/AuthProvider";
 import type { StaffProfile } from "@/types/admin/profile/types";
 import {
   getUserAvatarUrl,
@@ -14,10 +19,20 @@ type ProfileHeaderProps = {
 };
 
 export function ProfileHeader({ user, profile }: ProfileHeaderProps) {
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+  const [signingOut, setSigningOut] = useState(false);
+
   const displayName = getUserDisplayName(user);
   const initials = getUserInitials(user);
   const email = getUserEmail(user);
   const avatarUrl = getUserAvatarUrl(user);
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    await signOut();
+    navigate("/auth", { replace: true });
+  }
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
@@ -46,6 +61,22 @@ export function ProfileHeader({ user, profile }: ProfileHeaderProps) {
             {profile.bio}
           </p>
         </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleSignOut}
+          disabled={signingOut}
+          className="shrink-0"
+        >
+          {signingOut ? (
+            <Loader2 className="animate-spin" aria-hidden="true" />
+          ) : (
+            <LogOut aria-hidden="true" />
+          )}
+          Sign out
+        </Button>
       </div>
     </div>
   );

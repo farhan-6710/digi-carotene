@@ -112,7 +112,7 @@
   --muted: oklch(0.23 0.02 42); /* +4L above card */
   --accent: oklch(0.22 0.024 42); /* hover/pressed states */
   --border: oklch(0.28 0.02 40);
-  --input: oklch(0.18 0.02 42); /* same as muted */
+  --input: oklch(0.34 0.032 42); /* input borders — visible above card/popover */
 
   /* ── Sidebar: one stop darker than bg ── */
   --sidebar: oklch(15.688% 0.01139 39.451);

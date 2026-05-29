@@ -3,12 +3,12 @@ import { DateSelector } from "@/components/admin/posts-management/DateSelector";
 import { PostsManagementWeeksTable } from "@/components/admin/posts-management/PostsManagementWeeksTable";
 import { SendDailyReportDialog } from "@/components/admin/posts-management/SendDailyReportDialog";
 import {
-  initialSlots,
   statusColors,
   statusText,
 } from "@/constants/admin/posts-management/postsManagement";
 import { usePostsCalendarSelection } from "@/hooks/admin/usePostsCalendarSelection";
 import { usePostsManagement } from "@/hooks/admin/usePostsManagement";
+import { Loader2 } from "lucide-react";
 
 export function PostsManagementPage() {
   const { selectedDate, calendarWeeks, year, month, selectDate } =
@@ -16,12 +16,16 @@ export function PostsManagementPage() {
 
   const {
     statusOptions,
+    isLoading,
+    error,
+    isSaving,
     isDialogOpen,
+    activeSlot,
     clientId,
     clientName,
     clientTime,
     clientStatus,
-    editingIndex,
+    editingPostId,
     setClientName,
     setClientTime,
     setClientStatus,
@@ -31,9 +35,9 @@ export function PostsManagementPage() {
     saveClient,
     deleteClient,
     handleDialogOpenChange,
-  } = usePostsManagement(initialSlots);
+  } = usePostsManagement(year, month);
 
-  const isEditing = editingIndex !== null;
+  const isEditing = editingPostId !== null;
 
   return (
     <section className="space-y-8">
@@ -72,22 +76,37 @@ export function PostsManagementPage() {
         <DateSelector selectedDate={selectedDate} onSelect={selectDate} />
       </div>
 
-      <PostsManagementWeeksTable
-        year={year}
-        month={month}
-        weeks={calendarWeeks}
-        selectedDate={selectedDate}
-        getSlot={getSlot}
-        onAdd={openAddDialog}
-        onEdit={openEditDialog}
-        statusColors={statusColors}
-        statusText={statusText}
-      />
+      {error ? (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </div>
+      ) : null}
+
+      {isLoading ? (
+        <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-border bg-card">
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        <PostsManagementWeeksTable
+          year={year}
+          month={month}
+          weeks={calendarWeeks}
+          selectedDate={selectedDate}
+          getSlot={getSlot}
+          onAdd={openAddDialog}
+          onEdit={openEditDialog}
+          statusColors={statusColors}
+          statusText={statusText}
+        />
+      )}
 
       <ClientDialog
         open={isDialogOpen}
         onOpenChange={handleDialogOpenChange}
         isEditing={isEditing}
+        slotYear={activeSlot?.year ?? year}
+        slotMonth={activeSlot?.month ?? month}
+        slotDate={activeSlot?.date ?? selectedDate.getDate()}
         clientId={clientId}
         clientName={clientName}
         clientTime={clientTime}
@@ -96,8 +115,9 @@ export function PostsManagementPage() {
         onClientNameChange={setClientName}
         onClientTimeChange={setClientTime}
         onClientStatusChange={setClientStatus}
-        onSave={saveClient}
-        onDelete={deleteClient}
+        onSave={() => void saveClient()}
+        onDelete={() => void deleteClient()}
+        isSaving={isSaving}
       />
     </section>
   );

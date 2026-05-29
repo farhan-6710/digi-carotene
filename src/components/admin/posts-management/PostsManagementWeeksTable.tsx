@@ -14,7 +14,7 @@ type PostsManagementWeeksTableProps = {
   selectedDate: Date;
   getSlot: (year: number, month: number, date: number) => Slot | undefined;
   onAdd: (year: number, month: number, date: number) => void;
-  onEdit: (year: number, month: number, date: number, clientIndex: number) => void;
+  onEdit: (year: number, month: number, date: number, postId: string) => void;
   statusColors: Record<StatusKey, string>;
   statusText: Record<StatusKey, string>;
 };
@@ -115,14 +115,14 @@ export function PostsManagementWeeksTable({
 
                   <div className="mt-3 flex flex-1 flex-col gap-1.5">
                     {hasClients ? (
-                      slot?.clients.map((client, clientIndex) => (
+                      slot?.clients.map((client) => (
                         <button
-                          key={`${client.id}-${clientIndex}`}
+                          key={client.id}
                           type="button"
                           className="flex w-full items-center justify-between gap-2 rounded-xl border border-border bg-background/70 px-3 py-1.5 text-left transition hover:border-ring/50"
                           onClick={(event) => {
                             event.stopPropagation();
-                            onEdit(year, month, dateNumber, clientIndex);
+                            onEdit(year, month, dateNumber, client.id);
                           }}
                           aria-label={`Edit ${client.name}`}
                         >
