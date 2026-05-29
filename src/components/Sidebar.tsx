@@ -7,6 +7,7 @@ import {
   FileText,
   LayoutDashboard,
   Settings,
+  UserRound,
 } from "lucide-react";
 import { appMeta, primaryNav, type NavIconKey } from "../constants/navigation";
 
@@ -16,6 +17,7 @@ const icons: Record<NavIconKey, (props: { className?: string }) => ReactNode> =
     appointments: (props) => <CalendarClock {...props} aria-hidden="true" />,
     analytics: (props) => <BarChart3 {...props} aria-hidden="true" />,
     reports: (props) => <FileText {...props} aria-hidden="true" />,
+    profile: (props) => <UserRound {...props} aria-hidden="true" />,
     settings: (props) => <Settings {...props} aria-hidden="true" />,
   };
 
@@ -98,7 +100,7 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
                 Review today&apos;s patient appointments and session schedule.
               </p>
               <Link
-                to="/admin/appointment-booking"
+                to="/admin/appointments-management"
                 className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
               >
                 View Appointments

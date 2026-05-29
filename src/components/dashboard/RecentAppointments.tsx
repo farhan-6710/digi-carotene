@@ -16,7 +16,7 @@ const RecentAppointments = ({
   const navigate = useNavigate();
   const { appointmentId } = useParams();
   const isAppointmentsRoute =
-    location.pathname.startsWith("/admin/appointment-booking");
+    location.pathname.startsWith("/admin/appointments-management");
 
   return (
     <div
@@ -29,7 +29,7 @@ const RecentAppointments = ({
         <div className="text-sm font-semibold">{title}</div>
         {showViewAllLink ? (
           <Link
-            to="/admin/appointment-booking"
+            to="/admin/appointments-management"
             className="text-sm font-medium text-primary hover:opacity-90"
           >
             View all <span aria-hidden="true">↗</span>
@@ -63,7 +63,7 @@ const RecentAppointments = ({
                 key={appointment.id}
                 type="button"
                 onClick={() => {
-                  navigate("/admin/appointment-booking");
+                  navigate("/admin/appointments-management");
                 }}
                 className={[
                   "group block w-full text-left",

@@ -1,10 +1,11 @@
-import { type ReactNode, useState } from "react";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import { Menu, Search } from "lucide-react";
 import { appMeta } from "../constants/navigation";
 import Sidebar from "../components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { useThemePreference } from "@/providers/ThemePreferenceProvider";
+import { type ReactNode, useState } from "react";
 
 function ShellSection({ children }: { children: ReactNode }) {
   return <div className="px-6 py-6 lg:px-8">{children}</div>;
@@ -12,9 +13,7 @@ function ShellSection({ children }: { children: ReactNode }) {
 
 export function RootLayout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(() =>
-    document.body.classList.contains("dark"),
-  );
+  const { isDarkMode, setDarkMode } = useThemePreference();
 
   return (
     <div className="h-dvh overflow-hidden bg-background text-foreground">
@@ -51,16 +50,17 @@ export function RootLayout() {
               <div className="ml-auto flex items-center gap-3">
                 <Switch
                   checked={isDarkMode}
-                  onCheckedChange={(checked) => {
-                    setIsDarkMode(checked);
-                    document.body.classList.toggle("dark", checked);
-                  }}
+                  onCheckedChange={setDarkMode}
                   aria-label="Toggle dark mode"
                   className="cursor-pointer"
                 />
-                <div className="flex size-10 items-center justify-center rounded-full bg-primary/20 text-sm font-semibold text-primary">
+                <Link
+                  to="/admin/profile"
+                  className="flex size-10 items-center justify-center rounded-full bg-primary/20 text-sm font-semibold text-primary transition hover:bg-primary/30"
+                  aria-label="Open profile"
+                >
                   {appMeta.userInitials}
-                </div>
+                </Link>
               </div>
             </div>
           </header>

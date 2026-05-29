@@ -13,7 +13,7 @@ const NeedsAttention = () => {
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">Needs Attention</div>
         <Link
-          to="/admin/appointment-booking"
+          to="/admin/appointments-management"
           className="text-sm font-medium text-primary hover:opacity-90"
         >
           View appointments <span aria-hidden="true">↗</span>

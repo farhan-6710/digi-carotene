@@ -5,7 +5,9 @@ import { RootLayout } from "./layouts/RootLayout";
 import { DashboardPage } from "./pages/admin/DashboardPage";
 import { AnalyticsPage } from "./pages/admin/AnalyticsPage";
 import { AppointmentBookingPage } from "./pages/admin/AppointmentBookingPage";
-import { PlaceholderPage } from "./pages/admin/PlaceholderPage";
+import { ProfilePage } from "./pages/admin/ProfilePage";
+import { ReportsPage } from "./pages/admin/ReportsPage";
+import { SettingsPage } from "./pages/admin/SettingsPage";
 import { AboutPage } from "./pages/public/AboutPage";
 import { HomePage } from "./pages/public/HomePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -26,8 +28,9 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="dashboard" replace /> },
       { path: "dashboard", element: <DashboardPage /> },
       { path: "analytics", element: <AnalyticsPage /> },
-      { path: "reports", element: <PlaceholderPage title="Reports" /> },
-      { path: "settings", element: <PlaceholderPage title="Settings" /> },
+      { path: "reports", element: <ReportsPage /> },
+      { path: "settings", element: <SettingsPage /> },
+      { path: "profile", element: <ProfilePage /> },
       { path: "appointments-management", element: <AppointmentBookingPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],

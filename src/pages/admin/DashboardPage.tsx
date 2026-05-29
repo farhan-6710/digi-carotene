@@ -20,7 +20,7 @@ export function DashboardPage() {
     <section className="space-y-8">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">
-          Clinic Dashboard
+          Reviva Physio & Rehab Dashboard
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Snapshot of monthly session performance and patient activity at

@@ -7,7 +7,7 @@ const TopPatients = () => {
       <div className="flex items-center justify-between px-6 py-5">
         <div className="text-sm font-semibold">Patients With Most Sessions</div>
         <Link
-          to="/admin/appointment-booking"
+          to="/admin/appointments-management"
           className="text-sm font-medium text-primary hover:opacity-90"
         >
           View appointments <span aria-hidden="true">↗</span>
