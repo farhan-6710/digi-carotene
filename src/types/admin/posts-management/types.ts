@@ -8,14 +8,18 @@ export type SlotClient = {
 };
 
 export type Slot = {
-  day: string;
+  year: number;
+  month: number;
   date: number;
+  day: string;
   clients: SlotClient[];
 };
 
 export type ActiveSlot = {
-  day: string;
+  year: number;
+  month: number;
   date: number;
+  day: string;
 };
 
 export type Week = {

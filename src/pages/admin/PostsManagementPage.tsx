@@ -1,16 +1,19 @@
 import { ClientDialog } from "@/components/admin/posts-management/ClientDialog";
+import { DateSelector } from "@/components/admin/posts-management/DateSelector";
 import { PostsManagementWeeksTable } from "@/components/admin/posts-management/PostsManagementWeeksTable";
 import { SendDailyReportDialog } from "@/components/admin/posts-management/SendDailyReportDialog";
 import {
-  days,
   initialSlots,
   statusColors,
   statusText,
-  weeks,
 } from "@/constants/admin/posts-management/postsManagement";
+import { usePostsCalendarSelection } from "@/hooks/admin/usePostsCalendarSelection";
 import { usePostsManagement } from "@/hooks/admin/usePostsManagement";
 
 export function PostsManagementPage() {
+  const { selectedDate, calendarWeeks, year, month, selectDate } =
+    usePostsCalendarSelection();
+
   const {
     statusOptions,
     isDialogOpen,
@@ -47,28 +50,33 @@ export function PostsManagementPage() {
         <SendDailyReportDialog />
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-        {(
-          [
-            { label: "Draft", color: "bg-status-draft" },
-            { label: "Scheduled", color: "bg-status-scheduled" },
-            { label: "Posted", color: "bg-status-posted" },
-            { label: "Missed", color: "bg-status-missed" },
-          ] as const
-        ).map((item) => (
-          <div
-            key={item.label}
-            className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1"
-          >
-            <span className={`size-2 rounded-full ${item.color}`} />
-            <span>{item.label}</span>
-          </div>
-        ))}
+      <div className="flex flex-wrap justify-between items-center text-xs text-muted-foreground">
+        <div className="flex items-center gap-3">
+          {(
+            [
+              { label: "Draft", color: "bg-status-draft" },
+              { label: "Scheduled", color: "bg-status-scheduled" },
+              { label: "Posted", color: "bg-status-posted" },
+              { label: "Missed", color: "bg-status-missed" },
+            ] as const
+          ).map((item) => (
+            <div
+              key={item.label}
+              className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1"
+            >
+              <span className={`size-2 rounded-full ${item.color}`} />
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </div>
+        <DateSelector selectedDate={selectedDate} onSelect={selectDate} />
       </div>
 
       <PostsManagementWeeksTable
-        days={days}
-        weeks={weeks}
+        year={year}
+        month={month}
+        weeks={calendarWeeks}
+        selectedDate={selectedDate}
         getSlot={getSlot}
         onAdd={openAddDialog}
         onEdit={openEditDialog}

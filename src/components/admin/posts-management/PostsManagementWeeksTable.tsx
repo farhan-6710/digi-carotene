@@ -1,18 +1,29 @@
 import type { Slot, StatusKey, Week } from "@/types/admin/posts-management/types";
+import {
+  formatMonthDayLabel,
+  getDayLabel,
+  isSameCalendarDay,
+} from "@/utils/admin/posts-management/calendarUtils";
+import { CALENDAR_DAY_LABELS } from "@/constants/admin/posts-management/calendar";
+import { cn } from "@/lib/utils";
 
 type PostsManagementWeeksTableProps = {
-  days: string[];
+  year: number;
+  month: number;
   weeks: Week[];
-  getSlot: (day: string, date: number) => Slot | undefined;
-  onAdd: (day: string, date: number) => void;
-  onEdit: (day: string, date: number, clientIndex: number) => void;
+  selectedDate: Date;
+  getSlot: (year: number, month: number, date: number) => Slot | undefined;
+  onAdd: (year: number, month: number, date: number) => void;
+  onEdit: (year: number, month: number, date: number, clientIndex: number) => void;
   statusColors: Record<StatusKey, string>;
   statusText: Record<StatusKey, string>;
 };
 
 export function PostsManagementWeeksTable({
-  days,
+  year,
+  month,
   weeks,
+  selectedDate,
   getSlot,
   onAdd,
   onEdit,
@@ -41,16 +52,16 @@ export function PostsManagementWeeksTable({
       </div>
 
       <div className="divide-y divide-border">
-        {days.map((day, dayIndex) => (
+        {CALENDAR_DAY_LABELS.map((dayLabel, dayIndex) => (
           <div
-            key={day}
+            key={dayLabel}
             className="grid"
             style={{
               gridTemplateColumns: `140px repeat(${weekCount}, minmax(0, 1fr))`,
             }}
           >
             <div className="flex items-center border-r border-border bg-muted/40 px-4 py-6 text-sm font-semibold">
-              {day}
+              {dayLabel}
             </div>
             {weeks.map((week) => {
               const dateNumber = week.dates[dayIndex];
@@ -58,33 +69,48 @@ export function PostsManagementWeeksTable({
               if (!dateNumber) {
                 return (
                   <div
-                    key={`${day}-${week.label}-empty`}
+                    key={`${dayLabel}-${week.label}-empty`}
                     className="min-h-[140px] border-r border-border/70 bg-muted/20"
                   />
                 );
               }
 
-              const slot = getSlot(day, dateNumber);
+              const slot = getSlot(year, month, dateNumber);
               const hasClients = Boolean(slot?.clients.length);
+              const isSelected = isSameCalendarDay(
+                selectedDate,
+                year,
+                month,
+                dateNumber,
+              );
+              const dayName = getDayLabel(year, month, dateNumber);
 
               return (
                 <div
-                  key={`${day}-${week.label}-${dateNumber}`}
+                  key={`${dayLabel}-${week.label}-${dateNumber}`}
                   role="button"
                   tabIndex={0}
-                  className="group flex min-h-[140px] cursor-pointer flex-col border-r border-border/70 p-4 text-left transition hover:bg-muted/40"
-                  aria-label={`Add client for ${day} May ${dateNumber}`}
-                  onClick={() => onAdd(day, dateNumber)}
+                  className={cn(
+                    "group flex min-h-[140px] cursor-pointer flex-col border-r p-4 text-left transition hover:bg-muted/40",
+                    isSelected
+                      ? "border-2 border-primary"
+                      : "border-border/70",
+                  )}
+                  aria-label={`Add client for ${dayName} ${formatMonthDayLabel(year, month, dateNumber)}`}
+                  aria-current={isSelected ? "date" : undefined}
+                  onClick={() => onAdd(year, month, dateNumber)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
-                      onAdd(day, dateNumber);
+                      onAdd(year, month, dateNumber);
                     }
                   }}
                 >
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>Date</span>
-                    <span className="font-mono">May {dateNumber}</span>
+                    <span className="font-mono">
+                      {formatMonthDayLabel(year, month, dateNumber)}
+                    </span>
                   </div>
 
                   <div className="mt-3 flex flex-1 flex-col gap-1.5">
@@ -96,7 +122,7 @@ export function PostsManagementWeeksTable({
                           className="flex w-full items-center justify-between gap-2 rounded-xl border border-border bg-background/70 px-3 py-1.5 text-left transition hover:border-ring/50"
                           onClick={(event) => {
                             event.stopPropagation();
-                            onEdit(day, dateNumber, clientIndex);
+                            onEdit(year, month, dateNumber, clientIndex);
                           }}
                           aria-label={`Edit ${client.name}`}
                         >

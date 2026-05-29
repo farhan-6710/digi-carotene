@@ -5,7 +5,7 @@ import type {
   DayContribution,
   MonthLabel,
 } from "@/types/admin/analytics/types";
-import { getPostActivityLevel } from "@/lib/admin/analytics/postActivityLevels";
+import { getPostActivityLevel } from "@/utils/admin/analytics/postActivityLevels";
 
 export const CONTRIBUTION_YEAR = 2026;
 export const MAX_DAILY_POSTS = 8;

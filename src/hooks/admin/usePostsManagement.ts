@@ -4,15 +4,30 @@ import type {
   Slot,
   StatusKey,
 } from "@/types/admin/posts-management/types";
+import { getDayLabel } from "@/utils/admin/posts-management/calendarUtils";
 
 const statusOptions: StatusKey[] = ["Draft", "Scheduled", "Posted", "Missed"];
 
-function buildEmptySlot(day: string, date: number): Slot {
-  return { day, date, clients: [] };
+function buildEmptySlot(
+  year: number,
+  month: number,
+  date: number,
+  day: string,
+): Slot {
+  return { year, month, date, day, clients: [] };
 }
 
 function createClientId() {
   return `cli-${Date.now()}`;
+}
+
+function matchesSlot(
+  slot: Slot,
+  year: number,
+  month: number,
+  date: number,
+) {
+  return slot.year === year && slot.month === month && slot.date === date;
 }
 
 export function usePostsManagement(initialSlots: Slot[]) {
@@ -25,8 +40,8 @@ export function usePostsManagement(initialSlots: Slot[]) {
   const [clientTime, setClientTime] = useState("");
   const [clientStatus, setClientStatus] = useState<StatusKey>("Draft");
 
-  const getSlot = (day: string, date: number) =>
-    slots.find((slot) => slot.day === day && slot.date === date);
+  const getSlot = (year: number, month: number, date: number) =>
+    slots.find((slot) => matchesSlot(slot, year, month, date));
 
   const handleDialogOpenChange = (open: boolean) => {
     setIsDialogOpen(open);
@@ -40,8 +55,9 @@ export function usePostsManagement(initialSlots: Slot[]) {
     }
   };
 
-  const openAddDialog = (day: string, date: number) => {
-    setActiveSlot({ day, date });
+  const openAddDialog = (year: number, month: number, date: number) => {
+    const day = getDayLabel(year, month, date);
+    setActiveSlot({ year, month, date, day });
     setEditingIndex(null);
     setClientId(createClientId());
     setClientName("");
@@ -50,15 +66,25 @@ export function usePostsManagement(initialSlots: Slot[]) {
     setIsDialogOpen(true);
   };
 
-  const openEditDialog = (day: string, date: number, clientIndex: number) => {
-    const slot = getSlot(day, date);
+  const openEditDialog = (
+    year: number,
+    month: number,
+    date: number,
+    clientIndex: number,
+  ) => {
+    const slot = getSlot(year, month, date);
     const client = slot?.clients[clientIndex];
 
     if (!client) {
       return;
     }
 
-    setActiveSlot({ day, date });
+    setActiveSlot({
+      year,
+      month,
+      date,
+      day: slot?.day ?? getDayLabel(year, month, date),
+    });
     setEditingIndex(clientIndex);
     setClientId(client.id);
     setClientName(client.name);
@@ -79,14 +105,21 @@ export function usePostsManagement(initialSlots: Slot[]) {
     }
 
     setSlots((prev) => {
-      const existingIndex = prev.findIndex(
-        (slot) => slot.day === activeSlot.day && slot.date === activeSlot.date,
+      const existingIndex = prev.findIndex((slot) =>
+        matchesSlot(slot, activeSlot.year, activeSlot.month, activeSlot.date),
       );
 
       const next = [...prev];
       const targetIndex =
         existingIndex === -1
-          ? next.push(buildEmptySlot(activeSlot.day, activeSlot.date)) - 1
+          ? next.push(
+              buildEmptySlot(
+                activeSlot.year,
+                activeSlot.month,
+                activeSlot.date,
+                activeSlot.day,
+              ),
+            ) - 1
           : existingIndex;
 
       const targetSlot = next[targetIndex];
@@ -121,8 +154,8 @@ export function usePostsManagement(initialSlots: Slot[]) {
     }
 
     setSlots((prev) => {
-      const existingIndex = prev.findIndex(
-        (slot) => slot.day === activeSlot.day && slot.date === activeSlot.date,
+      const existingIndex = prev.findIndex((slot) =>
+        matchesSlot(slot, activeSlot.year, activeSlot.month, activeSlot.date),
       );
 
       if (existingIndex === -1) {

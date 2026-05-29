@@ -1,34 +1,10 @@
-import type { Slot, StatusKey, Week } from "@/types/admin/posts-management/types";
-
-export const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-export const weeks: Week[] = [
-  { label: "Week 1", range: "May 1 to May 7", dates: [1, 2, 3, 4, 5, 6, 7] },
-  {
-    label: "Week 2",
-    range: "May 8 to May 14",
-    dates: [8, 9, 10, 11, 12, 13, 14],
-  },
-  {
-    label: "Week 3",
-    range: "May 15 to May 21",
-    dates: [15, 16, 17, 18, 19, 20, 21],
-  },
-  {
-    label: "Week 4",
-    range: "May 22 to May 28",
-    dates: [22, 23, 24, 25, 26, 27, 28],
-  },
-  {
-    label: "Week 5",
-    range: "May 29 to May 31",
-    dates: [29, 30, 31, 0, 0, 0, 0],
-  },
-];
+import type { Slot, StatusKey } from "@/types/admin/posts-management/types";
 
 export const dummyPostsData: Slot[] = [
   {
-        date: 1,
+    year: 2026,
+    month: 5,
+    date: 1,
     day: "Mon",
     clients: [
       {
@@ -58,7 +34,9 @@ export const dummyPostsData: Slot[] = [
     ],
   },
   {
-        date: 2,
+    year: 2026,
+    month: 5,
+    date: 2,
     day: "Tue",
     clients: [
       {
@@ -88,7 +66,9 @@ export const dummyPostsData: Slot[] = [
     ],
   },
   {
-        date: 3,
+    year: 2026,
+    month: 5,
+    date: 3,
     day: "Wed",
     clients: [
       {
@@ -117,9 +97,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 4, day: "Thu", clients: [] },
+  { year: 2026, month: 5, date: 4, day: "Thu", clients: [] },
   {
-        date: 5,
+    year: 2026,
+    month: 5,
+    date: 5,
     day: "Fri",
     clients: [
       {
@@ -136,9 +118,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 6, day: "Sat", clients: [] },
+  { year: 2026, month: 5, date: 6, day: "Sat", clients: [] },
   {
-        date: 7,
+    year: 2026,
+    month: 5,
+    date: 7,
     day: "Sun",
     clients: [
       {
@@ -161,9 +145,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 8, day: "Mon", clients: [] },
+  { year: 2026, month: 5, date: 8, day: "Mon", clients: [] },
   {
-        date: 9,
+    year: 2026,
+    month: 5,
+    date: 9,
     day: "Tue",
     clients: [
       {
@@ -175,7 +161,9 @@ export const dummyPostsData: Slot[] = [
     ],
   },
   {
-        date: 10,
+    year: 2026,
+    month: 5,
+    date: 10,
     day: "Wed",
     clients: [
       {
@@ -192,9 +180,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 11, day: "Thu", clients: [] },
+  { year: 2026, month: 5, date: 11, day: "Thu", clients: [] },
   {
-        date: 12,
+    year: 2026,
+    month: 5,
+    date: 12,
     day: "Fri",
     clients: [
       {
@@ -205,9 +195,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 13, day: "Sat", clients: [] },
+  { year: 2026, month: 5, date: 13, day: "Sat", clients: [] },
   {
-        date: 14,
+    year: 2026,
+    month: 5,
+    date: 14,
     day: "Sun",
     clients: [
       {
@@ -225,7 +217,9 @@ export const dummyPostsData: Slot[] = [
     ],
   },
   {
-        date: 15,
+    year: 2026,
+    month: 5,
+    date: 15,
     day: "Mon",
     clients: [
       {
@@ -248,9 +242,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 16, day: "Tue", clients: [] },
+  { year: 2026, month: 5, date: 16, day: "Tue", clients: [] },
   {
-        date: 17,
+    year: 2026,
+    month: 5,
+    date: 17,
     day: "Wed",
     clients: [
       {
@@ -261,9 +257,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 18, day: "Thu", clients: [] },
+  { year: 2026, month: 5, date: 18, day: "Thu", clients: [] },
   {
-        date: 19,
+    year: 2026,
+    month: 5,
+    date: 19,
     day: "Fri",
     clients: [
       {
@@ -280,9 +278,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 20, day: "Sat", clients: [] },
+  { year: 2026, month: 5, date: 20, day: "Sat", clients: [] },
   {
-        date: 21,
+    year: 2026,
+    month: 5,
+    date: 21,
     day: "Sun",
     clients: [
       {
@@ -293,9 +293,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 22, day: "Mon", clients: [] },
+  { year: 2026, month: 5, date: 22, day: "Mon", clients: [] },
   {
-        date: 23,
+    year: 2026,
+    month: 5,
+    date: 23,
     day: "Tue",
     clients: [
       {
@@ -312,9 +314,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 24, day: "Wed", clients: [] },
+  { year: 2026, month: 5, date: 24, day: "Wed", clients: [] },
   {
-        date: 25,
+    year: 2026,
+    month: 5,
+    date: 25,
     day: "Thu",
     clients: [
       {
@@ -337,9 +341,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 26, day: "Fri", clients: [] },
+  { year: 2026, month: 5, date: 26, day: "Fri", clients: [] },
   {
-        date: 27,
+    year: 2026,
+    month: 5,
+    date: 27,
     day: "Sat",
     clients: [
       {
@@ -350,9 +356,11 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 28, day: "Sun", clients: [] },
+  { year: 2026, month: 5, date: 28, day: "Sun", clients: [] },
   {
-        date: 29,
+    year: 2026,
+    month: 5,
+    date: 29,
     day: "Mon",
     clients: [
       {
@@ -370,7 +378,9 @@ export const dummyPostsData: Slot[] = [
     ],
   },
   {
-        date: 30,
+    year: 2026,
+    month: 5,
+    date: 30,
     day: "Tue",
     clients: [
       {
@@ -381,7 +391,7 @@ export const dummyPostsData: Slot[] = [
       },
     ],
   },
-  { date: 31, day: "Wed", clients: [] },
+  { year: 2026, month: 5, date: 31, day: "Wed", clients: [] },
 ];
 
 export const initialSlots: Slot[] = dummyPostsData;

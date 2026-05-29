@@ -1,16 +1,25 @@
+import type { User } from "@supabase/supabase-js";
+
 import type { StaffProfile } from "@/types/admin/profile/types";
+import {
+  getUserAuthProvider,
+  getUserEmail,
+  getUserJoinedDate,
+} from "@/utils/admin/authUserDisplay";
 
 type ProfileDetailsCardProps = {
+  user: User | null;
   profile: StaffProfile;
 };
 
-export function ProfileDetailsCard({ profile }: ProfileDetailsCardProps) {
+export function ProfileDetailsCard({ user, profile }: ProfileDetailsCardProps) {
   const details = [
     { label: "Department", value: profile.department },
-    { label: "Email", value: profile.email },
+    { label: "Email", value: getUserEmail(user) },
     { label: "Phone", value: profile.phone },
     { label: "Certification", value: profile.licenseNumber },
-    { label: "Joined", value: profile.joinedDate },
+    { label: "Joined", value: getUserJoinedDate(user) },
+    { label: "Sign-in method", value: getUserAuthProvider(user) },
     { label: "Location", value: profile.location },
   ];
 

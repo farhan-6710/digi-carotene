@@ -13,7 +13,7 @@ import {
   resolveInitialThemePreference,
   setStoredThemePreference,
   type ThemePreference,
-} from "@/lib/admin/themePreferenceStorage";
+} from "@/utils/admin/themePreferenceStorage";
 
 type ThemePreferenceContextValue = {
   isDarkMode: boolean;

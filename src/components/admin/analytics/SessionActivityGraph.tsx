@@ -7,7 +7,7 @@ import {
 import {
   formatPostActivityDate,
   postActivityLevelClasses,
-} from "@/lib/admin/analytics/postActivityLevels";
+} from "@/utils/admin/analytics/postActivityLevels";
 import type { DayContribution } from "@/types/admin/analytics/types";
 import { SessionActivityLegend } from "./SessionActivityLegend";
 

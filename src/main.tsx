@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { getStoredThemePreference } from "./lib/admin/themePreferenceStorage";
+import { getStoredThemePreference } from "./utils/admin/themePreferenceStorage";
 
 const storedTheme = getStoredThemePreference();
 if (storedTheme === "dark") {
