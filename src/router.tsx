@@ -4,7 +4,7 @@ import { PublicLayout } from "./layouts/PublicLayout";
 import { RootLayout } from "./layouts/RootLayout";
 import { DashboardPage } from "./pages/admin/DashboardPage";
 import { AnalyticsPage } from "./pages/admin/AnalyticsPage";
-import { AppointmentBookingPage } from "./pages/admin/AppointmentBookingPage";
+import { PostsManagementPage } from "./pages/admin/PostsManagementPage";
 import { ProfilePage } from "./pages/admin/ProfilePage";
 import { ReportsPage } from "./pages/admin/ReportsPage";
 import { SettingsPage } from "./pages/admin/SettingsPage";
@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
       { path: "reports", element: <ReportsPage /> },
       { path: "settings", element: <SettingsPage /> },
       { path: "profile", element: <ProfilePage /> },
-      { path: "appointments-management", element: <AppointmentBookingPage /> },
+      { path: "posts-management", element: <PostsManagementPage /> },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

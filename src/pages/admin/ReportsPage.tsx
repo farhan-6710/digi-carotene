@@ -8,8 +8,8 @@ export function ReportsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Review clinic performance summaries, billing exports, and compliance
-          documents generated for Reviva.
+          Review agency performance summaries, billing exports, and compliance
+          documents generated for Digi Carotene.
         </p>
       </div>
 

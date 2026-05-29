@@ -1,72 +1,72 @@
-export const clinicMeta = {
-  name: "Reviva",
-  tagline: "Physiotherapy & Rehabilitation Clinic",
+export const agencyMeta = {
+  name: "Digi Carotene",
+  tagline: "Digital Marketing Agency",
   description:
-    "Personalised recovery programmes that restore movement, reduce pain, and help you return to everyday life with confidence.",
+    "Strategic content, social campaigns, and brand growth — delivered with clarity, creativity, and measurable results.",
 } as const;
 
 export const heroContent = {
-  eyebrow: "Physiotherapy & Rehab",
-  title: "Recover stronger with Reviva",
+  eyebrow: "Digital Marketing",
+  title: "Grow your brand with Digi Carotene",
   description:
-    "Expert-led rehabilitation for sports injuries, post-operative recovery, chronic pain, and mobility restoration — delivered with care, clarity, and consistency.",
-  primaryCta: { label: "Explore our clinic", to: "/about" },
-  secondaryCta: { label: "Staff portal", to: "/admin/dashboard" },
+    "Full-service digital marketing for brands that want stronger social presence, smarter content calendars, and campaigns that convert.",
+  primaryCta: { label: "About our agency", to: "/about" },
+  secondaryCta: { label: "Team portal", to: "/admin/dashboard" },
 } as const;
 
 export const serviceHighlights = [
   {
-    title: "Sports Injury Rehab",
+    title: "Social Media Management",
     description:
-      "Structured return-to-play plans for sprains, strains, and performance-related injuries.",
+      "Consistent posting, community engagement, and platform-specific content that builds audience trust.",
   },
   {
-    title: "Post-Operative Recovery",
+    title: "Content Strategy",
     description:
-      "Guided rehabilitation after surgery with progressive strength and mobility milestones.",
+      "Editorial calendars, campaign planning, and creative direction aligned to your brand goals.",
   },
   {
-    title: "Chronic Pain Management",
+    title: "Paid Media Campaigns",
     description:
-      "Evidence-based treatment for back, neck, and joint pain with long-term movement strategies.",
+      "Targeted ad campaigns across social and search with ongoing optimisation and reporting.",
   },
   {
-    title: "Mobility & Gait Training",
+    title: "Brand & Creative",
     description:
-      "Balance, posture, and walking programmes tailored to each patient’s daily goals.",
+      "Visual identity, copy, and campaign assets that keep your messaging cohesive across channels.",
   },
 ] as const;
 
-export const clinicStats = [
-  { label: "Sessions delivered monthly", value: "180+" },
-  { label: "Patient satisfaction", value: "96%" },
-  { label: "Average recovery plan", value: "6–8 wks" },
-  { label: "Therapists on staff", value: "12" },
+export const agencyStats = [
+  { label: "Posts delivered monthly", value: "180+" },
+  { label: "Client retention", value: "96%" },
+  { label: "Average campaign cycle", value: "6–8 wks" },
+  { label: "Specialists on team", value: "12" },
 ] as const;
 
 export const aboutContent = {
-  title: "About Reviva",
+  title: "About Digi Carotene",
   intro:
-    "Reviva is a physiotherapy and rehabilitation clinic built around one belief: recovery should feel structured, supportive, and measurable.",
+    "Digi Carotene is a digital marketing agency built around one belief: growth should feel structured, creative, and measurable.",
   sections: [
     {
       title: "Our approach",
-      body: "Every patient receives a clear plan with defined milestones — from initial assessment through active rehab and discharge. We combine manual therapy, exercise prescription, and progress tracking in one calm clinical environment.",
+      body: "Every client receives a clear content plan with defined milestones — from strategy and scheduling through publishing and performance review. We combine creative direction, channel expertise, and reporting in one collaborative workflow.",
     },
     {
       title: "Who we help",
-      body: "From athletes returning to sport to patients rebuilding strength after surgery, our team supports a wide range of recovery journeys with the same level of attention and professionalism.",
+      body: "From local brands building their first social presence to established companies scaling multi-channel campaigns, our team supports a wide range of marketing goals with the same level of attention and professionalism.",
     },
     {
-      title: "Clinic operations",
-      body: "Our staff portal keeps appointments, session activity, and patient progress organised — so clinicians can focus on care while the clinic runs smoothly behind the scenes.",
+      title: "Agency operations",
+      body: "Our team portal keeps posts, client schedules, and campaign activity organised — so strategists can focus on creative work while operations run smoothly behind the scenes.",
     },
   ],
-  values: ["Patient-first care", "Evidence-based rehab", "Transparent progress"],
+  values: ["Client-first strategy", "Data-informed creativity", "Transparent reporting"],
 } as const;
 
 export const publicNavLinks = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
-  { label: "Staff portal", to: "/admin/dashboard" },
+  { label: "Team portal", to: "/admin/dashboard" },
 ] as const;

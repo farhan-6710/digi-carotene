@@ -7,163 +7,163 @@ export type StatCard = {
 
 export const dashboardStats: StatCard[] = [
   {
-    label: "Sessions Completed This Month",
+    label: "Posts Published This Month",
     value: "186",
     delta: "+12.4%",
     deltaLabel: "vs last month",
   },
   {
-    label: "Appointments Scheduled",
+    label: "Posts Scheduled",
     value: "52",
     delta: "+6",
     deltaLabel: "since last week",
   },
   {
-    label: "Patients Seen This Month",
-    value: "134",
+    label: "Active Clients This Month",
+    value: "34",
     delta: "+9",
     deltaLabel: "new this month",
   },
   {
-    label: "No-Shows This Month",
+    label: "Missed Posts This Month",
     value: "7",
     delta: "-2",
     deltaLabel: "from last month",
   },
 ];
 
-export type NeedsAttentionPosts = {
+export type NeedsAttentionItem = {
   time: string;
   from: string;
   status: "Missed" | "Due Today" | "Needs Review";
 };
 
-export const needsAttentionPosts: NeedsAttentionPosts[] = [
+export const needsAttentionItems: NeedsAttentionItem[] = [
   {
     time: "09:00 AM",
-    from: "Sarah Khan - Knee rehab follow-up",
+    from: "Bloom Skincare - Instagram carousel",
     status: "Missed",
   },
   {
     time: "10:30 AM",
-    from: "James O'Neill - Post-op assessment",
+    from: "Northwind Apparel - Product launch post",
     status: "Due Today",
   },
   {
     time: "11:15 AM",
-    from: "Maria Lopez - Shoulder mobility",
+    from: "Urban Eats Co. - Weekend promo",
     status: "Needs Review",
   },
   {
     time: "01:00 PM",
-    from: "David Chen - Gait training",
+    from: "Peak Fitness - Reels campaign",
     status: "Due Today",
   },
   {
     time: "03:30 PM",
-    from: "Emily Watson - Sports injury review",
+    from: "Luxe Interiors - Before/after showcase",
     status: "Needs Review",
   },
   {
     time: "04:45 PM",
-    from: "Robert Singh - Back pain session",
+    from: "GreenLeaf Organics - Story series",
     status: "Missed",
   },
   {
     time: "05:20 PM",
-    from: "Aisha Malik - ACL recovery",
+    from: "Swift Logistics - LinkedIn update",
     status: "Due Today",
   },
   {
     time: "06:15 PM",
-    from: "Tom Bradley - Initial consultation",
+    from: "Nova Tech - Feature announcement",
     status: "Needs Review",
   },
 ];
 
-export type TopPatient = {
+export type TopClient = {
   name: string;
-  sessions: number;
-  upcoming: number;
-  noShows: number;
+  posts: number;
+  scheduled: number;
+  missed: number;
 };
 
-export const topPatients: TopPatient[] = [
-  { name: "Sarah Khan", sessions: 24, upcoming: 6, noShows: 1 },
-  { name: "James O'Neill", sessions: 21, upcoming: 5, noShows: 0 },
-  { name: "Maria Lopez", sessions: 18, upcoming: 4, noShows: 2 },
-  { name: "David Chen", sessions: 16, upcoming: 3, noShows: 1 },
-  { name: "Emily Watson", sessions: 14, upcoming: 2, noShows: 1 },
-  { name: "Robert Singh", sessions: 13, upcoming: 3, noShows: 0 },
-  { name: "Aisha Malik", sessions: 12, upcoming: 2, noShows: 1 },
-  { name: "Tom Bradley", sessions: 11, upcoming: 2, noShows: 0 },
-  { name: "Nina Patel", sessions: 10, upcoming: 1, noShows: 1 },
-  { name: "Chris Evans", sessions: 9, upcoming: 1, noShows: 0 },
+export const topClients: TopClient[] = [
+  { name: "Bloom Skincare", posts: 24, scheduled: 6, missed: 1 },
+  { name: "Northwind Apparel", posts: 21, scheduled: 5, missed: 0 },
+  { name: "Urban Eats Co.", posts: 18, scheduled: 4, missed: 2 },
+  { name: "Peak Fitness", posts: 16, scheduled: 3, missed: 1 },
+  { name: "Luxe Interiors", posts: 14, scheduled: 2, missed: 1 },
+  { name: "GreenLeaf Organics", posts: 13, scheduled: 3, missed: 0 },
+  { name: "Swift Logistics", posts: 12, scheduled: 2, missed: 1 },
+  { name: "Nova Tech", posts: 11, scheduled: 2, missed: 0 },
+  { name: "Bright Dental", posts: 10, scheduled: 1, missed: 1 },
+  { name: "Coastal Realty", posts: 9, scheduled: 1, missed: 0 },
 ];
 
-export type RecentAppointment = {
+export type RecentPost = {
   time: string;
-  patient: string;
+  client: string;
   id: string;
-  sessionType: string;
-  status: "Upcoming" | "Attended" | "Missed";
+  postType: string;
+  status: "Scheduled" | "Posted" | "Missed";
 };
 
-export const recentAppointments: RecentAppointment[] = [
+export const recentPosts: RecentPost[] = [
   {
     time: "09:00 AM",
-    patient: "Sarah Khan",
-    id: "RV-728",
-    sessionType: "Knee rehab",
-    status: "Attended",
+    client: "Bloom Skincare",
+    id: "DC-728",
+    postType: "Instagram carousel",
+    status: "Posted",
   },
   {
     time: "09:45 AM",
-    patient: "James O'Neill",
-    id: "RV-727",
-    sessionType: "Post-op review",
-    status: "Upcoming",
+    client: "Northwind Apparel",
+    id: "DC-727",
+    postType: "Product launch",
+    status: "Scheduled",
   },
   {
     time: "10:30 AM",
-    patient: "Maria Lopez",
-    id: "RV-726",
-    sessionType: "Shoulder mobility",
-    status: "Attended",
+    client: "Urban Eats Co.",
+    id: "DC-726",
+    postType: "Weekend promo",
+    status: "Posted",
   },
   {
     time: "11:15 AM",
-    patient: "David Chen",
-    id: "RV-725",
-    sessionType: "Gait training",
+    client: "Peak Fitness",
+    id: "DC-725",
+    postType: "Reels campaign",
     status: "Missed",
   },
   {
     time: "12:00 PM",
-    patient: "Emily Watson",
-    id: "RV-724",
-    sessionType: "Sports injury",
-    status: "Upcoming",
+    client: "Luxe Interiors",
+    id: "DC-724",
+    postType: "Before/after",
+    status: "Scheduled",
   },
   {
     time: "01:30 PM",
-    patient: "Robert Singh",
-    id: "RV-723",
-    sessionType: "Back pain session",
-    status: "Attended",
+    client: "GreenLeaf Organics",
+    id: "DC-723",
+    postType: "Story series",
+    status: "Posted",
   },
   {
     time: "02:15 PM",
-    patient: "Aisha Malik",
-    id: "RV-722",
-    sessionType: "ACL recovery",
-    status: "Upcoming",
+    client: "Swift Logistics",
+    id: "DC-722",
+    postType: "LinkedIn update",
+    status: "Scheduled",
   },
   {
     time: "03:00 PM",
-    patient: "Tom Bradley",
-    id: "RV-721",
-    sessionType: "Initial consult",
-    status: "Attended",
+    client: "Nova Tech",
+    id: "DC-721",
+    postType: "Feature announcement",
+    status: "Posted",
   },
 ];

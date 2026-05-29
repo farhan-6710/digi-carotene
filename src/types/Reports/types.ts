@@ -1,6 +1,6 @@
 export type ReportCategory =
-  | "patient-outcomes"
-  | "session-summary"
+  | "client-performance"
+  | "content-summary"
   | "billing"
   | "compliance";
 
@@ -16,7 +16,7 @@ export type ReportStatCard = {
   trend: ReportStatTrend;
 };
 
-export type ClinicReport = {
+export type AgencyReport = {
   id: string;
   title: string;
   category: ReportCategory;

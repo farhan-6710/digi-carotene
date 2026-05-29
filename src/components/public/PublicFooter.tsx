@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { clinicMeta } from "@/constants/public";
+import { agencyMeta } from "@/constants/public";
 
 export function PublicFooter() {
   return (
@@ -7,10 +7,10 @@ export function PublicFooter() {
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between lg:px-8">
         <div>
           <div className="text-lg font-semibold tracking-tight">
-            {clinicMeta.name}
+            {agencyMeta.name}
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            {clinicMeta.tagline}
+            {agencyMeta.tagline}
           </p>
         </div>
 
@@ -25,7 +25,7 @@ export function PublicFooter() {
             to="/admin/dashboard"
             className="transition hover:text-foreground"
           >
-            Staff portal
+            Team portal
           </Link>
         </div>
       </div>

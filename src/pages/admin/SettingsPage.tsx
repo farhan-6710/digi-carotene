@@ -10,8 +10,8 @@ export function SettingsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Manage notifications, appearance, and clinic workflow preferences for
-          the Reviva staff portal.
+          Manage notifications, appearance, and agency workflow preferences for
+          the Digi Carotene team portal.
         </p>
       </div>
 

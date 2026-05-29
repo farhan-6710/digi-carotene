@@ -1,11 +1,11 @@
-import { Link } from "react-router";
 import {
-  clinicMeta,
-  clinicStats,
+  agencyMeta,
+  agencyStats,
   heroContent,
   serviceHighlights,
 } from "@/constants/public";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 export function HomePage() {
   return (
@@ -37,12 +37,12 @@ export function HomePage() {
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-            <div className="text-sm font-semibold">{clinicMeta.name}</div>
+            <div className="text-sm font-semibold">{agencyMeta.name}</div>
             <p className="mt-2 text-sm text-muted-foreground">
-              {clinicMeta.description}
+              {agencyMeta.description}
             </p>
             <div className="mt-6 grid grid-cols-2 gap-4">
-              {clinicStats.map((stat) => (
+              {agencyStats.map((stat) => (
                 <div
                   key={stat.label}
                   className="rounded-xl border border-border bg-muted/30 p-4"
@@ -63,11 +63,11 @@ export function HomePage() {
       <section className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Rehabilitation services
+            Marketing services
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Structured programmes designed to meet you where you are in your
-            recovery journey.
+            Campaigns and content programmes designed to meet your brand where
+            it is and take it further.
           </p>
         </div>
 
@@ -92,15 +92,15 @@ export function HomePage() {
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-12 sm:flex-row sm:items-center lg:px-8">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">
-              Ready to begin your recovery?
+              Ready to grow your brand?
             </h2>
             <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-              Learn more about our clinic approach or access the staff portal to
-              manage appointments and sessions.
+              Learn more about our agency approach or access the team portal to
+              manage posts and client campaigns.
             </p>
           </div>
           <Button asChild className="rounded-full px-6">
-            <Link to="/about">Learn about Reviva</Link>
+            <Link to="/about">About Digi Carotene</Link>
           </Button>
         </div>
       </section>

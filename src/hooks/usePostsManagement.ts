@@ -11,12 +11,18 @@ function buildEmptySlot(day: string, date: number): Slot {
   return { day, date, clients: [] };
 }
 
+function createClientId() {
+  return `cli-${Date.now()}`;
+}
+
 export function usePostsManagement(initialSlots: Slot[]) {
   const [slots, setSlots] = useState<Slot[]>(initialSlots);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeSlot, setActiveSlot] = useState<ActiveSlot | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [clientId, setClientId] = useState("");
   const [clientName, setClientName] = useState("");
+  const [clientTime, setClientTime] = useState("");
   const [clientStatus, setClientStatus] = useState<StatusKey>("Draft");
 
   const getSlot = (day: string, date: number) =>
@@ -27,7 +33,9 @@ export function usePostsManagement(initialSlots: Slot[]) {
     if (!open) {
       setActiveSlot(null);
       setEditingIndex(null);
+      setClientId("");
       setClientName("");
+      setClientTime("");
       setClientStatus("Draft");
     }
   };
@@ -35,7 +43,9 @@ export function usePostsManagement(initialSlots: Slot[]) {
   const openAddDialog = (day: string, date: number) => {
     setActiveSlot({ day, date });
     setEditingIndex(null);
+    setClientId(createClientId());
     setClientName("");
+    setClientTime("");
     setClientStatus("Draft");
     setIsDialogOpen(true);
   };
@@ -50,7 +60,9 @@ export function usePostsManagement(initialSlots: Slot[]) {
 
     setActiveSlot({ day, date });
     setEditingIndex(clientIndex);
+    setClientId(client.id);
     setClientName(client.name);
+    setClientTime(client.time);
     setClientStatus(client.status);
     setIsDialogOpen(true);
   };
@@ -61,7 +73,8 @@ export function usePostsManagement(initialSlots: Slot[]) {
     }
 
     const trimmedName = clientName.trim();
-    if (!trimmedName) {
+    const trimmedTime = clientTime.trim();
+    if (!trimmedName || !trimmedTime) {
       return;
     }
 
@@ -80,10 +93,17 @@ export function usePostsManagement(initialSlots: Slot[]) {
       const updatedClients = [...targetSlot.clients];
 
       if (editingIndex === null) {
-        updatedClients.push({ name: trimmedName, status: clientStatus });
+        updatedClients.push({
+          id: clientId || createClientId(),
+          name: trimmedName,
+          time: trimmedTime,
+          status: clientStatus,
+        });
       } else if (updatedClients[editingIndex]) {
         updatedClients[editingIndex] = {
+          id: clientId,
           name: trimmedName,
+          time: trimmedTime,
           status: clientStatus,
         };
       }
@@ -131,10 +151,13 @@ export function usePostsManagement(initialSlots: Slot[]) {
     slots,
     statusOptions,
     isDialogOpen,
+    clientId,
     clientName,
+    clientTime,
     clientStatus,
     editingIndex,
     setClientName,
+    setClientTime,
     setClientStatus,
     getSlot,
     openAddDialog,

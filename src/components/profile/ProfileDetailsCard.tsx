@@ -9,7 +9,7 @@ export function ProfileDetailsCard({ profile }: ProfileDetailsCardProps) {
     { label: "Department", value: profile.department },
     { label: "Email", value: profile.email },
     { label: "Phone", value: profile.phone },
-    { label: "License", value: profile.licenseNumber },
+    { label: "Certification", value: profile.licenseNumber },
     { label: "Joined", value: profile.joinedDate },
     { label: "Location", value: profile.location },
   ];

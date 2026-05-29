@@ -1,5 +1,5 @@
 import type {
-  ClinicReport,
+  AgencyReport,
   ReportStatCard,
 } from "@/types/Reports/types";
 
@@ -12,14 +12,14 @@ export const reportStats: ReportStatCard[] = [
     trend: "positive",
   },
   {
-    label: "Session Attendance Rate",
+    label: "Post Delivery Rate",
     value: "92%",
     delta: "+3.2%",
     deltaLabel: "vs last quarter",
     trend: "positive",
   },
   {
-    label: "Billing Collected",
+    label: "Revenue Collected",
     value: "$24.8k",
     delta: "+$1.4k",
     deltaLabel: "vs last month",
@@ -34,11 +34,11 @@ export const reportStats: ReportStatCard[] = [
   },
 ];
 
-export const clinicReports: ClinicReport[] = [
+export const agencyReports: AgencyReport[] = [
   {
     id: "RPT-2401",
-    title: "Monthly Patient Outcomes",
-    category: "patient-outcomes",
+    title: "Monthly Client Performance",
+    category: "client-performance",
     period: "May 2026",
     status: "ready",
     lastGenerated: "May 26, 2026",
@@ -46,8 +46,8 @@ export const clinicReports: ClinicReport[] = [
   },
   {
     id: "RPT-2402",
-    title: "Weekly Session Summary",
-    category: "session-summary",
+    title: "Weekly Content Summary",
+    category: "content-summary",
     period: "May 19 – May 25, 2026",
     status: "ready",
     lastGenerated: "May 25, 2026",
@@ -55,7 +55,7 @@ export const clinicReports: ClinicReport[] = [
   },
   {
     id: "RPT-2403",
-    title: "Insurance Billing Summary",
+    title: "Client Billing Summary",
     category: "billing",
     period: "May 2026",
     status: "generating",
@@ -64,7 +64,7 @@ export const clinicReports: ClinicReport[] = [
   },
   {
     id: "RPT-2404",
-    title: "Clinic Compliance Audit",
+    title: "Agency Compliance Audit",
     category: "compliance",
     period: "Q2 2026",
     status: "scheduled",
@@ -73,8 +73,8 @@ export const clinicReports: ClinicReport[] = [
   },
   {
     id: "RPT-2405",
-    title: "No-Show & Cancellation Trends",
-    category: "session-summary",
+    title: "Missed Post Trends",
+    category: "content-summary",
     period: "Apr – May 2026",
     status: "ready",
     lastGenerated: "May 20, 2026",
@@ -82,8 +82,8 @@ export const clinicReports: ClinicReport[] = [
   },
   {
     id: "RPT-2406",
-    title: "Rehab Progress Benchmarks",
-    category: "patient-outcomes",
+    title: "Campaign ROI Benchmarks",
+    category: "client-performance",
     period: "May 2026",
     status: "ready",
     lastGenerated: "May 22, 2026",
@@ -92,16 +92,16 @@ export const clinicReports: ClinicReport[] = [
 ];
 
 export const reportCategoryLabels: Record<
-  ClinicReport["category"],
+  AgencyReport["category"],
   string
 > = {
-  "patient-outcomes": "Patient Outcomes",
-  "session-summary": "Session Summary",
+  "client-performance": "Client Performance",
+  "content-summary": "Content Summary",
   billing: "Billing",
   compliance: "Compliance",
 };
 
-export const reportStatusLabels: Record<ClinicReport["status"], string> = {
+export const reportStatusLabels: Record<AgencyReport["status"], string> = {
   ready: "Ready",
   generating: "Generating",
   scheduled: "Scheduled",

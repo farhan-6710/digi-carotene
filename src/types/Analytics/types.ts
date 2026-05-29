@@ -1,9 +1,9 @@
-export type ContributionLevel = 0 | 1 | 2 | 3 | 4;
+export type PostActivityLevel = 0 | 1 | 2 | 3 | 4;
 
 export type DayContribution = {
   date: string;
   completedCount: number;
-  level: ContributionLevel;
+  level: PostActivityLevel;
   isFuture: boolean;
 };
 

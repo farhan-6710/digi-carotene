@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { aboutContent, clinicMeta } from "@/constants/public";
+import { aboutContent, agencyMeta } from "@/constants/public";
 import { Button } from "@/components/ui/button";
 
 export function AboutPage() {
@@ -8,7 +8,7 @@ export function AboutPage() {
       <section className="border-b border-border/80">
         <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
           <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-            {clinicMeta.tagline}
+            {agencyMeta.tagline}
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             {aboutContent.title}
@@ -54,15 +54,15 @@ export function AboutPage() {
       <section className="border-t border-border/80 bg-card">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-6 py-10 sm:flex-row sm:items-center lg:px-8">
           <p className="text-sm text-muted-foreground">
-            Clinicians can access appointments, analytics, and session tracking
-            through the staff portal.
+            Team members can access posts, analytics, and campaign tracking
+            through the team portal.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="outline" className="rounded-full">
               <Link to="/">Back to home</Link>
             </Button>
             <Button asChild className="rounded-full">
-              <Link to="/admin/dashboard">Open staff portal</Link>
+              <Link to="/admin/dashboard">Open team portal</Link>
             </Button>
           </div>
         </div>

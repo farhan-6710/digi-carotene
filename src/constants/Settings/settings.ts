@@ -5,34 +5,34 @@ export const settingsSections: SettingsSection[] = [
     id: "notifications",
     title: "Notifications",
     description:
-      "Choose how Reviva keeps your clinic team informed about appointments and patient activity.",
+      "Choose how Digi Carotene keeps your team informed about posts and client activity.",
     toggles: [
       {
         id: "appointment-reminders",
-        label: "Appointment reminders",
+        label: "Post reminders",
         description:
-          "Notify staff when a new patient appointment is booked or rescheduled.",
+          "Notify team members when a new client post is scheduled or rescheduled.",
         defaultEnabled: true,
       },
       {
         id: "no-show-alerts",
-        label: "No-show alerts",
+        label: "Missed post alerts",
         description:
-          "Send an alert when a patient misses a scheduled rehab session.",
+          "Send an alert when a scheduled post is missed or not published on time.",
         defaultEnabled: true,
       },
       {
         id: "daily-schedule-digest",
-        label: "Daily schedule digest",
+        label: "Daily content digest",
         description:
-          "Receive a morning summary of today’s sessions and follow-ups.",
+          "Receive a morning summary of today’s posts and pending approvals.",
         defaultEnabled: false,
       },
       {
         id: "patient-outcome-reports",
-        label: "Patient outcome reports",
+        label: "Campaign reports",
         description:
-          "Email when monthly outcome reports finish generating.",
+          "Email when monthly campaign performance reports finish generating.",
         defaultEnabled: true,
       },
     ],
@@ -41,7 +41,7 @@ export const settingsSections: SettingsSection[] = [
     id: "appearance",
     title: "Appearance",
     description:
-      "Adjust how the Reviva staff portal looks and feels during daily clinic work.",
+      "Adjust how the Digi Carotene team portal looks and feels during daily work.",
     toggles: [
       {
         id: "dark-theme",
@@ -60,23 +60,23 @@ export const settingsSections: SettingsSection[] = [
     ],
   },
   {
-    id: "clinic-preferences",
-    title: "Clinic preferences",
+    id: "agency-preferences",
+    title: "Agency preferences",
     description:
-      "Workflow defaults that apply across appointments, notes, and analytics.",
+      "Workflow defaults that apply across posts, drafts, and analytics.",
     toggles: [
       {
         id: "auto-save-notes",
-        label: "Auto-save session notes",
+        label: "Auto-save post drafts",
         description:
-          "Automatically save in-progress notes while documenting a session.",
+          "Automatically save in-progress copy while drafting client content.",
         defaultEnabled: true,
       },
       {
         id: "anonymized-analytics",
         label: "Share anonymized analytics",
         description:
-          "Include de-identified session data in Reviva benchmark insights.",
+          "Include de-identified campaign data in Digi Carotene benchmark insights.",
         defaultEnabled: false,
       },
     ],

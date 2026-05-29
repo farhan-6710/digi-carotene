@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router";
-import { clinicMeta, publicNavLinks } from "@/constants/public";
+import { agencyMeta, publicNavLinks } from "@/constants/public";
 import { Button } from "@/components/ui/button";
 
 export function PublicHeader() {
@@ -10,7 +10,7 @@ export function PublicHeader() {
           to="/"
           className="text-2xl font-bold tracking-tight text-primary dark:text-foreground"
         >
-          {clinicMeta.name}
+          {agencyMeta.name}
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -34,7 +34,7 @@ export function PublicHeader() {
         </nav>
 
         <Button asChild className="rounded-full">
-          <Link to="/admin/dashboard">Staff login</Link>
+          <Link to="/admin/dashboard">Team login</Link>
         </Button>
       </div>
     </header>

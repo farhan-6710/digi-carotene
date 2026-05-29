@@ -1,6 +1,6 @@
-import type { ContributionLevel } from "@/types/Analytics/types";
+import type { PostActivityLevel } from "@/types/Analytics/types";
 
-export const contributionLevelClasses: Record<ContributionLevel, string> = {
+export const postActivityLevelClasses: Record<PostActivityLevel, string> = {
   0: "bg-status-muted",
   1: "bg-contrib-1",
   2: "bg-contrib-2",
@@ -8,27 +8,27 @@ export const contributionLevelClasses: Record<ContributionLevel, string> = {
   4: "bg-contrib-4",
 };
 
-export function getContributionLevel(completedCount: number): ContributionLevel {
-  if (completedCount <= 0) {
+export function getPostActivityLevel(publishedCount: number): PostActivityLevel {
+  if (publishedCount <= 0) {
     return 0;
   }
 
-  if (completedCount <= 2) {
+  if (publishedCount <= 2) {
     return 1;
   }
 
-  if (completedCount <= 4) {
+  if (publishedCount <= 4) {
     return 2;
   }
 
-  if (completedCount <= 6) {
+  if (publishedCount <= 6) {
     return 3;
   }
 
   return 4;
 }
 
-export function formatContributionDate(dateKey: string): string {
+export function formatPostActivityDate(dateKey: string): string {
   const [year, month, day] = dateKey.split("-").map(Number);
   const date = new Date(year, month - 1, day);
 

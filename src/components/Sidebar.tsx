@@ -14,7 +14,7 @@ import { appMeta, primaryNav, type NavIconKey } from "../constants/navigation";
 const icons: Record<NavIconKey, (props: { className?: string }) => ReactNode> =
   {
     dashboard: (props) => <LayoutDashboard {...props} aria-hidden="true" />,
-    appointments: (props) => <CalendarClock {...props} aria-hidden="true" />,
+    posts: (props) => <CalendarClock {...props} aria-hidden="true" />,
     analytics: (props) => <BarChart3 {...props} aria-hidden="true" />,
     reports: (props) => <FileText {...props} aria-hidden="true" />,
     profile: (props) => <UserRound {...props} aria-hidden="true" />,
@@ -97,13 +97,13 @@ const Sidebar = ({ collapsed }: SidebarProps) => {
             <div className="mt-4 rounded-2xl border border-primary/40 bg-muted p-4 shadow-sm">
               <div className="text-sm font-semibold">Quick Actions</div>
               <p className="mt-1 text-xs text-muted-foreground">
-                Review today&apos;s patient appointments and session schedule.
+                Review today&apos;s client posts and content schedule.
               </p>
               <Link
-                to="/admin/appointments-management"
+                to="/admin/posts-management"
                 className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
               >
-                View Appointments
+                View Posts
               </Link>
             </div>
           </div>

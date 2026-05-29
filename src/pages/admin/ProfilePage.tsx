@@ -10,7 +10,7 @@ export function ProfilePage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Profile</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your Reviva staff profile, credentials, and current clinic
+          Your Digi Carotene team profile, credentials, and current agency
           performance snapshot.
         </p>
       </div>

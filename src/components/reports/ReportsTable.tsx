@@ -1,30 +1,30 @@
 import {
-  clinicReports,
+  agencyReports,
   reportCategoryLabels,
   reportStatusLabels,
 } from "@/constants/Reports/reports";
-import type { ClinicReport } from "@/types/Reports/types";
+import type { AgencyReport } from "@/types/Reports/types";
 import { Button } from "@/components/ui/button";
 
-const statusStyles: Record<ClinicReport["status"], string> = {
+const statusStyles: Record<AgencyReport["status"], string> = {
   ready: "bg-status-done/15 text-status-done",
   generating: "bg-status-upcoming/15 text-status-upcoming",
   scheduled: "bg-muted text-muted-foreground",
 };
 
 type ReportsTableProps = {
-  reports?: ClinicReport[];
+  reports?: AgencyReport[];
 };
 
-export function ReportsTable({ reports = clinicReports }: ReportsTableProps) {
+export function ReportsTable({ reports = agencyReports }: ReportsTableProps) {
   return (
     <div className="rounded-2xl border border-border bg-card shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5">
         <div>
-          <div className="text-sm font-semibold">Clinic Reports</div>
+          <div className="text-sm font-semibold">Agency Reports</div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Download or track generated summaries for outcomes, billing, and
-            compliance.
+            Download or track generated summaries for client performance,
+            content, and compliance.
           </p>
         </div>
         <Button type="button" size="sm">

@@ -5,10 +5,10 @@ import type {
   DayContribution,
   MonthLabel,
 } from "@/types/Analytics/types";
-import { getContributionLevel } from "@/lib/analytics/contributionLevels";
+import { getPostActivityLevel } from "@/lib/analytics/postActivityLevels";
 
 export const CONTRIBUTION_YEAR = 2026;
-export const MAX_DAILY_SESSIONS = 8;
+export const MAX_DAILY_POSTS = 8;
 
 export const monthLabels = [
   "Jan",
@@ -132,7 +132,7 @@ function buildDayContribution(date: Date, isFuture: boolean): DayContribution {
   return {
     date: dateKey,
     completedCount,
-    level: isFuture ? 0 : getContributionLevel(completedCount),
+    level: isFuture ? 0 : getPostActivityLevel(completedCount),
     isFuture,
   };
 }
@@ -337,14 +337,14 @@ function buildAnalyticsStats(
 
   return [
     {
-      label: "Sessions Completed",
+      label: "Posts Published",
       value: summary.totalCompleted.toLocaleString(),
       delta: formatPercentChange(summary.totalCompleted, priorTotal),
       deltaLabel: "vs last year",
       trend: summary.totalCompleted >= priorTotal ? "positive" : "negative",
     },
     {
-      label: "Active Clinic Days",
+      label: "Active Posting Days",
       value: summary.activeDays.toLocaleString(),
       delta: formatDayChange(summary.activeDays, priorActiveDays),
       deltaLabel: "vs last year",
@@ -358,7 +358,7 @@ function buildAnalyticsStats(
       trend: summary.currentStreak >= lastMonthStreak ? "positive" : "negative",
     },
     {
-      label: "No-Show Days",
+      label: "Missed Post Days",
       value: summary.missedDays.toLocaleString(),
       delta: formatDayChange(summary.missedDays, priorMissedDays),
       deltaLabel: "from last year",

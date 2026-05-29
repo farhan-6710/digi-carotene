@@ -5,9 +5,9 @@ import {
   weekdayLabels,
 } from "@/constants/Analytics/sessionActivity";
 import {
-  contributionLevelClasses,
-  formatContributionDate,
-} from "@/lib/analytics/contributionLevels";
+  formatPostActivityDate,
+  postActivityLevelClasses,
+} from "@/lib/analytics/postActivityLevels";
 import type { DayContribution } from "@/types/Analytics/types";
 import { SessionActivityLegend } from "./SessionActivityLegend";
 
@@ -18,12 +18,12 @@ function ActivityCell({ day }: { day: DayContribution | null }) {
     return <span className={`${CELL_SIZE} rounded-sm bg-transparent`} />;
   }
 
-  const levelClass = contributionLevelClasses[day.level];
+  const levelClass = postActivityLevelClasses[day.level];
   const tooltip = day.isFuture
-    ? `${formatContributionDate(day.date)} · Upcoming`
-    : `${formatContributionDate(day.date)} · ${day.completedCount} session${
+    ? `${formatPostActivityDate(day.date)} · Upcoming`
+    : `${formatPostActivityDate(day.date)} · ${day.completedCount} post${
         day.completedCount === 1 ? "" : "s"
-      } completed`;
+      } published`;
 
   return (
     <span
@@ -42,15 +42,14 @@ export function SessionActivityGraph() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold tracking-tight">
-            {CONTRIBUTION_YEAR} sessions &amp; appointments activity
+            {CONTRIBUTION_YEAR} posts &amp; content activity
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Each square is one day. Darker greens mean more rehab sessions
-            delivered.
+            Each square is one day. Darker greens mean more posts published.
           </p>
         </div>
         <p className="text-xs text-muted-foreground">
-          Based on daily session completions
+          Based on daily post completions
         </p>
       </div>
 

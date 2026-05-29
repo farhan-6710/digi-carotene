@@ -1,6 +1,6 @@
 export type NavIconKey =
   | "dashboard"
-  | "appointments"
+  | "posts"
   | "analytics"
   | "reports"
   | "profile"
@@ -17,9 +17,9 @@ export const adminBasePath = "/admin";
 export const primaryNav: NavItem[] = [
   { label: "Dashboard", to: `${adminBasePath}/dashboard`, icon: "dashboard" },
   {
-    label: "Appointments",
-    to: `${adminBasePath}/appointments-management`,
-    icon: "appointments",
+    label: "Posts Management",
+    to: `${adminBasePath}/posts-management`,
+    icon: "posts",
   },
   { label: "Analytics", to: `${adminBasePath}/analytics`, icon: "analytics" },
   { label: "Reports", to: `${adminBasePath}/reports`, icon: "reports" },
@@ -28,6 +28,6 @@ export const primaryNav: NavItem[] = [
 ];
 
 export const appMeta = {
-  name: "Reviva",
-  userInitials: "R",
+  name: "Digi Carotene",
+  userInitials: "D",
 } as const;

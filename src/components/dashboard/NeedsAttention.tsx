@@ -1,4 +1,4 @@
-import { needsAttentionPosts } from "@/constants/dashboard";
+import { needsAttentionItems } from "@/constants/dashboard";
 import { Link } from "react-router";
 
 const statusStyles: Record<string, { dot: string; text: string }> = {
@@ -13,14 +13,14 @@ const NeedsAttention = () => {
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">Needs Attention</div>
         <Link
-          to="/admin/appointments-management"
+          to="/admin/posts-management"
           className="text-sm font-medium text-primary hover:opacity-90"
         >
-          View appointments <span aria-hidden="true">↗</span>
+          View posts <span aria-hidden="true">↗</span>
         </Link>
       </div>
       <div className="mt-4 space-y-4">
-        {needsAttentionPosts.map((row) => {
+        {needsAttentionItems.map((row) => {
           const styles = statusStyles[row.status];
 
           return (

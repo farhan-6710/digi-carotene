@@ -1,7 +1,9 @@
 export type StatusKey = "Draft" | "Scheduled" | "Posted" | "Missed";
 
 export type SlotClient = {
+  id: string;
   name: string;
+  time: string;
   status: StatusKey;
 };
 

@@ -39,8 +39,8 @@ export function AnalyticsPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Year-at-a-glance view of Reviva session volume and appointment
-          consistency across the clinic.
+          Year-at-a-glance view of Digi Carotene post volume and publishing
+          consistency across the agency.
         </p>
       </div>
 
