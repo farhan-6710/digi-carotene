@@ -136,7 +136,7 @@ export function PostsManagementWeeksTable({
                           </div>
                           <div className="flex shrink-0 flex-col items-end gap-0.5">
                             <span className="font-mono text-[11px] text-muted-foreground">
-                              {client.time}
+                              {client.scheduledTime}
                             </span>
                             <span
                               className={`text-[11px] font-semibold ${statusText[client.status]}`}

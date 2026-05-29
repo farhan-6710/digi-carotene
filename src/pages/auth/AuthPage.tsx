@@ -1,19 +1,47 @@
-import { Link, Navigate, useLocation } from "react-router";
+import { useEffect } from "react";
+import { Link, Navigate, useLocation, useSearchParams } from "react-router";
 
-import { authFormStyles } from "@/components/auth/authFormStyles";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { SignupForm } from "@/components/auth/SignupForm";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AUTH_FORM_TYPE_PARAM,
+  AUTH_SIGNUP_CODE_PARAM,
+  AUTH_FORM_TYPES,
+  isValidSignupInviteCode,
+  resolveAuthFormType,
+} from "@/constants/auth/auth";
 import { agencyMeta } from "@/constants/public";
-import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/AuthProvider";
 
 export function AuthPage() {
   const { user, loading } = useAuth();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const formTypeParam = searchParams.get(AUTH_FORM_TYPE_PARAM);
+  const signupCode = searchParams.get(AUTH_SIGNUP_CODE_PARAM);
+  const activeForm = resolveAuthFormType(formTypeParam, signupCode);
+  const isSignup = activeForm === AUTH_FORM_TYPES.signup;
+
   const redirectPath =
     (location.state as { from?: { pathname?: string } } | null)?.from
       ?.pathname ?? "/admin/dashboard";
+
+  useEffect(() => {
+    if (
+      formTypeParam === AUTH_FORM_TYPES.signup &&
+      !isValidSignupInviteCode(signupCode)
+    ) {
+      setSearchParams(
+        (currentParams) => {
+          const nextParams = new URLSearchParams(currentParams);
+          nextParams.set(AUTH_FORM_TYPE_PARAM, AUTH_FORM_TYPES.login);
+          return nextParams;
+        },
+        { replace: true },
+      );
+    }
+  }, [formTypeParam, signupCode, setSearchParams]);
 
   if (loading) {
     return (
@@ -33,43 +61,25 @@ export function AuthPage() {
         <div className="mb-8 space-y-2 text-center">
           <Link
             to="/"
-            className="text-xs font-semibold tracking-wider text-muted-foreground uppercase transition hover:text-foreground"
+            className="text-3xl font-semibold tracking-wider text-muted-foreground uppercase transition hover:text-foreground"
           >
             {agencyMeta.name}
           </Link>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Team portal access
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Sign in or create an account to manage clients and posts.
-          </p>
         </div>
 
         <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-          <Tabs defaultValue="login" className="gap-0">
-            <TabsList className={authFormStyles.tabsList}>
-              <TabsTrigger
-                value="login"
-                className={cn(authFormStyles.tabsTrigger)}
-              >
-                Login
-              </TabsTrigger>
-              <TabsTrigger
-                value="signup"
-                className={cn(authFormStyles.tabsTrigger)}
-              >
-                Sign up
-              </TabsTrigger>
-            </TabsList>
+          <div className="mb-6 flex flex-col justify-center items-center">
+            <h2 className="text-lg font-semibold tracking-tight">
+              {isSignup ? "Create account" : "Log in"}
+            </h2>
+            <p className="text-sm text-muted-foreground text-center">
+              {isSignup
+                ? "Set up your team portal access to manage clients and posts."
+                : "Log in to manage clients and posts."}
+            </p>
+          </div>
 
-            <TabsContent value="login" className="mt-0">
-              <LoginForm />
-            </TabsContent>
-
-            <TabsContent value="signup" className="mt-0">
-              <SignupForm />
-            </TabsContent>
-          </Tabs>
+          {isSignup ? <SignupForm /> : <LoginForm />}
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">

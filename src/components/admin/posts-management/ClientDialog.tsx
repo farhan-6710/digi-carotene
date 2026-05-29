@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { PostSchedulePicker } from "@/components/admin/posts-management/PostSchedulePicker";
+import { PostDateTimePicker } from "@/components/admin/posts-management/PostDateTimePicker";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { StatusKey } from "@/types/admin/posts-management/types";
+import type { PostDateTimeValue, StatusKey } from "@/types/admin/posts-management/types";
 import { cn } from "@/lib/utils";
 
 const fieldClassName = cn(
@@ -24,16 +24,15 @@ type ClientDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isEditing: boolean;
-  slotYear: number;
-  slotMonth: number;
-  slotDate: number;
   clientId: string;
   clientName: string;
-  clientTime: string;
+  toBePostedOn: PostDateTimeValue | null;
+  postedOn: PostDateTimeValue | null;
   clientStatus: StatusKey;
   statusOptions: StatusKey[];
   onClientNameChange: (value: string) => void;
-  onClientTimeChange: (value: string) => void;
+  onToBePostedOnChange: (value: PostDateTimeValue | null) => void;
+  onPostedOnChange: (value: PostDateTimeValue | null) => void;
   onClientStatusChange: (value: StatusKey) => void;
   onSave: () => void;
   onDelete?: () => void;
@@ -44,16 +43,15 @@ export function ClientDialog({
   open,
   onOpenChange,
   isEditing,
-  slotYear,
-  slotMonth,
-  slotDate,
   clientId,
   clientName,
-  clientTime,
+  toBePostedOn,
+  postedOn,
   clientStatus,
   statusOptions,
   onClientNameChange,
-  onClientTimeChange,
+  onToBePostedOnChange,
+  onPostedOnChange,
   onClientStatusChange,
   onSave,
   onDelete,
@@ -78,6 +76,13 @@ export function ClientDialog({
     setIsConfirmOpen(false);
   };
 
+  const canSave =
+    clientName.trim() &&
+    toBePostedOn?.time.trim() &&
+    toBePostedOn.day &&
+    toBePostedOn.month &&
+    toBePostedOn.year;
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -87,7 +92,8 @@ export function ClientDialog({
               {isEditing ? "Edit Client" : "Add Client"}
             </DialogTitle>
             <DialogDescription>
-              Set the client name, schedule, and status for this day.
+              Set the client name, planned publish time, optional actual publish
+              time, and status.
             </DialogDescription>
           </DialogHeader>
 
@@ -113,19 +119,20 @@ export function ClientDialog({
               />
             </label>
 
-            <div className="space-y-2">
-              <span className="block text-xs font-semibold text-muted-foreground">
-                Date & time
-              </span>
-              <PostSchedulePicker
-                year={slotYear}
-                month={slotMonth}
-                date={slotDate}
-                selectedTime={clientTime}
-                onTimeChange={onClientTimeChange}
-                disabled={isSaving}
-              />
-            </div>
+            <PostDateTimePicker
+              label="To be posted on"
+              value={toBePostedOn}
+              onChange={onToBePostedOnChange}
+              required
+              disabled={isSaving}
+            />
+
+            <PostDateTimePicker
+              label="Posted on"
+              value={postedOn}
+              onChange={onPostedOnChange}
+              disabled={isSaving}
+            />
 
             <label className="block text-xs font-semibold text-muted-foreground">
               Status
@@ -163,7 +170,7 @@ export function ClientDialog({
             </DialogClose>
             <Button
               onClick={onSave}
-              disabled={!clientName.trim() || !clientTime.trim() || isSaving}
+              disabled={!canSave || isSaving}
               className="rounded-full"
             >
               {isSaving

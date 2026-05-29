@@ -33,6 +33,7 @@ function GoogleIcon() {
 
 export function SignupForm() {
   const { signUpWithEmail, signInWithGoogle } = useAuth();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -46,6 +47,11 @@ export function SignupForm() {
     setError(null);
     setSuccessMessage(null);
 
+    if (!name.trim()) {
+      setError("Name is required.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -58,13 +64,14 @@ export function SignupForm() {
 
     setIsSubmitting(true);
 
-    const authError = await signUpWithEmail(email.trim(), password);
+    const authError = await signUpWithEmail(name, email.trim(), password);
     if (authError) {
       setError(authError.message);
     } else {
       setSuccessMessage(
         "Account created. Check your email to confirm your address, then sign in.",
       );
+      setName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
@@ -87,31 +94,24 @@ export function SignupForm() {
 
   return (
     <div className="space-y-6">
-      <Button
-        type="button"
-        variant="outline"
-        className={authFormStyles.googleButton}
-        onClick={handleGoogleSignIn}
-        disabled={isSubmitting || isGoogleLoading}
-      >
-        {isGoogleLoading ? (
-          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-        ) : (
-          <GoogleIcon />
-        )}
-        Continue with Google
-      </Button>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-border/80" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className={authFormStyles.divider}>Or sign up with email</span>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="signup-name" className={authFormStyles.label}>
+            Name
+          </Label>
+          <Input
+            id="signup-name"
+            type="text"
+            autoComplete="name"
+            placeholder="Your full name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            className={authFormStyles.input}
+            required
+            disabled={isSubmitting || isGoogleLoading}
+          />
+        </div>
+
         <div className="space-y-2">
           <Label htmlFor="signup-email" className={authFormStyles.label}>
             Email
@@ -193,6 +193,30 @@ export function SignupForm() {
           )}
         </Button>
       </form>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-border/80" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className={authFormStyles.divider}>Or continue with Google</span>
+        </div>
+      </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        className={authFormStyles.googleButton}
+        onClick={handleGoogleSignIn}
+        disabled={isSubmitting || isGoogleLoading}
+      >
+        {isGoogleLoading ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <GoogleIcon />
+        )}
+        Continue with Google
+      </Button>
     </div>
   );
 }

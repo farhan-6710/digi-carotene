@@ -12,8 +12,4 @@ export const authFormStyles = {
     "rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-sm text-destructive",
   successAlert:
     "rounded-lg border border-primary/20 bg-primary/5 px-3 py-2.5 text-sm text-foreground",
-  tabsList:
-    "mb-6 grid h-11 w-full grid-cols-2 rounded-full border border-ring/60 bg-muted/40 p-1 shadow-xs",
-  tabsTrigger:
-    "h-full rounded-full border-0 px-4 text-sm font-medium text-muted-foreground shadow-none transition hover:text-foreground data-active:bg-card data-active:text-foreground data-active:shadow-sm after:hidden dark:data-active:bg-card dark:data-active:text-foreground",
 } as const;

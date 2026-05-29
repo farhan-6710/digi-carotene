@@ -65,30 +65,6 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
-      <Button
-        type="button"
-        variant="outline"
-        className={authFormStyles.googleButton}
-        onClick={handleGoogleSignIn}
-        disabled={isSubmitting || isGoogleLoading}
-      >
-        {isGoogleLoading ? (
-          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-        ) : (
-          <GoogleIcon />
-        )}
-        Continue with Google
-      </Button>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-border/80" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className={authFormStyles.divider}>Or continue with email</span>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="login-email" className={authFormStyles.label}>
@@ -145,6 +121,30 @@ export function LoginForm() {
           )}
         </Button>
       </form>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-border/80" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className={authFormStyles.divider}>Or continue with Google</span>
+        </div>
+      </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        className={authFormStyles.googleButton}
+        onClick={handleGoogleSignIn}
+        disabled={isSubmitting || isGoogleLoading}
+      >
+        {isGoogleLoading ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <GoogleIcon />
+        )}
+        Continue with Google
+      </Button>
     </div>
   );
 }

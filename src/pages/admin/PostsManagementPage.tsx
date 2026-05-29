@@ -4,6 +4,7 @@ import { PostsManagementWeeksTable } from "@/components/admin/posts-management/P
 import { SendDailyReportDialog } from "@/components/admin/posts-management/SendDailyReportDialog";
 import {
   statusColors,
+  statusOptions,
   statusText,
 } from "@/constants/admin/posts-management/postsManagement";
 import { usePostsCalendarSelection } from "@/hooks/admin/usePostsCalendarSelection";
@@ -15,19 +16,20 @@ export function PostsManagementPage() {
     usePostsCalendarSelection();
 
   const {
-    statusOptions,
     isLoading,
     error,
     isSaving,
     isDialogOpen,
-    activeSlot,
     clientId,
     clientName,
-    clientTime,
+    toBePostedOn,
+    postedOn,
     clientStatus,
     editingPostId,
+    statusOptions: dialogStatusOptions,
     setClientName,
-    setClientTime,
+    setToBePostedOn,
+    setPostedOn,
     setClientStatus,
     getSlot,
     openAddDialog,
@@ -56,20 +58,13 @@ export function PostsManagementPage() {
 
       <div className="flex flex-wrap justify-between items-center text-xs text-muted-foreground">
         <div className="flex items-center gap-3">
-          {(
-            [
-              { label: "Draft", color: "bg-status-draft" },
-              { label: "Scheduled", color: "bg-status-scheduled" },
-              { label: "Posted", color: "bg-status-posted" },
-              { label: "Missed", color: "bg-status-missed" },
-            ] as const
-          ).map((item) => (
+          {statusOptions.map((label) => (
             <div
-              key={item.label}
+              key={label}
               className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1"
             >
-              <span className={`size-2 rounded-full ${item.color}`} />
-              <span>{item.label}</span>
+              <span className={`size-2 rounded-full ${statusColors[label]}`} />
+              <span>{label}</span>
             </div>
           ))}
         </div>
@@ -104,16 +99,15 @@ export function PostsManagementPage() {
         open={isDialogOpen}
         onOpenChange={handleDialogOpenChange}
         isEditing={isEditing}
-        slotYear={activeSlot?.year ?? year}
-        slotMonth={activeSlot?.month ?? month}
-        slotDate={activeSlot?.date ?? selectedDate.getDate()}
         clientId={clientId}
         clientName={clientName}
-        clientTime={clientTime}
+        toBePostedOn={toBePostedOn}
+        postedOn={postedOn}
         clientStatus={clientStatus}
-        statusOptions={statusOptions}
+        statusOptions={dialogStatusOptions}
         onClientNameChange={setClientName}
-        onClientTimeChange={setClientTime}
+        onToBePostedOnChange={setToBePostedOn}
+        onPostedOnChange={setPostedOn}
         onClientStatusChange={setClientStatus}
         onSave={() => void saveClient()}
         onDelete={() => void deleteClient()}

@@ -1,19 +1,61 @@
 import { useCallback, useEffect, useState } from "react";
 
-import type { ActiveSlot, StatusKey } from "@/types/admin/posts-management/types";
+import {
+  DEFAULT_POST_STATUS,
+  statusOptions,
+} from "@/constants/admin/posts-management/postsManagement";
 import { DEFAULT_POST_TIME } from "@/constants/admin/posts-management/postSchedule";
+import type {
+  ActiveSlot,
+  PostDateTimeValue,
+  StatusKey,
+} from "@/types/admin/posts-management/types";
 import { getDayLabel } from "@/utils/admin/posts-management/calendarUtils";
-import { normalizePostTime, isValidPostTime } from "@/utils/admin/posts-management/postScheduleUtils";
+import {
+  isValidPostTime,
+  normalizePostTime,
+  parsePostDate,
+  toPostDateString,
+} from "@/utils/admin/posts-management/postScheduleUtils";
 import {
   createPost,
   deletePost,
   fetchPostsForMonth,
   postsToSlots,
-  toScheduledDate,
   updatePost,
 } from "@/utils/admin/posts-management/postsRepository";
 
-const statusOptions: StatusKey[] = ["Draft", "Scheduled", "Posted", "Missed"];
+function toPostDateTimeValue(
+  dateValue: string | null | undefined,
+  timeValue: string | null | undefined,
+): PostDateTimeValue | null {
+  const dateParts = parsePostDate(dateValue);
+  const time = timeValue?.trim();
+
+  if (!dateParts || !time || !isValidPostTime(time)) {
+    return null;
+  }
+
+  return {
+    year: dateParts.year,
+    month: dateParts.month,
+    day: dateParts.day,
+    time: normalizePostTime(time),
+  };
+}
+
+function toRepositoryDateTime(
+  value: PostDateTimeValue | null,
+): { date: string; time: string } | null {
+  if (!value?.time.trim() || !isValidPostTime(value.time)) {
+    return null;
+  }
+
+  return {
+    date: toPostDateString(value.year, value.month, value.day),
+    time: normalizePostTime(value.time),
+  };
+}
 
 export function usePostsManagement(year: number, month: number) {
   const [slots, setSlots] = useState(() => postsToSlots([], year, month));
@@ -25,8 +67,11 @@ export function usePostsManagement(year: number, month: number) {
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [clientId, setClientId] = useState("");
   const [clientName, setClientName] = useState("");
-  const [clientTime, setClientTime] = useState("");
-  const [clientStatus, setClientStatus] = useState<StatusKey>("Draft");
+  const [toBePostedOn, setToBePostedOn] = useState<PostDateTimeValue | null>(
+    null,
+  );
+  const [postedOn, setPostedOn] = useState<PostDateTimeValue | null>(null);
+  const [clientStatus, setClientStatus] = useState<StatusKey>(DEFAULT_POST_STATUS);
 
   const loadPosts = useCallback(async () => {
     setIsLoading(true);
@@ -67,8 +112,9 @@ export function usePostsManagement(year: number, month: number) {
     setEditingPostId(null);
     setClientId("");
     setClientName("");
-    setClientTime("");
-    setClientStatus("Draft");
+    setToBePostedOn(null);
+    setPostedOn(null);
+    setClientStatus(DEFAULT_POST_STATUS);
   }, []);
 
   const handleDialogOpenChange = useCallback(
@@ -92,8 +138,14 @@ export function usePostsManagement(year: number, month: number) {
       setEditingPostId(null);
       setClientId("");
       setClientName("");
-      setClientTime(DEFAULT_POST_TIME);
-      setClientStatus("Draft");
+      setToBePostedOn({
+        year: slotYear,
+        month: slotMonth,
+        day: date,
+        time: DEFAULT_POST_TIME,
+      });
+      setPostedOn(null);
+      setClientStatus(DEFAULT_POST_STATUS);
       setIsDialogOpen(true);
     },
     [],
@@ -120,9 +172,17 @@ export function usePostsManagement(year: number, month: number) {
         day: slot?.day ?? getDayLabel(slotYear, slotMonth, date),
       });
       setEditingPostId(postId);
-      setClientId(client.id);
+      setClientId(postId);
       setClientName(client.name);
-      setClientTime(normalizePostTime(client.time));
+      setToBePostedOn(
+        toPostDateTimeValue(client.scheduledDate, client.scheduledTime) ?? {
+          year: slotYear,
+          month: slotMonth,
+          day: date,
+          time: normalizePostTime(client.scheduledTime),
+        },
+      );
+      setPostedOn(toPostDateTimeValue(client.postedDate, client.postedTime));
       setClientStatus(client.status);
       setIsDialogOpen(true);
     },
@@ -135,11 +195,25 @@ export function usePostsManagement(year: number, month: number) {
     }
 
     const trimmedName = clientName.trim();
-    if (!trimmedName || !isValidPostTime(clientTime)) {
+    const scheduled = toRepositoryDateTime(toBePostedOn);
+    const posted = toRepositoryDateTime(postedOn);
+    const hasPostedInput = Boolean(
+      postedOn &&
+        (postedOn.time.trim() ||
+          postedOn.day ||
+          postedOn.month ||
+          postedOn.year),
+    );
+
+    if (!trimmedName || !scheduled) {
+      setError("To be posted on requires both date and time.");
       return;
     }
 
-    const trimmedTime = normalizePostTime(clientTime);
+    if (hasPostedInput && !posted) {
+      setError("Posted on requires both date and time, or leave both empty.");
+      return;
+    }
 
     setIsSaving(true);
     setError(null);
@@ -148,18 +222,15 @@ export function usePostsManagement(year: number, month: number) {
       if (editingPostId) {
         await updatePost(editingPostId, {
           clientName: trimmedName,
-          scheduledTime: trimmedTime,
+          scheduled,
+          posted,
           status: clientStatus,
         });
       } else {
         await createPost({
           clientName: trimmedName,
-          scheduledDate: toScheduledDate(
-            activeSlot.year,
-            activeSlot.month,
-            activeSlot.date,
-          ),
-          scheduledTime: trimmedTime,
+          scheduled,
+          posted,
           status: clientStatus,
         });
       }
@@ -179,11 +250,12 @@ export function usePostsManagement(year: number, month: number) {
     activeSlot,
     clientName,
     clientStatus,
-    clientTime,
     editingPostId,
     handleDialogOpenChange,
     isSaving,
     loadPosts,
+    postedOn,
+    toBePostedOn,
   ]);
 
   const deleteClient = useCallback(async () => {
@@ -218,11 +290,13 @@ export function usePostsManagement(year: number, month: number) {
     activeSlot,
     clientId,
     clientName,
-    clientTime,
+    toBePostedOn,
+    postedOn,
     clientStatus,
     editingPostId,
     setClientName,
-    setClientTime,
+    setToBePostedOn,
+    setPostedOn,
     setClientStatus,
     getSlot,
     openAddDialog,

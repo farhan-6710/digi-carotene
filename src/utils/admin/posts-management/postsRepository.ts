@@ -8,13 +8,14 @@ import type {
   StatusKey,
 } from "@/types/admin/posts-management/types";
 import { getDayLabel } from "@/utils/admin/posts-management/calendarUtils";
+import { toPostDateString } from "@/utils/admin/posts-management/postScheduleUtils";
 
 export function toScheduledDate(
   year: number,
   month: number,
   date: number,
 ): string {
-  return format(new Date(year, month - 1, date), "yyyy-MM-dd");
+  return toPostDateString(year, month, date);
 }
 
 function getMonthDateRange(year: number, month: number) {
@@ -31,7 +32,10 @@ export function postToSlotClient(post: Post): SlotClient {
   return {
     id: post.id,
     name: post.client_name,
-    time: post.scheduled_time,
+    scheduledDate: post.scheduled_date,
+    scheduledTime: post.scheduled_time,
+    postedDate: post.posted_date,
+    postedTime: post.posted_time,
     status: post.status,
   };
 }
@@ -60,7 +64,9 @@ export function postsToSlots(posts: Post[], year: number, month: number): Slot[]
       month,
       date,
       day: getDayLabel(year, month, date),
-      clients: clients.sort((a, b) => a.time.localeCompare(b.time)),
+      clients: clients.sort((a, b) =>
+        a.scheduledTime.localeCompare(b.scheduledTime),
+      ),
     }));
 }
 
@@ -85,16 +91,22 @@ export async function fetchPostsForMonth(
   return (data ?? []) as Post[];
 }
 
+type PostDateTimeInput = {
+  date: string;
+  time: string;
+};
+
 type CreatePostInput = {
   clientName: string;
-  scheduledDate: string;
-  scheduledTime: string;
+  scheduled: PostDateTimeInput;
+  posted: PostDateTimeInput | null;
   status: StatusKey;
 };
 
 type UpdatePostInput = {
   clientName: string;
-  scheduledTime: string;
+  scheduled: PostDateTimeInput;
+  posted: PostDateTimeInput | null;
   status: StatusKey;
 };
 
@@ -103,8 +115,10 @@ export async function createPost(input: CreatePostInput): Promise<Post> {
     .from("posts")
     .insert({
       client_name: input.clientName,
-      scheduled_date: input.scheduledDate,
-      scheduled_time: input.scheduledTime,
+      scheduled_date: input.scheduled.date,
+      scheduled_time: input.scheduled.time,
+      posted_date: input.posted?.date ?? null,
+      posted_time: input.posted?.time ?? null,
       status: input.status,
     })
     .select("*")
@@ -125,7 +139,10 @@ export async function updatePost(
     .from("posts")
     .update({
       client_name: input.clientName,
-      scheduled_time: input.scheduledTime,
+      scheduled_date: input.scheduled.date,
+      scheduled_time: input.scheduled.time,
+      posted_date: input.posted?.date ?? null,
+      posted_time: input.posted?.time ?? null,
       status: input.status,
     })
     .eq("id", postId)

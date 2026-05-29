@@ -1,15 +1,17 @@
 import type { StatusKey } from "@/types/admin/posts-management/types";
 
+export const statusOptions: StatusKey[] = ["Not posted", "Scheduled", "Posted"];
+
+export const DEFAULT_POST_STATUS: StatusKey = "Not posted";
+
 export const statusColors: Record<StatusKey, string> = {
-  Draft: "bg-status-draft ",
+  "Not posted": "bg-status-not-posted",
   Scheduled: "bg-status-scheduled",
   Posted: "bg-status-posted",
-  Missed: "bg-status-missed",
 };
 
 export const statusText: Record<StatusKey, string> = {
-  Draft: "text-status-draft",
+  "Not posted": "text-status-not-posted",
   Scheduled: "text-status-scheduled",
   Posted: "text-status-posted",
-  Missed: "text-status-missed",
 };

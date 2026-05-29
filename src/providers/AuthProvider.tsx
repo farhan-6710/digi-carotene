@@ -25,6 +25,7 @@ type AuthProviderContextValue = {
     password: string,
   ) => Promise<AuthError | null>;
   signUpWithEmail: (
+    name: string,
     email: string,
     password: string,
   ) => Promise<AuthError | null>;
@@ -88,11 +89,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 
   const signUpWithEmail = useCallback(
-    async (email: string, password: string) => {
+    async (name: string, email: string, password: string) => {
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
+          data: {
+            full_name: name.trim(),
+          },
           emailRedirectTo: `${window.location.origin}/admin/dashboard`,
         },
       });
