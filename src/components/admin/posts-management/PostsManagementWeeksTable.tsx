@@ -5,6 +5,7 @@ import {
   isSameCalendarDay,
 } from "@/utils/admin/posts-management/calendarUtils";
 import { CALENDAR_DAY_LABELS } from "@/constants/admin/posts-management/calendar";
+import { comparePostTimes } from "@/utils/admin/posts-management/postScheduleUtils";
 import { cn } from "@/lib/utils";
 
 type PostsManagementWeeksTableProps = {
@@ -115,7 +116,11 @@ export function PostsManagementWeeksTable({
 
                   <div className="mt-3 flex flex-1 flex-col gap-1.5">
                     {hasClients ? (
-                      slot?.clients.map((client) => (
+                      [...(slot?.clients ?? [])]
+                        .sort((a, b) =>
+                          comparePostTimes(a.scheduledTime, b.scheduledTime),
+                        )
+                        .map((client) => (
                         <button
                           key={client.id}
                           type="button"

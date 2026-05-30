@@ -34,6 +34,26 @@ export function isValidPostTime(time: string): boolean {
   );
 }
 
+export function comparePostTimes(a: string, b: string): number {
+  const normalizedA = normalizePostTime(a);
+  const normalizedB = normalizePostTime(b);
+  const indexA = POST_AVAILABLE_TIMES.findIndex(
+    (time) => time.toLowerCase() === normalizedA.toLowerCase(),
+  );
+  const indexB = POST_AVAILABLE_TIMES.findIndex(
+    (time) => time.toLowerCase() === normalizedB.toLowerCase(),
+  );
+
+  if (indexA !== -1 && indexB !== -1) {
+    return indexA - indexB;
+  }
+
+  return normalizedA.localeCompare(normalizedB, undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
+}
+
 export function parsePostDate(
   dateValue: string | null | undefined,
 ): { year: number; month: number; day: number } | null {

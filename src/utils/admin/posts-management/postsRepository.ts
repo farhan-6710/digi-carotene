@@ -8,7 +8,7 @@ import type {
   StatusKey,
 } from "@/types/admin/posts-management/types";
 import { getDayLabel } from "@/utils/admin/posts-management/calendarUtils";
-import { toPostDateString } from "@/utils/admin/posts-management/postScheduleUtils";
+import { toPostDateString, comparePostTimes } from "@/utils/admin/posts-management/postScheduleUtils";
 
 export function toScheduledDate(
   year: number,
@@ -65,7 +65,7 @@ export function postsToSlots(posts: Post[], year: number, month: number): Slot[]
       date,
       day: getDayLabel(year, month, date),
       clients: clients.sort((a, b) =>
-        a.scheduledTime.localeCompare(b.scheduledTime),
+        comparePostTimes(a.scheduledTime, b.scheduledTime),
       ),
     }));
 }
