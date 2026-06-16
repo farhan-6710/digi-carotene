@@ -14,7 +14,7 @@ import {
   isAdminPath,
   isPortalPath,
 } from "@/features/auth/constants/routes";
-import { agencyMeta } from "@/features/public/constants/public";
+import { agencyMeta } from "@/features/public/constants/agency";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
 
 function resolvePostLoginPath(
