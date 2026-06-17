@@ -1,9 +1,10 @@
 import { FolderKanban } from "lucide-react";
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 
 import type { ProjectComboboxProps } from "@/features/projects-management/types/components";
 import { fetchProjects } from "@/features/projects-management/utils/projectsRepository";
 import { getProjectDisplayLabel } from "@/features/projects-management/utils/projectFormUtils";
+import { useLazyEntityList } from "@/shared/hooks/useLazyEntityList";
 import { ComboBox } from "@/shared/ui/ComboBox";
 
 export function ProjectCombobox({
@@ -14,33 +15,10 @@ export function ProjectCombobox({
   placeholder = "Search projects...",
   preload = false,
 }: ProjectComboboxProps) {
-  const [projects, setProjects] = useState<
-    Awaited<ReturnType<typeof fetchProjects>>
-  >([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const hasLoadedRef = useRef(false);
-
-  const loadProjects = useCallback(() => {
-    setIsLoading(true);
-    fetchProjects()
-      .then((data) => {
-        setProjects(data);
-        hasLoadedRef.current = true;
-      })
-      .catch(() => setProjects([]))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!preload) {
-      hasLoadedRef.current = false;
-      return;
-    }
-
-    if (!hasLoadedRef.current) {
-      loadProjects();
-    }
-  }, [loadProjects, preload]);
+  const { items: projects, isLoading, handleOpenChange } = useLazyEntityList(
+    fetchProjects,
+    { preload },
+  );
 
   const options = useMemo(
     () =>
@@ -66,11 +44,7 @@ export function ProjectCombobox({
       emptyMessage="No projects left to assign."
       noMatchMessage="No matching projects found."
       mode="value"
-      onOpenChange={(open) => {
-        if (open && !hasLoadedRef.current) {
-          loadProjects();
-        }
-      }}
+      onOpenChange={handleOpenChange}
     />
   );
 }

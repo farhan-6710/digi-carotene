@@ -1,25 +1,19 @@
 import { useCallback, useState } from "react";
 
-import { fetchProjects } from "@/features/projects-management/utils/projectsRepository";
 import { statusOptions } from "@/features/posts-management/constants/postsManagement";
-import { findRegisteredProject } from "@/features/posts-management/utils/projectValidationUtils";
-import { showToast } from "@/shared/utils/showToast";
+import {
+  deletePostMutation,
+  savePostMutation,
+} from "@/features/posts-management/utils/postDialogMutations";
 import type { Slot } from "@/features/posts-management/types/types";
 import { getDayLabel } from "@/features/posts-management/utils/calendarUtils";
 import {
   buildAddFormValues,
   buildEditFormValues,
   emptyPostFormValues,
-  postFormToPayload,
-  validatePostForm,
   type ActiveSlot,
   type PostFormValues,
 } from "@/features/posts-management/utils/postFormUtils";
-import {
-  createPost,
-  deletePost,
-  updatePost,
-} from "@/features/posts-management/utils/postsRepository";
 
 type UsePostDialogOptions = {
   slots: Slot[];
@@ -97,39 +91,17 @@ export function usePostDialog({ slots, reload, setError }: UsePostDialogOptions)
       return;
     }
 
-    const validationError = validatePostForm(values);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
     setIsSaving(true);
-    setError(null);
 
     try {
-      const projects = await fetchProjects();
+      const saved = await savePostMutation({
+        values,
+        editingPostId,
+        setError,
+      });
 
-      if (projects.length === 0) {
-        showToast("error", "Create a project before adding posts.");
+      if (!saved) {
         return;
-      }
-
-      const registeredProject = findRegisteredProject(values.projectId, projects);
-
-      if (!registeredProject) {
-        showToast("error", "Please select a valid project or create one first.");
-        return;
-      }
-
-      const payload = {
-        ...postFormToPayload(values),
-        projectId: registeredProject.id,
-      };
-
-      if (editingPostId) {
-        await updatePost(editingPostId, payload);
-      } else {
-        await createPost(payload);
       }
 
       await reload();
@@ -149,10 +121,9 @@ export function usePostDialog({ slots, reload, setError }: UsePostDialogOptions)
     }
 
     setIsSaving(true);
-    setError(null);
 
     try {
-      await deletePost(editingPostId);
+      await deletePostMutation({ editingPostId, setError });
       await reload();
       handleDialogOpenChange(false);
     } catch (deleteError) {

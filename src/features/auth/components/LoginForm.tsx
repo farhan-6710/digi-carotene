@@ -1,12 +1,15 @@
 import { useState, type FormEvent } from "react";
 
+import {
+  AuthEmailField,
+  AuthFormAlert,
+  AuthPasswordField,
+} from "@/features/auth/components/AuthFormFields";
 import { AuthGoogleSignIn } from "@/features/auth/components/AuthGoogleSignIn";
 import { authFormStyles } from "@/features/auth/components/authFormStyles";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
 import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
 import { cn } from "@/shared/lib/utils";
 
 export function LoginForm() {
@@ -34,45 +37,24 @@ export function LoginForm() {
   return (
     <div className="space-y-6">
       <form onSubmit={(event) => void handleSubmit(event)} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="login-email" className={authFormStyles.label}>
-            Email
-          </Label>
-          <Input
-            id="login-email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@company.com"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className={authFormStyles.input}
-            required
-            disabled={isBusy}
-          />
-        </div>
+        <AuthEmailField
+          id="login-email"
+          value={email}
+          onChange={setEmail}
+          disabled={isBusy}
+        />
 
-        <div className="space-y-2">
-          <Label htmlFor="login-password" className={authFormStyles.label}>
-            Password
-          </Label>
-          <Input
-            id="login-password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className={authFormStyles.input}
-            required
-            disabled={isBusy}
-          />
-        </div>
+        <AuthPasswordField
+          id="login-password"
+          label="Password"
+          value={password}
+          onChange={setPassword}
+          autoComplete="current-password"
+          placeholder="Enter your password"
+          disabled={isBusy}
+        />
 
-        {error ? (
-          <p className={authFormStyles.errorAlert} role="alert">
-            {error}
-          </p>
-        ) : null}
+        {error ? <AuthFormAlert message={error} variant="error" /> : null}
 
         <Button
           type="submit"

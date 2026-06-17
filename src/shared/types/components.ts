@@ -126,3 +126,8 @@ export type PortalPageShellProps = {
   actions?: ReactNode;
   children: ReactNode;
 };
+
+export type DetailPageLoadingProps = {
+  backButton?: ReactNode;
+  minHeight?: number;
+};

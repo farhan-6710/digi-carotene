@@ -1,9 +1,11 @@
 import {
   CONTRIBUTION_YEAR,
-  contributionMonthLabels,
-  contributionWeeks,
   weekdayLabels,
 } from "@/features/analytics/constants/sessionActivity";
+import {
+  contributionMonthLabels,
+  contributionWeeks,
+} from "@/features/analytics/utils/sessionActivityMock";
 import {
   formatPostActivityDate,
   postActivityLevelClasses,

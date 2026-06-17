@@ -3,7 +3,7 @@ import { format, parseISO } from "date-fns";
 import type { Post, StatusKey } from "@/features/posts-management/types/types";
 import { comparePostTimes } from "@/features/posts-management/utils/postScheduleUtils";
 
-import type { ClientReportSummary, ReportPostRow } from "../types/types";
+import type { ClientReportSummary, ReportPostRow, ReportStatCard } from "../types/types";
 
 function countByStatus(posts: Post[], status: StatusKey): number {
   return posts.filter((post) => post.status === status).length;
@@ -126,4 +126,78 @@ export function buildReportStatsFromSummaries(
       notPosted: 0,
     },
   );
+}
+
+const EMPTY_REPORT_STAT_CARDS: ReportStatCard[] = [
+  {
+    label: "Clients in range",
+    value: "—",
+    delta: "Select a date range",
+    deltaLabel: "to view totals",
+    trend: "positive",
+  },
+  {
+    label: "Total posts",
+    value: "—",
+    delta: "—",
+    deltaLabel: "in selected range",
+    trend: "positive",
+  },
+  {
+    label: "Posted",
+    value: "—",
+    delta: "—",
+    deltaLabel: "completed posts",
+    trend: "positive",
+  },
+  {
+    label: "Scheduled",
+    value: "—",
+    delta: "—",
+    deltaLabel: "upcoming posts",
+    trend: "positive",
+  },
+];
+
+export function buildReportStatCards(
+  summaries: ClientReportSummary[],
+  hasGenerated: boolean,
+  periodLabel: string,
+): ReportStatCard[] {
+  if (!hasGenerated) {
+    return EMPTY_REPORT_STAT_CARDS;
+  }
+
+  const totals = buildReportStatsFromSummaries(summaries);
+
+  return [
+    {
+      label: "Clients in range",
+      value: String(totals.clients),
+      delta: periodLabel,
+      deltaLabel: "selected period",
+      trend: "positive",
+    },
+    {
+      label: "Total posts",
+      value: String(totals.totalPosts),
+      delta: `${totals.posted} posted`,
+      deltaLabel: "in this report",
+      trend: "positive",
+    },
+    {
+      label: "Posted",
+      value: String(totals.posted),
+      delta: `${totals.notPosted} not posted`,
+      deltaLabel: "remaining",
+      trend: totals.posted >= totals.notPosted ? "positive" : "negative",
+    },
+    {
+      label: "Scheduled",
+      value: String(totals.scheduled),
+      delta: `${totals.totalPosts} total`,
+      deltaLabel: "posts tracked",
+      trend: "positive",
+    },
+  ];
 }

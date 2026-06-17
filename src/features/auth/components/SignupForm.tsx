@@ -1,5 +1,10 @@
 import { useState, type FormEvent } from "react";
 
+import {
+  AuthEmailField,
+  AuthFormAlert,
+  AuthPasswordField,
+} from "@/features/auth/components/AuthFormFields";
 import { AuthGoogleSignIn } from "@/features/auth/components/AuthGoogleSignIn";
 import { authFormStyles } from "@/features/auth/components/authFormStyles";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
@@ -84,70 +89,36 @@ export function SignupForm() {
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="signup-email" className={authFormStyles.label}>
-            Email
-          </Label>
-          <Input
-            id="signup-email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@company.com"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className={authFormStyles.input}
-            required
-            disabled={isBusy}
-          />
-        </div>
+        <AuthEmailField
+          id="signup-email"
+          value={email}
+          onChange={setEmail}
+          disabled={isBusy}
+        />
 
-        <div className="space-y-2">
-          <Label htmlFor="signup-password" className={authFormStyles.label}>
-            Password
-          </Label>
-          <Input
-            id="signup-password"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Create a password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className={authFormStyles.input}
-            required
-            disabled={isBusy}
-          />
-        </div>
+        <AuthPasswordField
+          id="signup-password"
+          label="Password"
+          value={password}
+          onChange={setPassword}
+          autoComplete="new-password"
+          placeholder="Create a password"
+          disabled={isBusy}
+        />
 
-        <div className="space-y-2">
-          <Label
-            htmlFor="signup-confirm-password"
-            className={authFormStyles.label}
-          >
-            Confirm password
-          </Label>
-          <Input
-            id="signup-confirm-password"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Confirm your password"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-            className={authFormStyles.input}
-            required
-            disabled={isBusy}
-          />
-        </div>
+        <AuthPasswordField
+          id="signup-confirm-password"
+          label="Confirm password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+          autoComplete="new-password"
+          placeholder="Confirm your password"
+          disabled={isBusy}
+        />
 
-        {error ? (
-          <p className={authFormStyles.errorAlert} role="alert">
-            {error}
-          </p>
-        ) : null}
-
+        {error ? <AuthFormAlert message={error} variant="error" /> : null}
         {successMessage ? (
-          <p className={authFormStyles.successAlert} role="status">
-            {successMessage}
-          </p>
+          <AuthFormAlert message={successMessage} variant="success" />
         ) : null}
 
         <Button

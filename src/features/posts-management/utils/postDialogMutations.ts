@@ -1,0 +1,74 @@
+import { fetchProjects } from "@/features/projects-management/utils/projectsRepository";
+import { findRegisteredProject } from "@/features/posts-management/utils/projectValidationUtils";
+import {
+  postFormToPayload,
+  validatePostForm,
+  type PostFormValues,
+} from "@/features/posts-management/utils/postFormUtils";
+import {
+  createPost,
+  deletePost,
+  updatePost,
+} from "@/features/posts-management/utils/postsRepository";
+import { showToast } from "@/shared/utils/showToast";
+
+type SavePostOptions = {
+  values: PostFormValues;
+  editingPostId: string | null;
+  setError: (message: string | null) => void;
+};
+
+type DeletePostOptions = {
+  editingPostId: string;
+  setError: (message: string | null) => void;
+};
+
+export async function savePostMutation({
+  values,
+  editingPostId,
+  setError,
+}: SavePostOptions): Promise<boolean> {
+  const validationError = validatePostForm(values);
+  if (validationError) {
+    setError(validationError);
+    return false;
+  }
+
+  setError(null);
+
+  const projects = await fetchProjects();
+
+  if (projects.length === 0) {
+    showToast("error", "Create a project before adding posts.");
+    return false;
+  }
+
+  const registeredProject = findRegisteredProject(values.projectId, projects);
+
+  if (!registeredProject) {
+    showToast("error", "Please select a valid project or create one first.");
+    return false;
+  }
+
+  const payload = {
+    ...postFormToPayload(values),
+    projectId: registeredProject.id,
+  };
+
+  if (editingPostId) {
+    await updatePost(editingPostId, payload);
+  } else {
+    await createPost(payload);
+  }
+
+  return true;
+}
+
+export async function deletePostMutation({
+  editingPostId,
+  setError,
+}: DeletePostOptions): Promise<boolean> {
+  setError(null);
+  await deletePost(editingPostId);
+  return true;
+}

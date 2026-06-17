@@ -9,8 +9,8 @@ import { TeamMemberProfileCard } from "@/features/team-management/components/Tea
 import { TEAM_MANAGEMENT_PATH } from "@/features/team-management/constants/routes";
 import { useTeamMemberProjectActions } from "@/features/team-management/hooks/useTeamMemberProjectActions";
 import { useTeamMemberDetailQuery } from "@/features/team-management/hooks/useTeamMemberDetailQuery";
+import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
-import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { Button } from "@/shared/ui/button";
 
@@ -52,11 +52,7 @@ export function TeamMemberDetailPage() {
   ];
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[320px] items-center justify-center">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
+    return <DetailPageLoading backButton={<TeamMemberDetailBackButton />} />;
   }
 
   if (!member) {

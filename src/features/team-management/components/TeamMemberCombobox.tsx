@@ -1,8 +1,9 @@
 import { UserRound } from "lucide-react";
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 
 import type { TeamMemberComboboxProps } from "@/features/team-management/types/components";
 import { fetchTeamMembers } from "@/features/team-management/utils/teamMembersRepository";
+import { useLazyEntityList } from "@/shared/hooks/useLazyEntityList";
 import { ComboBox } from "@/shared/ui/ComboBox";
 
 export function TeamMemberCombobox({
@@ -13,33 +14,10 @@ export function TeamMemberCombobox({
   placeholder = "Search by name...",
   preload = false,
 }: TeamMemberComboboxProps) {
-  const [members, setMembers] = useState<
-    Awaited<ReturnType<typeof fetchTeamMembers>>
-  >([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const hasLoadedRef = useRef(false);
-
-  const loadMembers = useCallback(() => {
-    setIsLoading(true);
-    fetchTeamMembers()
-      .then((data) => {
-        setMembers(data);
-        hasLoadedRef.current = true;
-      })
-      .catch(() => setMembers([]))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!preload) {
-      hasLoadedRef.current = false;
-      return;
-    }
-
-    if (!hasLoadedRef.current) {
-      loadMembers();
-    }
-  }, [loadMembers, preload]);
+  const { items: members, isLoading, handleOpenChange } = useLazyEntityList(
+    fetchTeamMembers,
+    { preload },
+  );
 
   const options = useMemo(
     () =>
@@ -65,11 +43,7 @@ export function TeamMemberCombobox({
       emptyMessage="No one available to assign."
       noMatchMessage="No matches found."
       mode="value"
-      onOpenChange={(open) => {
-        if (open && !hasLoadedRef.current) {
-          loadMembers();
-        }
-      }}
+      onOpenChange={handleOpenChange}
     />
   );
 }

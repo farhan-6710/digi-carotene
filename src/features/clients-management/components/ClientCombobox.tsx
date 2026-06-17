@@ -1,8 +1,9 @@
 import { User } from "lucide-react";
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 
 import type { ClientComboboxProps } from "@/features/clients-management/types/components";
 import { fetchClients } from "@/features/clients-management/utils/clientsRepository";
+import { useLazyEntityList } from "@/shared/hooks/useLazyEntityList";
 import { ComboBox } from "@/shared/ui/ComboBox";
 
 export function ClientCombobox({
@@ -13,33 +14,10 @@ export function ClientCombobox({
   placeholder = "Search clients...",
   preload = false,
 }: ClientComboboxProps) {
-  const [clients, setClients] = useState<
-    Awaited<ReturnType<typeof fetchClients>>
-  >([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const hasLoadedRef = useRef(false);
-
-  const loadClients = useCallback(() => {
-    setIsLoading(true);
-    fetchClients()
-      .then((data) => {
-        setClients(data);
-        hasLoadedRef.current = true;
-      })
-      .catch(() => setClients([]))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!preload) {
-      hasLoadedRef.current = false;
-      return;
-    }
-
-    if (!hasLoadedRef.current) {
-      loadClients();
-    }
-  }, [loadClients, preload]);
+  const { items: clients, isLoading, handleOpenChange } = useLazyEntityList(
+    fetchClients,
+    { preload },
+  );
 
   const options = useMemo(
     () =>
@@ -65,11 +43,7 @@ export function ClientCombobox({
       emptyMessage="No clients left to assign."
       noMatchMessage="No matching clients found."
       mode="value"
-      onOpenChange={(open) => {
-        if (open && !hasLoadedRef.current) {
-          loadClients();
-        }
-      }}
+      onOpenChange={handleOpenChange}
     />
   );
 }

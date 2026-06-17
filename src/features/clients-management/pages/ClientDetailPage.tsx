@@ -5,8 +5,8 @@ import { ClientProfileCard } from "@/features/clients-management/components/Clie
 import { CLIENTS_MANAGEMENT_PATH } from "@/features/clients-management/constants/routes";
 import { useClientDetailQuery } from "@/features/clients-management/hooks/useClientDetailQuery";
 import { ClientProjectsSection } from "@/features/projects-management/components/ClientProjectsSection";
+import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
-import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { Button } from "@/shared/ui/button";
 
@@ -27,11 +27,7 @@ export function ClientDetailPage() {
   const { client, projects, isLoading, error } = useClientDetailQuery(clientId);
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[320px] items-center justify-center">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
+    return <DetailPageLoading backButton={<ClientDetailBackButton />} />;
   }
 
   if (!client) {
