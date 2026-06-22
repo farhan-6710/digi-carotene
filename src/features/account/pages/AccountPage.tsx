@@ -7,7 +7,7 @@ import { AccountStatsGrid } from "@/shared/components/account/AccountStatsGrid";
 import { PageHeader } from "@/shared/components/PageHeader";
 
 export function AccountPage() {
-  const { user } = useAuth();
+  const { user, adminTeamRole } = useAuth();
 
   return (
     <section className="space-y-8">
@@ -18,14 +18,19 @@ export function AccountPage() {
 
       <AccountHeader
         user={user}
-        roleLabel={staffAccount.role}
+        roleLabel={staffAccount.department}
         bio={staffAccount.bio}
+        teamRole={adminTeamRole}
       />
 
       <AccountStatsGrid stats={staffAccount.stats} />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <StaffAccountDetailsCard user={user} staffAccount={staffAccount} />
+        <StaffAccountDetailsCard
+          user={user}
+          staffAccount={staffAccount}
+          adminTeamRole={adminTeamRole}
+        />
         <AccountCredentialsList
           credentials={staffAccount.credentials}
           specializations={staffAccount.specializations}

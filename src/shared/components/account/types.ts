@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { User } from "@supabase/supabase-js";
 
+import type { TeamMemberRole } from "@/features/team-management/constants/teamMemberRoles";
+
 export type AccountStat = {
   label: string;
   value: string;
@@ -20,6 +22,8 @@ export type AccountHeaderProps = {
   user: User | null;
   roleLabel: string;
   bio?: string;
+  /** When set (including null), shows the internal admin team role badge. */
+  teamRole?: TeamMemberRole | null;
 };
 
 export type AccountPanelCardProps = {

@@ -2,9 +2,14 @@ import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+import {
+  TEAM_MEMBER_ROLE_BADGE_CLASS,
+  TEAM_MEMBER_ROLE_LABELS,
+} from "@/features/team-management/constants/teamMemberRoles";
 import { ConfirmationModal } from "@/shared/ConfirmationModal";
 import { Button } from "@/shared/ui/button";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
+import { cn } from "@/shared/lib/utils";
 import {
   getUserAvatarUrl,
   getUserDisplayName,
@@ -13,7 +18,12 @@ import {
 } from "@/shared/utils/authUserDisplay";
 import type { AccountHeaderProps } from "@/shared/components/account/types";
 
-export function AccountHeader({ user, roleLabel, bio }: AccountHeaderProps) {
+export function AccountHeader({
+  user,
+  roleLabel,
+  bio,
+  teamRole,
+}: AccountHeaderProps) {
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const [signOutOpen, setSignOutOpen] = useState(false);
@@ -53,9 +63,27 @@ export function AccountHeader({ user, roleLabel, bio }: AccountHeaderProps) {
             )}
 
             <div className="min-w-0 flex-1 space-y-1 sm:space-y-2">
-              <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-                {displayName}
-              </h2>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
+                  {displayName}
+                </h2>
+                {teamRole !== undefined ? (
+                  teamRole ? (
+                    <span
+                      className={cn(
+                        "inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                        TEAM_MEMBER_ROLE_BADGE_CLASS[teamRole],
+                      )}
+                    >
+                      {TEAM_MEMBER_ROLE_LABELS[teamRole]}
+                    </span>
+                  ) : (
+                    <span className="text-xs font-medium text-muted-foreground">
+                      Team role not assigned
+                    </span>
+                  )
+                ) : null}
+              </div>
               <p className="text-sm text-muted-foreground">{roleLabel}</p>
               <p className="break-all text-sm text-muted-foreground sm:break-normal">
                 {email}

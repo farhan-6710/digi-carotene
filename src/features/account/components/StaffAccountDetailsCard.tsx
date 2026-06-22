@@ -1,3 +1,4 @@
+import { TEAM_MEMBER_ROLE_LABELS } from "@/features/team-management/constants/teamMemberRoles";
 import { AccountDetailsCard } from "@/shared/components/account/AccountDetailsCard";
 import {
   getUserAuthProvider,
@@ -9,8 +10,15 @@ import type { StaffAccountDetailsCardProps } from "@/features/account/types/comp
 export function StaffAccountDetailsCard({
   user,
   staffAccount,
+  adminTeamRole,
 }: StaffAccountDetailsCardProps) {
   const details = [
+    {
+      label: "Team role",
+      value: adminTeamRole
+        ? TEAM_MEMBER_ROLE_LABELS[adminTeamRole]
+        : "Not assigned",
+    },
     { label: "Department", value: staffAccount.department },
     { label: "Email", value: getUserEmail(user) },
     { label: "Phone", value: staffAccount.phone },

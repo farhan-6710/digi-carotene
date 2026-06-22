@@ -4,6 +4,7 @@ import type {
   AccountCredential,
   StaffAccount,
 } from "@/features/account/types/types";
+import type { TeamMemberRole } from "@/features/team-management/constants/teamMemberRoles";
 
 export type AccountCredentialsListProps = {
   credentials: AccountCredential[];
@@ -13,4 +14,5 @@ export type AccountCredentialsListProps = {
 export type StaffAccountDetailsCardProps = {
   user: User | null;
   staffAccount: StaffAccount;
+  adminTeamRole: TeamMemberRole | null;
 };
