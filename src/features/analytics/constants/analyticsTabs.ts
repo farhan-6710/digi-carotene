@@ -12,5 +12,5 @@ export type AnalyticsTabId = (typeof ANALYTICS_TABS)[number]["id"];
 export const DEFAULT_ANALYTICS_TAB: AnalyticsTabId = "posts";
 
 export function buildAnalyticsPath(tab: AnalyticsTabId = DEFAULT_ANALYTICS_TAB) {
-  return `/admin/analytics?${ANALYTICS_TAB_PARAM}=${tab}`;
+  return `/staff-portal/analytics?${ANALYTICS_TAB_PARAM}=${tab}`;
 }

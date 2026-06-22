@@ -16,7 +16,7 @@ import { fetchPostsForClientId } from "@/features/posts-management/utils/postsRe
 import type { ProjectListItem } from "@/features/projects-management/types/types";
 import { fetchProjectsByClientId } from "@/features/projects-management/utils/projectsRepository";
 
-type PortalClientContextValue = {
+type ClientPortalContextValue = {
   client: Client | null;
   projects: ProjectListItem[];
   posts: Post[];
@@ -25,11 +25,11 @@ type PortalClientContextValue = {
   refresh: () => Promise<void>;
 };
 
-const PortalClientContext = createContext<PortalClientContextValue | null>(
+const ClientPortalContext = createContext<ClientPortalContextValue | null>(
   null,
 );
 
-export function PortalClientProvider({ children }: { children: ReactNode }) {
+export function ClientPortalProvider({ children }: { children: ReactNode }) {
   const { clientId } = useAuth();
   const [client, setClient] = useState<Client | null>(null);
   const [projects, setProjects] = useState<ProjectListItem[]>([]);
@@ -90,16 +90,16 @@ export function PortalClientProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <PortalClientContext.Provider value={value}>
+    <ClientPortalContext.Provider value={value}>
       {children}
-    </PortalClientContext.Provider>
+    </ClientPortalContext.Provider>
   );
 }
 
-export function usePortalClient() {
-  const context = useContext(PortalClientContext);
+export function useClientPortal() {
+  const context = useContext(ClientPortalContext);
   if (!context) {
-    throw new Error("usePortalClient must be used within PortalClientProvider");
+    throw new Error("useClientPortal must be used within ClientPortalProvider");
   }
   return context;
 }

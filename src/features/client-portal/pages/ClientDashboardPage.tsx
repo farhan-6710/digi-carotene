@@ -1,28 +1,28 @@
 import { format, parseISO } from "date-fns";
 import { Link } from "react-router";
 
-import { PortalSocialLinks } from "@/features/portal/components/PortalSocialLinks";
-import { usePortalClient } from "@/features/portal/providers/PortalClientProvider";
+import { ClientSocialLinks } from "@/features/client-portal/components/ClientSocialLinks";
+import { useClientPortal } from "@/features/client-portal/providers/ClientPortalProvider";
 import {
-  buildPortalStatCards,
+  buildClientStatCards,
   getUpcomingPosts,
-} from "@/features/portal/utils/portalStats";
+} from "@/features/client-portal/utils/clientStats";
 import {
   statusColors,
   statusText,
 } from "@/features/posts-management/constants/postsManagement";
-import { PortalPageShell } from "@/shared/components/PortalPageShell";
+import { ClientPageShell } from "@/shared/components/ClientPageShell";
 import { LoadingSpinner, TableLoadingState } from "@/shared/components/LoadingSpinner";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatsCards } from "@/shared/components/StatsCards";
 
-export function PortalDashboardPage() {
-  const { client, projects, posts, loading, error } = usePortalClient();
-  const statCards = buildPortalStatCards(posts);
+export function ClientDashboardPage() {
+  const { client, projects, posts, loading, error } = useClientPortal();
+  const statCards = buildClientStatCards(posts);
   const upcoming = getUpcomingPosts(posts);
 
   return (
-    <PortalPageShell
+    <ClientPageShell
       heading={client?.client_name ?? "Your brand"}
       description="Overview of your content schedule, social profiles, and account with Digi Carotene."
       error={error && !loading ? error : null}
@@ -35,7 +35,7 @@ export function PortalDashboardPage() {
             heading="Upcoming posts"
             actions={
               <Link
-                to="/portal/posts"
+                to="/client-portal/posts"
                 className="text-xs font-semibold text-primary hover:underline"
               >
                 View all
@@ -89,11 +89,11 @@ export function PortalDashboardPage() {
             {loading || !client ? (
               <LoadingSpinner />
             ) : (
-              <PortalSocialLinks projects={projects} />
+              <ClientSocialLinks projects={projects} />
             )}
           </div>
         </div>
       </div>
-    </PortalPageShell>
+    </ClientPageShell>
   );
 }

@@ -1,7 +1,9 @@
 import { supabase } from "@/shared/lib/supabase";
 import type { Profile } from "@/features/auth/types/profile";
 
-export async function fetchProfileByUserId(userId: string): Promise<Profile | null> {
+export async function fetchProfileByUserId(
+  userId: string,
+): Promise<Profile | null> {
   const { data, error } = await supabase
     .from("profiles")
     .select("id, role, client_id")
@@ -15,7 +17,9 @@ export async function fetchProfileByUserId(userId: string): Promise<Profile | nu
   return (data as Profile | null) ?? null;
 }
 
-export async function unlinkProfilesFromClient(clientId: string): Promise<void> {
+export async function unlinkProfilesFromClient(
+  clientId: string,
+): Promise<void> {
   const { error } = await supabase
     .from("profiles")
     .update({ client_id: null })

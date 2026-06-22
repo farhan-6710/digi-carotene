@@ -1,9 +1,9 @@
 import type {
-  AdminNeedsAttentionItem,
-  AdminRecentPost,
-} from "@/features/admin-dashboard/types/types";
+  StaffNeedsAttentionItem,
+  StaffRecentPost,
+} from "@/features/staff-portal/types/types";
 
-export const adminNeedsAttentionItems: AdminNeedsAttentionItem[] = [
+export const staffNeedsAttentionItems: StaffNeedsAttentionItem[] = [
   {
     time: "09:00 AM",
     from: "Bloom Skincare - Instagram carousel",
@@ -46,7 +46,7 @@ export const adminNeedsAttentionItems: AdminNeedsAttentionItem[] = [
   },
 ];
 
-export const adminRecentPosts: AdminRecentPost[] = [
+export const staffRecentPosts: StaffRecentPost[] = [
   {
     time: "09:00 AM",
     client: "Bloom Skincare",
@@ -105,7 +105,7 @@ export const adminRecentPosts: AdminRecentPost[] = [
   },
 ];
 
-export const adminPublishingComparisonData = [
+export const staffPublishingComparisonData = [
   { day: "Day 1", currentMonth: 4, previousMonth: 3 },
   { day: "Day 3", currentMonth: 6, previousMonth: 5 },
   { day: "Day 5", currentMonth: 3, previousMonth: 4 },

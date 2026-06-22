@@ -2,7 +2,7 @@
 
 Scheduled content per **project**. Post-level platform tags and published links stay on each post row.
 
-**Route:** `/admin/posts-management`  
+**Route:** `/staff-portal/posts-management`  
 **Code:** `src/features/posts-management/`  
 **Setup:** included in `scripts/setup-database.sql`
 

@@ -43,14 +43,14 @@ projects ──1:N── posts
 
 ## RLS summary (from setup-database.sql)
 
-| Table                  | Admin (authenticated)              | Portal (client role)                          |
+| Table                  | Staff (authenticated)              | Client portal (client role)                   |
 | ---------------------- | ---------------------------------- | --------------------------------------------- |
 | `clients`              | Full CRUD                          | SELECT own row (`profiles.client_id`)         |
 | `team_members`         | Full CRUD                          | —                                             |
 | `projects`             | Full CRUD                          | —                                             |
 | `project_team_members` | Full CRUD                          | —                                             |
 | `posts`                | Full CRUD                          | SELECT posts for projects under linked client |
-| `profiles`             | Read/update own; admins update any | Read/update own                               |
+| `profiles`             | Read/update own; staff update any  | Read/update own                               |
 
 ## After setup
 
@@ -58,7 +58,7 @@ projects ──1:N── posts
 
 ```sql
 update public.profiles
-set role = 'admin', client_id = null
+set role = 'staff', client_id = null
 where id = '<auth-user-uuid>';
 ```
 
@@ -67,9 +67,9 @@ where id = '<auth-user-uuid>';
 4. Add **projects** (client + manager + social URLs).
 5. Add **posts** (each post requires a project).
 
-**Brand portal users:** sign up or create in Supabase → link via SQL (see [admin/auth/profiles.md](./admin/auth/profiles.md)).
+**Brand portal users:** sign up or create in Supabase → link via SQL (see [staff-portal/auth/profiles.md](./staff-portal/auth/profiles.md)).
 
-Suggested admin nav / setup order: Clients → Team → Projects → Posts.
+Suggested staff nav / setup order: Clients → Team → Projects → Posts.
 
 ## Feature docs
 

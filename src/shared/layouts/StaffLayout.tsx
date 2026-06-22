@@ -1,13 +1,13 @@
-import { adminShellConfig } from "@/features/admin-shell/constants/shellConfig";
+import { staffShellConfig } from "@/features/staff-portal-shell/constants/shellConfig";
 import { AppShellLayout } from "@/shared/layouts/AppShellLayout";
 
-export function AdminLayout() {
+export function StaffLayout() {
   return (
     <AppShellLayout
-      sidebarConfig={adminShellConfig}
-      accountPath="/admin/account"
-      mobileNavDescription="Admin navigation links and quick actions"
-      scrollContainerId="admin"
+      sidebarConfig={staffShellConfig}
+      accountPath="/staff-portal/account"
+      mobileNavDescription="Staff portal navigation links and quick actions"
+      scrollContainerId="staff-portal"
     />
   );
 }

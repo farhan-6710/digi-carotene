@@ -1,14 +1,14 @@
 import { format, parseISO } from "date-fns";
 
-import { PORTAL_POSTS_ROW_GRID_CLASS } from "@/features/portal/constants/postsDirectory";
-import type { PortalPostsTableRowProps } from "@/features/portal/types/components";
+import { CLIENT_POSTS_ROW_GRID_CLASS } from "@/features/client-portal/constants/postsDirectory";
+import type { ClientPostsTableRowProps } from "@/features/client-portal/types/components";
 import {
   statusColors,
   statusText,
 } from "@/features/posts-management/constants/postsManagement";
 import { cn } from "@/shared/lib/utils";
 
-function formatScheduled(post: PortalPostsTableRowProps["post"]): string {
+function formatScheduled(post: ClientPostsTableRowProps["post"]): string {
   const dateLabel = format(parseISO(post.scheduled_date), "MMM d, yyyy");
   if (!post.scheduled_time) {
     return dateLabel;
@@ -16,12 +16,12 @@ function formatScheduled(post: PortalPostsTableRowProps["post"]): string {
   return `${dateLabel} · ${post.scheduled_time}`;
 }
 
-export function PortalPostsTableRow({ post }: PortalPostsTableRowProps) {
+export function ClientPostsTableRow({ post }: ClientPostsTableRowProps) {
   return (
     <div
       className={cn(
         "grid gap-2 px-6 py-4 sm:items-center sm:gap-4",
-        PORTAL_POSTS_ROW_GRID_CLASS,
+        CLIENT_POSTS_ROW_GRID_CLASS,
       )}
     >
       <div>

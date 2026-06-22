@@ -9,19 +9,19 @@ import {
 import { TEAM_MANAGEMENT_PATH } from "@/features/team-management/constants/routes";
 import type { StatCardItem } from "@/shared/types/statsCards";
 
-type AdminStatCounts = {
+type StaffStatCounts = {
   clientsCount: number | null;
   teamMembersCount: number | null;
   totalPostsCount: number | null;
   missedPostsCount: number | null;
 };
 
-export function buildAdminStatCards({
+export function buildStaffStatCards({
   clientsCount,
   teamMembersCount,
   totalPostsCount,
   missedPostsCount,
-}: AdminStatCounts): StatCardItem[] {
+}: StaffStatCounts): StatCardItem[] {
   return [
     {
       id: "team-members",
@@ -41,7 +41,7 @@ export function buildAdminStatCards({
       icon: Users,
       sparklineData: clientsSparklineData,
       sparklineColor: "var(--accent)",
-      href: "/admin/clients-management",
+      href: "/staff-portal/clients-management",
     },
     {
       id: "total-posts",
@@ -51,7 +51,7 @@ export function buildAdminStatCards({
       icon: Layers,
       sparklineData: totalPostsSparklineData,
       sparklineColor: "var(--primary)",
-      href: "/admin/posts-management",
+      href: "/staff-portal/posts-management",
     },
     {
       id: "missed-posts",
@@ -61,7 +61,7 @@ export function buildAdminStatCards({
       icon: XCircle,
       sparklineData: missedPostsSparklineData,
       sparklineColor: "var(--accent)",
-      href: "/admin/posts-management",
+      href: "/staff-portal/posts-management",
     },
   ];
 }

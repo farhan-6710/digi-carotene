@@ -128,7 +128,7 @@ create policy "Authenticated users manage posts"
 create table public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   role text not null default 'client'
-    check (role in ('admin', 'client', 'user')),
+    check (role in ('staff', 'client', 'user')),
   client_id uuid references public.clients (id) on delete set null
 );
 
@@ -142,12 +142,12 @@ create policy "Users update own profile"
   on public.profiles for update to authenticated
   using (id = auth.uid()) with check (id = auth.uid());
 
-create policy "Admins update any profile"
+create policy "Staff update any profile"
   on public.profiles for update to authenticated
   using (
     exists (
       select 1 from public.profiles p
-      where p.id = auth.uid() and p.role = 'admin'
+      where p.id = auth.uid() and p.role = 'staff'
     )
   );
 

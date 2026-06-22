@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { settingsSections } from "@/features/settings/constants/settings";
-import { useTheme } from "@/features/admin-shell/providers/ThemeProvider";
+import { useTheme } from "@/shared/providers/ThemeProvider";
 import type { SettingsToggleId } from "@/features/settings/types/types";
 
 function buildInitialToggleState() {

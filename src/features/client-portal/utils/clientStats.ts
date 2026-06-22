@@ -12,39 +12,39 @@ function countByStatus(posts: Post[], status: Post["status"]): number {
   return posts.filter((post) => post.status === status).length;
 }
 
-export function buildPortalStatCards(posts: Post[]): StatCardItem[] {
+export function buildClientStatCards(posts: Post[]): StatCardItem[] {
   return [
     {
-      id: "portal-total-posts",
+      id: "client-total-posts",
       label: "Total posts",
       value: String(posts.length),
       description: "All content for your brand",
       icon: FileText,
-      href: "/portal/posts",
+      href: "/client-portal/posts",
     },
     {
-      id: "portal-scheduled",
+      id: "client-scheduled",
       label: "Scheduled",
       value: String(countByStatus(posts, "Scheduled")),
       description: "Waiting to go live",
       icon: CalendarClock,
-      href: "/portal/posts",
+      href: "/client-portal/posts",
     },
     {
-      id: "portal-posted",
+      id: "client-posted",
       label: "Posted",
       value: String(countByStatus(posts, "Posted")),
       description: "Published successfully",
       icon: CheckCircle2,
-      href: "/portal/posts",
+      href: "/client-portal/posts",
     },
     {
-      id: "portal-not-posted",
+      id: "client-not-posted",
       label: "Not posted",
       value: String(countByStatus(posts, "Not posted")),
       description: "Missed or pending action",
       icon: XCircle,
-      href: "/portal/posts",
+      href: "/client-portal/posts",
     },
   ];
 }

@@ -13,15 +13,15 @@ Reference docs for agents and developers. Source of truth for database schema, D
 1. `scripts/reset-database.sql` — wipe all tables + auth users
 2. `scripts/setup-database.sql` — create schema, RLS, signup trigger
 
-## Admin features
+## Staff portal features
 
 | Feature | Doc |
 |---------|-----|
-| Auth / profiles | [admin/auth/profiles.md](./admin/auth/profiles.md) |
-| Clients | [admin/clients-management/clients.md](./admin/clients-management/clients.md) |
-| Team members | [admin/team-management/team-members.md](./admin/team-management/team-members.md) |
-| Projects | [admin/projects-management/projects.md](./admin/projects-management/projects.md) |
-| Posts | [admin/posts-management/posts.md](./admin/posts-management/posts.md) |
+| Auth / profiles | [staff-portal/auth/profiles.md](./staff-portal/auth/profiles.md) |
+| Clients | [staff-portal/clients-management/clients.md](./staff-portal/clients-management/clients.md) |
+| Team members | [staff-portal/team-management/team-members.md](./staff-portal/team-management/team-members.md) |
+| Projects | [staff-portal/projects-management/projects.md](./staff-portal/projects-management/projects.md) |
+| Posts | [staff-portal/posts-management/posts.md](./staff-portal/posts-management/posts.md) |
 
 ## Domain hierarchy
 

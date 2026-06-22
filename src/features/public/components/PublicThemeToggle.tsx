@@ -1,6 +1,6 @@
 import { Moon, Sun } from "lucide-react";
 
-import { useTheme } from "@/features/admin-shell/providers/ThemeProvider";
+import { useTheme } from "@/shared/providers/ThemeProvider";
 import { Switch } from "@/shared/ui/switch";
 
 export function PublicThemeToggle() {

@@ -181,7 +181,7 @@ async function main() {
   if (dryRun) {
     console.log("\nDry run complete. Run: bun run link:profiles-clients");
   } else {
-    console.log("\nDone. Log out and log in, then open /portal/dashboard.");
+    console.log("\nDone. Log out and log in, then open /client-portal/dashboard.");
     console.log(
       "If portal data is empty, run scripts/portal-data-rls.sql for client read access.",
     );

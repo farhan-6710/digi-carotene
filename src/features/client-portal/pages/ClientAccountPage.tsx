@@ -1,6 +1,6 @@
-import { PortalSocialLinks } from "@/features/portal/components/PortalSocialLinks";
-import { usePortalClient } from "@/features/portal/providers/PortalClientProvider";
-import { buildPortalStatCards } from "@/features/portal/utils/portalStats";
+import { ClientSocialLinks } from "@/features/client-portal/components/ClientSocialLinks";
+import { useClientPortal } from "@/features/client-portal/providers/ClientPortalProvider";
+import { buildClientStatCards } from "@/features/client-portal/utils/clientStats";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
 import { AccountHeader } from "@/shared/components/account/AccountHeader";
 import { AccountDetailsCard } from "@/shared/components/account/AccountDetailsCard";
@@ -8,18 +8,18 @@ import type { AccountDetailRow } from "@/shared/components/account/types";
 import { AccountPanelCard } from "@/shared/components/account/AccountPanelCard";
 import { AccountStatsGrid } from "@/shared/components/account/AccountStatsGrid";
 import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
-import { PortalPageShell } from "@/shared/components/PortalPageShell";
+import { ClientPageShell } from "@/shared/components/ClientPageShell";
 import {
   getUserAuthProvider,
   getUserEmail,
   getUserJoinedDate,
 } from "@/shared/utils/authUserDisplay";
 
-export function PortalAccountPage() {
+export function ClientAccountPage() {
   const { user } = useAuth();
-  const { client, projects, posts, loading, error } = usePortalClient();
+  const { client, projects, posts, loading, error } = useClientPortal();
 
-  const stats = buildPortalStatCards(posts).map((stat) => ({
+  const stats = buildClientStatCards(posts).map((stat) => ({
     label: stat.label,
     value: loading ? "—" : stat.value,
   }));
@@ -47,7 +47,7 @@ export function PortalAccountPage() {
     : "Your Digi Carotene client portal account.";
 
   return (
-    <PortalPageShell
+    <ClientPageShell
       heading="Account"
       description="Your login, brand on file with Digi Carotene, and content performance snapshot."
       error={error && !loading ? error : null}
@@ -66,7 +66,7 @@ export function PortalAccountPage() {
             <AccountDetailsCard title="Brand & login details" details={brandDetails} />
             <AccountPanelCard title="Social profiles">
               {projects.length > 0 ? (
-                <PortalSocialLinks projects={projects} />
+                <ClientSocialLinks projects={projects} />
               ) : (
                 <p className="text-sm text-muted-foreground">
                   Brand details unavailable.
@@ -76,6 +76,6 @@ export function PortalAccountPage() {
           </>
         )}
       </div>
-    </PortalPageShell>
+    </ClientPageShell>
   );
 }

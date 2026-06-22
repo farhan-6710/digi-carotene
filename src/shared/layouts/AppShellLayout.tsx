@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, Outlet } from "react-router";
 import { Menu, Moon, Search, Sun } from "lucide-react";
 
-import { useTheme } from "@/features/admin-shell/providers/ThemeProvider";
+import { useTheme } from "@/shared/providers/ThemeProvider";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
 import {
   ShellMobileNavSheet,
@@ -110,7 +110,7 @@ export function AppShellLayout({
           </header>
 
           <main
-            {...(scrollContainerId ? { "data-admin-scroll-container": true } : {})}
+            {...(scrollContainerId ? { "data-scroll-container": true } : {})}
             className="min-h-0 flex-1 overflow-y-auto scroll-smooth"
           >
             <div className="px-6 py-6 lg:px-8">

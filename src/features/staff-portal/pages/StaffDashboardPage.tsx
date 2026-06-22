@@ -1,14 +1,14 @@
-import { AdminNeedsAttention } from "@/features/admin-dashboard/components/AdminNeedsAttention";
-import { AdminPostingChart } from "@/features/admin-dashboard/components/AdminPostingChart";
-import { useAdminDashboardQuery } from "@/features/admin-dashboard/hooks/useAdminDashboardQuery";
+import { StaffNeedsAttention } from "@/features/staff-portal/components/StaffNeedsAttention";
+import { StaffPostingChart } from "@/features/staff-portal/components/StaffPostingChart";
+import { useStaffDashboardQuery } from "@/features/staff-portal/hooks/useStaffDashboardQuery";
 import { PostsTopClientsTable } from "@/features/analytics/components/PostsTopClientsTable";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatsCards } from "@/shared/components/StatsCards";
 
-export function AdminDashboardPage() {
+export function StaffDashboardPage() {
   const { statCards, topClients, isStatsLoading, isPostsLoading, error } =
-    useAdminDashboardQuery();
+    useStaffDashboardQuery();
 
   return (
     <section className="space-y-8">
@@ -23,12 +23,12 @@ export function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <AdminPostingChart />
+          <StaffPostingChart />
           <PostsTopClientsTable clients={topClients} isLoading={isPostsLoading} />
         </div>
 
         <div className="lg:col-span-1">
-          <AdminNeedsAttention />
+          <StaffNeedsAttention />
         </div>
       </div>
     </section>

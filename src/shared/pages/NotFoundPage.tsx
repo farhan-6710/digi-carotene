@@ -15,10 +15,10 @@ export function NotFoundPage() {
           Go to Home
         </Link>
         <Link
-          to="/admin/dashboard"
+          to="/staff-portal/dashboard"
           className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
         >
-          Go to Admin Dashboard
+          Go to Staff Dashboard
         </Link>
       </div>
     </section>

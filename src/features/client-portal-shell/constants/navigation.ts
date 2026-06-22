@@ -1,23 +1,23 @@
 import type { ShellNavIconKey } from "@/shared/constants/shellNavIcons";
 
-export type PortalNavIconKey = Extract<
+export type ClientNavIconKey = Extract<
   ShellNavIconKey,
   "dashboard" | "posts" | "account"
 >;
 
-export type PortalNavItem = {
+export type ClientNavItem = {
   label: string;
   to: string;
-  icon: PortalNavIconKey;
+  icon: ClientNavIconKey;
 };
 
-export const portalNav: PortalNavItem[] = [
-  { label: "Dashboard", to: "/portal/dashboard", icon: "dashboard" },
-  { label: "Posts", to: "/portal/posts", icon: "posts" },
-  { label: "Account", to: "/portal/account", icon: "account" },
+export const clientNav: ClientNavItem[] = [
+  { label: "Dashboard", to: "/client-portal/dashboard", icon: "dashboard" },
+  { label: "Posts", to: "/client-portal/posts", icon: "posts" },
+  { label: "Account", to: "/client-portal/account", icon: "account" },
 ];
 
-export const portalMeta = {
+export const clientMeta = {
   name: "Digi Carotene",
   portalLabel: "Client Portal",
   userInitials: "DC",

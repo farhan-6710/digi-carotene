@@ -1,17 +1,17 @@
-import { PortalPostsTable } from "@/features/portal/components/PortalPostsTable";
-import { usePortalClient } from "@/features/portal/providers/PortalClientProvider";
-import { PortalPageShell } from "@/shared/components/PortalPageShell";
+import { ClientPostsTable } from "@/features/client-portal/components/ClientPostsTable";
+import { useClientPortal } from "@/features/client-portal/providers/ClientPortalProvider";
+import { ClientPageShell } from "@/shared/components/ClientPageShell";
 
-export function PortalPostsPage() {
-  const { posts, loading, error } = usePortalClient();
+export function ClientPostsPage() {
+  const { posts, loading, error } = useClientPortal();
 
   return (
-    <PortalPageShell
+    <ClientPageShell
       heading="My Posts"
       description="Read-only view of every post scheduled for your brand."
       error={error && !loading ? error : null}
     >
-      <PortalPostsTable posts={posts} isLoading={loading} />
-    </PortalPageShell>
+      <ClientPostsTable posts={posts} isLoading={loading} />
+    </ClientPageShell>
   );
 }

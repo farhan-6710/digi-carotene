@@ -1,14 +1,14 @@
 import { PageHeader } from "@/shared/components/PageHeader";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
-import type { PortalPageShellProps } from "@/shared/types/components";
+import type { ClientPageShellProps } from "@/shared/types/components";
 
-export function PortalPageShell({
+export function ClientPageShell({
   heading,
   description,
   error = null,
   actions,
   children,
-}: PortalPageShellProps) {
+}: ClientPageShellProps) {
   return (
     <section className="space-y-8">
       <PageHeader

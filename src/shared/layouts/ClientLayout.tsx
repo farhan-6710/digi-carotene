@@ -1,9 +1,12 @@
-import { portalShellConfig } from "@/features/portal-shell/constants/shellConfig";
-import { PortalClientProvider, usePortalClient } from "@/features/portal/providers/PortalClientProvider";
+import { clientShellConfig } from "@/features/client-portal-shell/constants/shellConfig";
+import {
+  ClientPortalProvider,
+  useClientPortal,
+} from "@/features/client-portal/providers/ClientPortalProvider";
 import { AppShellLayout } from "@/shared/layouts/AppShellLayout";
 
-function PortalBrandHeader() {
-  const { client } = usePortalClient();
+function ClientBrandHeader() {
+  const { client } = useClientPortal();
 
   return (
     <div className="min-w-0 flex-1">
@@ -17,21 +20,21 @@ function PortalBrandHeader() {
   );
 }
 
-function PortalAppShell() {
+function ClientAppShell() {
   return (
     <AppShellLayout
-      sidebarConfig={portalShellConfig}
-      accountPath="/portal/account"
-      headerCenter={<PortalBrandHeader />}
-      mobileNavDescription="Portal navigation links and quick actions"
+      sidebarConfig={clientShellConfig}
+      accountPath="/client-portal/account"
+      headerCenter={<ClientBrandHeader />}
+      mobileNavDescription="Client portal navigation links and quick actions"
     />
   );
 }
 
-export function PortalLayout() {
+export function ClientLayout() {
   return (
-    <PortalClientProvider>
-      <PortalAppShell />
-    </PortalClientProvider>
+    <ClientPortalProvider>
+      <ClientAppShell />
+    </ClientPortalProvider>
   );
 }

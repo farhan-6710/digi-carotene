@@ -6,13 +6,13 @@ import {
   AUTH_FORM_TYPE_PARAM,
   AUTH_FORM_TYPES,
 } from "@/features/auth/constants/auth";
-import { isAdminPath, isPortalPath } from "@/features/auth/constants/routes";
+import { isStaffPath, isClientPath } from "@/features/auth/constants/routes";
 import { agencyMeta } from "@/features/public/constants/agency";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
 import { CenteredLoading } from "@/shared/components/LoadingSpinner";
 
 export function AuthPage() {
-  const { user, loading, profile, homePath, isAdmin, isClient } = useAuth();
+  const { user, loading, profile, homePath, isStaff, isClient } = useAuth();
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
@@ -25,9 +25,9 @@ export function AuthPage() {
 
   let redirectPath = homePath;
   if (requestedPath) {
-    if (isAdmin && isAdminPath(requestedPath)) {
+    if (isStaff && isStaffPath(requestedPath)) {
       redirectPath = requestedPath;
-    } else if (isClient && isPortalPath(requestedPath)) {
+    } else if (isClient && isClientPath(requestedPath)) {
       redirectPath = requestedPath;
     }
   }
@@ -83,7 +83,7 @@ export function AuthPage() {
             <p className="mt-1 text-sm text-muted-foreground">
               {isSignup
                 ? "Sign up for portal access."
-                : "Sign in to your admin or client portal."}
+                : "Sign in to your staff or client portal."}
             </p>
           </div>
 

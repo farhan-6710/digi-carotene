@@ -12,16 +12,16 @@ Links Supabase Auth users to app roles and (for portal users) a client brand.
 | Column | Type | Nullable | Description |
 |--------|------|----------|-------------|
 | `id` | uuid | No | PK, FK → `auth.users(id)` ON DELETE CASCADE |
-| `role` | text | No | CHECK: `admin`, `client`, `user` |
+| `role` | text | No | CHECK: `staff`, `client`, `user` |
 | `client_id` | uuid | Yes | FK → `clients.id` ON DELETE SET NULL |
 
 ### Roles
 
 | Role | App behavior |
 |------|--------------|
-| `admin` | Full `/admin` access |
-| `client` | `/portal` access; requires non-null `client_id` |
-| `user` | Treated like `admin` in app (legacy default) |
+| `staff` | Full `/staff-portal` access |
+| `client` | `/client-portal` access; requires non-null `client_id` |
+| `user` | Treated like `staff` in app (legacy default) |
 
 ### Signup trigger
 
@@ -35,7 +35,7 @@ Defined in `scripts/setup-database.sql` (`handle_new_user` + `on_auth_user_creat
 |--------|-----------|------|
 | Users read own profile | SELECT | `id = auth.uid()` |
 | Users update own profile | UPDATE | `id = auth.uid()` |
-| Admins update any profile | UPDATE | caller's profile has `role = 'admin'` |
+| Staff update any profile | UPDATE | caller's profile has `role = 'staff'` |
 
 Portal data policies (on `clients` / `posts`) are in the same setup script — see [database.md](../../database.md).
 
@@ -46,7 +46,7 @@ Portal data policies (on `clients` / `posts`) are in the same setup script — s
 Types: `src/features/auth/types/profile.ts`
 
 ```ts
-type UserRole = "admin" | "client" | "user";
+type UserRole = "staff" | "client" | "user";
 
 type Profile = {
   id: string;
@@ -59,11 +59,11 @@ type Profile = {
 
 ## Manual setup (after signup)
 
-**Promote to admin:**
+**Promote to staff:**
 
 ```sql
 update public.profiles
-set role = 'admin', client_id = null
+set role = 'staff', client_id = null
 where id = '<auth-user-uuid>';
 ```
 

@@ -12,7 +12,7 @@ import { supabase } from "@/shared/lib/supabase";
 import { fetchProfileByUserId } from "@/features/auth/utils/profileRepository";
 import { fetchTeamRoleByEmail } from "@/features/auth/utils/teamRoleRepository";
 import type { Profile, UserRole } from "@/features/auth/types/profile";
-import { isAdminRole, isClientRole } from "@/features/auth/types/profile";
+import { isStaffRole, isClientRole } from "@/features/auth/types/profile";
 import { getHomePathForRole } from "@/features/auth/constants/routes";
 import type { TeamMemberRole } from "@/features/team-management/constants/teamMemberRoles";
 
@@ -22,7 +22,7 @@ type AuthContextValue = {
   role: UserRole | null;
   adminTeamRole: TeamMemberRole | null;
   clientId: string | null;
-  isAdmin: boolean;
+  isStaff: boolean;
   isClient: boolean;
   homePath: string;
   loading: boolean;
@@ -141,9 +141,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const role = profile?.role ?? null;
   const clientId = profile?.client_id ?? null;
-  const isAdmin = role !== null && isAdminRole(role);
+  const isStaff = role !== null && isStaffRole(role);
   const isClient = role !== null && isClientRole(role) && Boolean(clientId);
-  const homePath = role ? getHomePathForRole(role) : "/admin/dashboard";
+  const homePath = role ? getHomePathForRole(role) : "/staff-portal/dashboard";
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -152,7 +152,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       role,
       adminTeamRole,
       clientId,
-      isAdmin,
+      isStaff,
       isClient,
       homePath,
       loading,
@@ -188,7 +188,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setAdminTeamRole(null);
       },
     }),
-    [user, profile, role, adminTeamRole, clientId, isAdmin, isClient, homePath, loading],
+    [user, profile, role, adminTeamRole, clientId, isStaff, isClient, homePath, loading],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

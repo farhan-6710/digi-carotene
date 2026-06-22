@@ -1,21 +1,21 @@
-import { PortalPostsTableRow } from "@/features/portal/components/PortalPostsTableRow";
-import { portalPostsDirectoryConfig } from "@/features/portal/constants/postsDirectory";
-import type { PortalPostsTableProps } from "@/features/portal/types/components";
+import { ClientPostsTableRow } from "@/features/client-portal/components/ClientPostsTableRow";
+import { clientPostsDirectoryConfig } from "@/features/client-portal/constants/postsDirectory";
+import type { ClientPostsTableProps } from "@/features/client-portal/types/components";
 import { DirectoryTable } from "@/shared/components/DirectoryTable";
 
-export function PortalPostsTable({ posts, isLoading }: PortalPostsTableProps) {
+export function ClientPostsTable({ posts, isLoading }: ClientPostsTableProps) {
   return (
     <DirectoryTable
-      title={portalPostsDirectoryConfig.title}
-      description={portalPostsDirectoryConfig.description}
-      gridClass={portalPostsDirectoryConfig.gridClass}
-      columns={portalPostsDirectoryConfig.columns}
-      emptyMessage={portalPostsDirectoryConfig.emptyMessage}
+      title={clientPostsDirectoryConfig.title}
+      description={clientPostsDirectoryConfig.description}
+      gridClass={clientPostsDirectoryConfig.gridClass}
+      columns={clientPostsDirectoryConfig.columns}
+      emptyMessage={clientPostsDirectoryConfig.emptyMessage}
       isLoading={isLoading}
       isEmpty={posts.length === 0}
     >
       {posts.map((post) => (
-        <PortalPostsTableRow key={post.id} post={post} />
+        <ClientPostsTableRow key={post.id} post={post} />
       ))}
     </DirectoryTable>
   );

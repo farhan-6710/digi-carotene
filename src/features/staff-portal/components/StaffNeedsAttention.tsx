@@ -1,23 +1,23 @@
 import { Link } from "react-router";
 
-import { adminNeedsAttentionStatusStyles } from "@/features/admin-dashboard/constants/adminNeedsAttentionStyles";
-import { adminNeedsAttentionItems } from "@/shared/fixtures/adminSamples";
+import { staffNeedsAttentionStatusStyles } from "@/features/staff-portal/constants/staffNeedsAttentionStyles";
+import { staffNeedsAttentionItems } from "@/shared/fixtures/staffSamples";
 
-export function AdminNeedsAttention() {
+export function StaffNeedsAttention() {
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold text-foreground">Needs Attention</div>
         <Link
-          to="/admin/posts-management"
+          to="/staff-portal/posts-management"
           className="text-sm font-medium text-primary hover:underline"
         >
           View posts <span aria-hidden="true">↗</span>
         </Link>
       </div>
       <div className="mt-4 space-y-3">
-        {adminNeedsAttentionItems.map((row) => {
-          const styles = adminNeedsAttentionStatusStyles[row.status];
+        {staffNeedsAttentionItems.map((row) => {
+          const styles = staffNeedsAttentionStatusStyles[row.status];
 
           return (
             <div

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { buildAdminStatCards } from "@/features/admin-dashboard/utils/adminStatsUtils";
+import { buildStaffStatCards } from "@/features/staff-portal/utils/staffStatsUtils";
 import { usePostsAnalyticsQuery } from "@/features/analytics/hooks/usePostsAnalyticsQuery";
 import { fetchClients } from "@/features/clients-management/utils/clientsRepository";
 import { fetchTeamMembers } from "@/features/team-management/utils/teamMembersRepository";
 import { supabase } from "@/shared/lib/supabase";
 
-export function useAdminDashboardQuery() {
+export function useStaffDashboardQuery() {
   const {
     topClients,
     isLoading: isPostsLoading,
@@ -55,7 +55,7 @@ export function useAdminDashboardQuery() {
 
   const statCards = useMemo(
     () =>
-      buildAdminStatCards({
+      buildStaffStatCards({
         clientsCount,
         teamMembersCount,
         totalPostsCount,

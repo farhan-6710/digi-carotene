@@ -1,10 +1,10 @@
 import { createBrowserRouter, Navigate } from "react-router";
 
-import { AdminRoute } from "@/features/auth/components/AdminRoute";
+import { StaffRoute } from "@/features/auth/components/StaffRoute";
 import { ClientRoute } from "@/features/auth/components/ClientRoute";
 import { AuthPage } from "@/features/auth/pages/AuthPage";
 import { AnalyticsPage } from "@/features/analytics/pages/AnalyticsPage";
-import { AdminDashboardPage } from "@/features/admin-dashboard/pages/AdminDashboardPage";
+import { StaffDashboardPage } from "@/features/staff-portal/pages/StaffDashboardPage";
 import { PostsManagementPage } from "@/features/posts-management/pages/PostsManagementPage";
 import { ClientsManagementPage } from "@/features/clients-management/pages/ClientsManagementPage";
 import { ProjectsManagementPage } from "@/features/projects-management/pages/ProjectsManagementPage";
@@ -15,13 +15,13 @@ import { AccountPage } from "@/features/account/pages/AccountPage";
 import { ReportsPage } from "@/features/reports/pages/ReportsPage";
 import { ClientReportPage } from "@/features/reports/pages/ClientReportPage";
 import { SettingsPage } from "@/features/settings/pages/SettingsPage";
-import { PortalDashboardPage } from "@/features/portal/pages/PortalDashboardPage";
-import { PortalPostsPage } from "@/features/portal/pages/PortalPostsPage";
-import { PortalAccountPage } from "@/features/portal/pages/PortalAccountPage";
+import { ClientDashboardPage } from "@/features/client-portal/pages/ClientDashboardPage";
+import { ClientPostsPage } from "@/features/client-portal/pages/ClientPostsPage";
+import { ClientAccountPage } from "@/features/client-portal/pages/ClientAccountPage";
 import { AboutPage } from "@/features/public/pages/AboutPage";
 import { HomePage } from "@/features/public/pages/HomePage";
-import { AdminLayout } from "@/shared/layouts/AdminLayout";
-import { PortalLayout } from "@/shared/layouts/PortalLayout";
+import { StaffLayout } from "@/shared/layouts/StaffLayout";
+import { ClientLayout } from "@/shared/layouts/ClientLayout";
 import { PublicLayout } from "@/shared/layouts/PublicLayout";
 
 export const router = createBrowserRouter([
@@ -35,13 +35,13 @@ export const router = createBrowserRouter([
   },
   { path: "/auth", element: <AuthPage /> },
   {
-    path: "/admin",
-    element: <AdminRoute />,
+    path: "/staff-portal",
+    element: <StaffRoute />,
     children: [
       {
-        element: <AdminLayout />,
+        element: <StaffLayout />,
         children: [
-          { path: "dashboard", element: <AdminDashboardPage /> },
+          { path: "dashboard", element: <StaffDashboardPage /> },
           { path: "posts-management", element: <PostsManagementPage /> },
           { path: "projects-management", element: <ProjectsManagementPage /> },
           { path: "clients-management", element: <ClientsManagementPage /> },
@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
           { path: "account", element: <AccountPage /> },
           {
             path: "profile",
-            element: <Navigate to="/admin/account" replace />,
+            element: <Navigate to="/staff-portal/account" replace />,
           },
           { path: "settings", element: <SettingsPage /> },
         ],
@@ -68,16 +68,16 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/portal",
+    path: "/client-portal",
     element: <ClientRoute />,
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },
       {
-        element: <PortalLayout />,
+        element: <ClientLayout />,
         children: [
-          { path: "dashboard", element: <PortalDashboardPage /> },
-          { path: "posts", element: <PortalPostsPage /> },
-          { path: "account", element: <PortalAccountPage /> },
+          { path: "dashboard", element: <ClientDashboardPage /> },
+          { path: "posts", element: <ClientPostsPage /> },
+          { path: "account", element: <ClientAccountPage /> },
         ],
       },
     ],

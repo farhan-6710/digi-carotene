@@ -119,7 +119,7 @@ export type AppShellLayoutProps = {
   scrollContainerId?: string;
 };
 
-export type PortalPageShellProps = {
+export type ClientPageShellProps = {
   heading: string;
   description: string;
   error?: string | null;

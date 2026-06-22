@@ -79,9 +79,9 @@ npm run build
 ```
 src/
   app/              Router, App shell, global styles
-  features/         Feature modules (dashboard, portal, public, team-management, etc.)
+  features/         Feature modules (staff-dashboard, client-portal, public, team-management, etc.)
   shared/           Cross-feature UI (Shadcn), layouts, utils, and toast helpers
 docs/               Schema, DTOs, and feature docs (see docs/README.md)
-  admin/            Per-feature docs under docs/admin/<feature>/
+  staff-portal/     Per-feature docs under docs/staff-portal/<feature>/
 scripts/            reset-database.sql + setup-database.sql only
 ```

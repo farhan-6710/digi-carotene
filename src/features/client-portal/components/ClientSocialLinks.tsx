@@ -7,7 +7,7 @@ import {
   YoutubeIcon,
 } from "@/shared/constants/socialIcons";
 import { formatSocialUrl } from "@/shared/utils/formatSocialUrl";
-import type { PortalSocialLinksProps } from "@/features/portal/types/components";
+import type { ClientSocialLinksProps } from "@/features/client-portal/types/components";
 
 const socialEntries = [
   { key: "instagram" as const, label: "Instagram", Icon: InstagramIcon },
@@ -31,7 +31,7 @@ function mergeProjectSocials(projects: ProjectListItem[]): ProjectSocials {
   return merged;
 }
 
-export function PortalSocialLinks({ projects }: PortalSocialLinksProps) {
+export function ClientSocialLinks({ projects }: ClientSocialLinksProps) {
   const socials = mergeProjectSocials(projects);
   const links = socialEntries
     .map(({ key, label, Icon }) => {

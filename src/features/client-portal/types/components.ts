@@ -1,15 +1,15 @@
 import type { Post } from "@/features/posts-management/types/types";
 import type { ProjectListItem } from "@/features/projects-management/types/types";
 
-export type PortalPostsTableProps = {
+export type ClientPostsTableProps = {
   posts: Post[];
   isLoading: boolean;
 };
 
-export type PortalPostsTableRowProps = {
+export type ClientPostsTableRowProps = {
   post: Post;
 };
 
-export type PortalSocialLinksProps = {
+export type ClientSocialLinksProps = {
   projects: ProjectListItem[];
 };

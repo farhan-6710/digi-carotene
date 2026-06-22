@@ -2,7 +2,7 @@
 
 Operational unit: social profile URLs, manager, team, and posts. Each project belongs to one client.
 
-**Route:** `/admin/projects-management`  
+**Route:** `/staff-portal/projects-management`  
 **Code:** `src/features/projects-management/`  
 **Setup:** included in `scripts/setup-database.sql`
 

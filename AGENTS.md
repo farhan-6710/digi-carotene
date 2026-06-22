@@ -7,7 +7,7 @@ Follow these conventions when adding or changing code in this repo. Keep structu
 ```
 src/
   app/              Router, App shell
-  features/         Feature modules (admin, portal, public)
+  features/         Feature modules (staff-portal, client-portal, public)
   shared/           Cross-feature UI, layouts, utils
 ```
 
@@ -58,7 +58,7 @@ Shared account UI types live in `src/shared/components/account/types.ts`. Shared
 ## UI & UX standards
 
 - Use **shadcn UI** components from `src/shared/ui/` for consistency.
-- Use **`PageHeader`** (`src/shared/components/PageHeader.tsx`) for admin page titles, descriptions, back buttons (left-aligned), and right-side actions. Avoid thin wrapper components around `PageHeader`.
+- Use **`PageHeader`** (`src/shared/components/PageHeader.tsx`) for staff portal page titles, descriptions, back buttons (left-aligned), and right-side actions. Avoid thin wrapper components around `PageHeader`.
 - Use **`ConfirmationModal`** for all confirmation flows (delete, end assignment, sign-out, etc.).
 - Use **Sonner** for notifications via **`showToast(type, message)`** in `src/shared/utils/showToast.ts` (`success` | `error` | `info` with Lucide icons).
 - Show toasts for important actions: create, update, delete, API success/failure across team members, clients, posts, etc.
@@ -71,17 +71,17 @@ Shared account UI types live in `src/shared/components/account/types.ts`. Shared
 
 | Area   | Pattern              | Example                    |
 |--------|----------------------|----------------------------|
-| Admin  | `Admin*Page` or `*ManagementPage` | `AdminDashboardPage`, `ClientsManagementPage`, `TeamManagementPage` |
-| Portal | `Portal*Page`        | `PortalDashboardPage`      |
+| Staff  | `Staff*Page` or `*ManagementPage` | `StaffDashboardPage`, `ClientsManagementPage`, `TeamManagementPage` |
+| Client | `Client*Page`        | `ClientDashboardPage`      |
 | Public | descriptive name     | `HomePage`, `AboutPage`    |
 
-File name must match the exported component: `AdminDashboardPage.tsx` exports `AdminDashboardPage`.
+File name must match the exported component: `StaffDashboardPage.tsx` exports `StaffDashboardPage`.
 
 ### Components
 
 - **PascalCase** file and export names: `PostsManagementWeeksTable.tsx` → `PostsManagementWeeksTable`.
 - Prefer **named exports** over default exports.
-- Prefix portal-only components with `Portal` when they mirror admin patterns (e.g. `PortalSidebar`, `PortalPostsTable`).
+- Prefix client-portal-only components with `Client` when they mirror staff patterns (e.g. `ClientPostsTable`, `ClientSocialLinks`).
 
 ### Constants & types
 
@@ -89,18 +89,18 @@ File name must match the exported component: `AdminDashboardPage.tsx` exports `A
 - Types/interfaces: **PascalCase** (`PostDialogProps`, `PostsStatCard`).
 - Props types suffix: `*Props`.
 
-## Admin vs portal
+## Staff portal vs client portal
 
-- Admin routes: `/admin/*` — shell in `admin-shell`, layout `AdminLayout`.
-- Portal routes: `/portal/*` — shell in `portal-shell`, layout `PortalLayout`.
-- Keep naming symmetric between the two (`AdminDashboardPage` / `PortalDashboardPage`, `Sidebar` / `PortalSidebar`).
+- Staff routes: `/staff-portal/*` — shell in `staff-portal-shell`, layout `StaffLayout`.
+- Client routes: `/client-portal/*` — shell in `client-portal-shell`, layout `ClientLayout`.
+- Keep naming symmetric between the two (`StaffDashboardPage` / `ClientDashboardPage`, `StaffLayout` / `ClientLayout`).
 
 ## Supabase & migrations
 
 - **Setup:** run `scripts/reset-database.sql` then `scripts/setup-database.sql` in Supabase SQL Editor.
 - **Docs:** all schema, RLS, and DTOs live under `docs/` — start at [docs/README.md](./docs/README.md).
   - `docs/database.md` — reset, setup, domain model
-  - `docs/admin/<feature>/` — per-feature tables, DTOs, UI flows
+  - `docs/staff-portal/<feature>/` — per-feature tables, DTOs, UI flows
 - Repositories in `utils/*Repository.ts` map camelCase TS fields to snake_case DB columns.
 - **Domain:** `clients` (company) → `projects` (socials, manager, team) → `posts` (`project_id`).
 - **Project team:** required `projects.manager_id`; extra members in `project_team_members` with `started_at` / `ended_at` (active when `ended_at IS NULL`).
@@ -108,7 +108,7 @@ File name must match the exported component: `AdminDashboardPage.tsx` exports `A
 
 ## Imports
 
-- Use `@/` path alias (e.g. `@/features/admin-dashboard/pages/AdminDashboardPage`).
+- Use `@/` path alias (e.g. `@/features/staff-dashboard/pages/StaffDashboardPage`).
 - Import types with `import type { ... }`.
 - shadcn UI components live in `src/shared/ui/`; configure `components.json` with `src/shared/...` paths (not literal `@/` folders).
 
