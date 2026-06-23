@@ -4,6 +4,7 @@ import { lazyRoutePage } from "@/app/lazyRoute";
 import { StaffRoute } from "@/features/auth/components/StaffRoute";
 import { ClientRoute } from "@/features/auth/components/ClientRoute";
 import { UserRoute } from "@/features/auth/components/UserRoute";
+import { RouteErrorPage } from "@/shared/pages/RouteErrorPage";
 
 const PublicLayout = lazyRoutePage(
   () => import("@/shared/layouts/PublicLayout"),
@@ -99,6 +100,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <PublicLayout />,
+    errorElement: <RouteErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
@@ -113,6 +115,7 @@ export const router = createBrowserRouter([
   {
     path: "/staff-portal",
     element: <StaffRoute />,
+    errorElement: <RouteErrorPage />,
     children: [
       {
         element: <StaffLayout />,

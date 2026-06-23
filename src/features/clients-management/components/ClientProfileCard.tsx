@@ -6,6 +6,10 @@ export function ClientProfileCard({ client }: ClientProfileCardProps) {
   const website = client.website_name?.trim();
   const details = [
     {
+      label: "Portal email",
+      value: client.email || "—",
+    },
+    {
       label: "Mobile",
       value: client.mobile_number || "—",
     },

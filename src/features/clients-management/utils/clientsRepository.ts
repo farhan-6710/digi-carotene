@@ -2,7 +2,18 @@ import { supabase } from "@/shared/lib/supabase";
 import { unlinkProfilesFromClient } from "@/features/auth/utils/profileRepository";
 import type { Client } from "../types/types";
 
-function formatDeleteClientError(error: { code?: string; message?: string }): Error {
+function formatClientError(error: { code?: string; message?: string }): Error {
+  if (error.code === "23505") {
+    return new Error("A client with this portal email already exists.");
+  }
+
+  return new Error(error.message ?? "Failed to save client.");
+}
+
+function formatDeleteClientError(error: {
+  code?: string;
+  message?: string;
+}): Error {
   if (error.code === "23503") {
     return new Error(
       "This client is linked to portal logins or projects. Remove those first, then try again.",
@@ -25,7 +36,9 @@ export async function fetchClients(): Promise<Client[]> {
   return (data ?? []) as Client[];
 }
 
-export async function fetchClientById(clientId: string): Promise<Client | null> {
+export async function fetchClientById(
+  clientId: string,
+): Promise<Client | null> {
   const { data, error } = await supabase
     .from("clients")
     .select("*")
@@ -41,6 +54,7 @@ export async function fetchClientById(clientId: string): Promise<Client | null> 
 
 export type CreateClientInput = {
   clientName: string;
+  email?: string | null;
   mobileNumber?: string | null;
   websiteName?: string | null;
 };
@@ -52,6 +66,7 @@ export async function createClient(input: CreateClientInput): Promise<Client> {
     .from("clients")
     .insert({
       client_name: input.clientName,
+      email: input.email?.trim().toLowerCase() || null,
       mobile_number: input.mobileNumber || null,
       website_name: input.websiteName || null,
     })
@@ -59,7 +74,7 @@ export async function createClient(input: CreateClientInput): Promise<Client> {
     .single();
 
   if (error) {
-    throw error;
+    throw formatClientError(error);
   }
 
   return data as Client;
@@ -73,6 +88,7 @@ export async function updateClient(
     .from("clients")
     .update({
       client_name: input.clientName,
+      email: input.email?.trim().toLowerCase() || null,
       mobile_number: input.mobileNumber || null,
       website_name: input.websiteName || null,
     })
@@ -81,7 +97,7 @@ export async function updateClient(
     .single();
 
   if (error) {
-    throw error;
+    throw formatClientError(error);
   }
 
   return data as Client;

@@ -15,3 +15,12 @@ export const TEAM_MEMBER_ROLE_BADGE_CLASS: Record<TeamMemberRole, string> = {
 };
 
 export const DEFAULT_TEAM_MEMBER_ROLE: TeamMemberRole = "executive";
+
+/** Roles eligible to be assigned as a project manager. */
+export const PROJECT_MANAGER_ROLES = ["manager", "admin"] as const;
+
+export type ProjectManagerRole = (typeof PROJECT_MANAGER_ROLES)[number];
+
+export function isProjectManagerRole(role: TeamMemberRole): role is ProjectManagerRole {
+  return role === "manager" || role === "admin";
+}

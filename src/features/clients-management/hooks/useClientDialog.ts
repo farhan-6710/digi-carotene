@@ -8,6 +8,8 @@ import type {
 import {
   clientToFormValues,
   emptyClientFormValues,
+  normalizeClientEmail,
+  validateClientForm,
 } from "@/features/clients-management/utils/clientFormUtils";
 import {
   createClient,
@@ -58,7 +60,13 @@ export function useClientDialog({ reload, setError }: UseClientDialogOptions) {
   }, []);
 
   const saveClient = useCallback(async () => {
-    if (isSaving || !values.clientName.trim()) {
+    if (isSaving) {
+      return;
+    }
+
+    const validationError = validateClientForm(values);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -68,6 +76,7 @@ export function useClientDialog({ reload, setError }: UseClientDialogOptions) {
     try {
       const payload = {
         clientName: values.clientName.trim(),
+        email: normalizeClientEmail(values.email),
         mobileNumber: values.mobileNumber.trim() || null,
         websiteName: values.websiteName.trim() || null,
       };

@@ -21,6 +21,8 @@ Run only migrations you have **not** applied yet, in order:
 | `006_profiles_team_member_id.sql` | `profiles.team_member_id` column missing |
 | `007_reset_profile_on_team_member_delete.sql` | Deleting team members does not reset linked profiles |
 | `008_reset_profile_on_client_delete_and_realtime.sql` | Client delete + instant profile sync (realtime) |
+| `009_clients_email.sql` | `clients.email` column + unique index |
+| `010_remove_portal_auto_link.sql` | Remove auto-link triggers/RPCs only (if an old 009 draft was applied) |
 
 Also rename `team_members.admin_team_role` → `team_role` in Supabase (Table Editor or SQL) before running app code that expects `team_role`.
 

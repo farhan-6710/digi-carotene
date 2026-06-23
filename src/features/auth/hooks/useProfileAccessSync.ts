@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 
-import { router } from "@/app/router";
 import {
   CLIENT_HOME,
   isClientPath,
@@ -22,6 +21,14 @@ type UseProfileAccessSyncOptions = {
   refreshProfile: () => Promise<void>;
 };
 
+function replacePath(path: string) {
+  if (window.location.pathname === path) {
+    return;
+  }
+
+  window.location.replace(path);
+}
+
 function redirectForPortalAccess(profile: Profile | null) {
   if (!profile) {
     return;
@@ -32,22 +39,22 @@ function redirectForPortalAccess(profile: Profile | null) {
   const clientAccess = hasClientPortalAccess(profile);
 
   if (isStaffPath(pathname) && !staffAccess) {
-    void router.navigate(USER_HOME, { replace: true });
+    replacePath(USER_HOME);
     return;
   }
 
   if (isClientPath(pathname) && !clientAccess) {
-    void router.navigate(USER_HOME, { replace: true });
+    replacePath(USER_HOME);
     return;
   }
 
   if (pathname.startsWith(USER_HOME) && staffAccess) {
-    void router.navigate(STAFF_HOME, { replace: true });
+    replacePath(STAFF_HOME);
     return;
   }
 
   if (pathname.startsWith(USER_HOME) && clientAccess) {
-    void router.navigate(CLIENT_HOME, { replace: true });
+    replacePath(CLIENT_HOME);
   }
 }
 

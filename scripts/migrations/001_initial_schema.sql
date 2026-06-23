@@ -14,11 +14,16 @@ $$ language plpgsql;
 create table public.clients (
   id uuid primary key default gen_random_uuid(),
   client_name text not null,
+  email text,
   mobile_number text,
   website_name text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+create unique index clients_email_unique
+  on public.clients (lower(trim(email)))
+  where email is not null;
 
 create trigger set_clients_updated_at
   before update on public.clients
@@ -191,7 +196,7 @@ $$;
 
 grant execute on function public.is_team_member_email(text) to anon, authenticated;
 
--- Auto-create profile on signup (default role: user until staff/client access is granted)
+-- Auto-create profile on signup (default role: user until staff links ids manually).
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -199,8 +204,8 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, role, client_id)
-  values (new.id, 'user', null)
+  insert into public.profiles (id, role, client_id, team_member_id)
+  values (new.id, 'user', null, null)
   on conflict (id) do nothing;
   return new;
 end;

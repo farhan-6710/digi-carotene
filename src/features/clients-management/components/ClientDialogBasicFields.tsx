@@ -20,6 +20,18 @@ export function ClientDialogBasicFields({
         />
       </label>
 
+      <label className="block text-xs font-semibold text-muted-foreground sm:col-span-2">
+        Portal user email
+        <input
+          type="email"
+          value={values.email}
+          onChange={(event) => onFieldChange("email", event.target.value)}
+          placeholder="e.g. contact@brand.com (portal login reference)"
+          className={formFieldClassName}
+          disabled={disabled}
+        />
+      </label>
+
       <label className="block text-xs font-semibold text-muted-foreground">
         Mobile number
         <input

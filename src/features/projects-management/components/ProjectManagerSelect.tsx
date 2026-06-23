@@ -2,7 +2,7 @@ import { UserRound } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
 import type { ProjectManagerSelectProps } from "@/features/projects-management/types/components";
-import { fetchTeamMembers } from "@/features/team-management/utils/teamMembersRepository";
+import { fetchProjectManagers } from "@/features/team-management/utils/teamMembersRepository";
 import { ComboBox } from "@/shared/ui/ComboBox";
 
 export function ProjectManagerSelect({
@@ -11,16 +11,14 @@ export function ProjectManagerSelect({
   disabled = false,
 }: ProjectManagerSelectProps) {
   const [members, setMembers] = useState<
-    Awaited<ReturnType<typeof fetchTeamMembers>>
+    Awaited<ReturnType<typeof fetchProjectManagers>>
   >([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadManagers = useCallback(() => {
     setIsLoading(true);
-    fetchTeamMembers()
-      .then((data) =>
-        setMembers(data.filter((member) => member.team_role === "manager")),
-      )
+    fetchProjectManagers()
+      .then(setMembers)
       .catch(() => setMembers([]))
       .finally(() => setIsLoading(false));
   }, []);
@@ -43,9 +41,9 @@ export function ProjectManagerSelect({
       isLoading={isLoading}
       disabled={disabled}
       placeholder="Select manager"
-      listTitle="Select manager"
-      emptyMessage="No managers found. Add a team member with manager role first."
-      noMatchMessage="No matching managers found."
+      listTitle="Select manager or admin"
+      emptyMessage="No managers or admins found. Add a team member with manager or admin role first."
+      noMatchMessage="No matching managers or admins found."
       mode="value"
       onOpenChange={(open) => {
         if (open && members.length === 0) {

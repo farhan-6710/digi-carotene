@@ -81,6 +81,8 @@ set role = 'client',
 where id = '<auth-user-uuid>';
 ```
 
+Use `clients.email` and `team_members.email` in the app to find the right row id when linking.
+
 ---
 
 ## Important distinctions

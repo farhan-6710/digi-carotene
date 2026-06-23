@@ -1,4 +1,7 @@
-import type { TeamMemberRole } from "@/features/team-management/constants/teamMemberRoles";
+import {
+  isProjectManagerRole,
+  type TeamMemberRole,
+} from "@/features/team-management/constants/teamMemberRoles";
 import type { TeamMember } from "@/features/team-management/types/types";
 import { mapDbRowToTeamMember } from "@/features/team-management/utils/teamMemberDb";
 import { resetProfilesForTeamMember } from "@/features/auth/utils/profileRepository";
@@ -52,7 +55,9 @@ export type CreateTeamMemberInput = {
 
 export type UpdateTeamMemberInput = CreateTeamMemberInput;
 
-export async function createTeamMember(input: CreateTeamMemberInput): Promise<TeamMember> {
+export async function createTeamMember(
+  input: CreateTeamMemberInput,
+): Promise<TeamMember> {
   const { data, error } = await supabase
     .from("team_members")
     .insert({
@@ -108,7 +113,12 @@ export async function deleteTeamMember(memberId: string): Promise<void> {
   }
 }
 
-export async function fetchManagers(): Promise<TeamMember[]> {
+export async function fetchProjectManagers(): Promise<TeamMember[]> {
   const members = await fetchTeamMembers();
-  return members.filter((member) => member.team_role === "manager");
+  return members.filter((member) => isProjectManagerRole(member.team_role));
+}
+
+/** @deprecated Use fetchProjectManagers */
+export async function fetchManagers(): Promise<TeamMember[]> {
+  return fetchProjectManagers();
 }
