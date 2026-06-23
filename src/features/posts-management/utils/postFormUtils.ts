@@ -51,6 +51,12 @@ export function buildAddFormValues(
   };
 }
 
+function getSlotProjectLabel(client: NonNullable<Slot["clients"][number]>): string {
+  return client.clientName
+    ? `${client.name} (${client.clientName})`
+    : client.name;
+}
+
 export function buildEditFormValues(
   client: NonNullable<Slot["clients"][number]>,
   slotYear: number,
@@ -59,7 +65,7 @@ export function buildEditFormValues(
 ): PostFormValues {
   return {
     projectId: client.projectId,
-    projectName: client.name,
+    projectName: getSlotProjectLabel(client),
     postTitle: client.postTitle ?? "",
     socials: client.socials ?? [],
     postLinks: (client.postLinks as Record<string, string>) ?? {},

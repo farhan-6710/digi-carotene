@@ -7,6 +7,8 @@ export type ProjectSelectProps = {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  preload?: boolean;
+  selectedLabel?: string;
 };
 
 export type ClientSelectProps = {
@@ -28,6 +30,7 @@ export type PostDialogFormFieldsProps = {
   values: PostFormValues;
   statusOptions: StatusKey[];
   disabled?: boolean;
+  preloadOptions?: boolean;
   patchValues: (patch: Partial<PostFormValues>) => void;
 };
 

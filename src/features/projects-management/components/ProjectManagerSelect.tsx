@@ -4,26 +4,41 @@ import { useMemo } from "react";
 import type { ProjectManagerSelectProps } from "@/features/projects-management/types/components";
 import { fetchProjectManagers } from "@/features/team-management/utils/teamMembersRepository";
 import { useLazyEntityList } from "@/shared/hooks/useLazyEntityList";
+import { mergeOptionsByValue } from "@/shared/utils/mergeOptionsByValue";
 import { ComboBox } from "@/shared/ui/ComboBox";
 
 export function ProjectManagerSelect({
   value,
   onChange,
   disabled = false,
+  preload = false,
+  seedManager = null,
 }: ProjectManagerSelectProps) {
   const { items: members, isLoading, handleOpenChange } = useLazyEntityList(
     fetchProjectManagers,
+    { preload },
   );
 
-  const options = useMemo(
-    () =>
-      members.map((member) => ({
-        value: member.id,
-        label: member.member_name,
-        icon: <UserRound className="size-3.5 opacity-70" />,
-      })),
-    [members],
-  );
+  const options = useMemo(() => {
+    const seedOptions =
+      seedManager && seedManager.id === value
+        ? [
+            {
+              value: seedManager.id,
+              label: seedManager.member_name,
+              icon: <UserRound className="size-3.5 opacity-70" />,
+            },
+          ]
+        : [];
+
+    const fetchedOptions = members.map((member) => ({
+      value: member.id,
+      label: member.member_name,
+      icon: <UserRound className="size-3.5 opacity-70" />,
+    }));
+
+    return mergeOptionsByValue(seedOptions, fetchedOptions);
+  }, [members, seedManager, value]);
 
   return (
     <ComboBox

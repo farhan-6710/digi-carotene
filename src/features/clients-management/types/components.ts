@@ -5,6 +5,8 @@ import type {
 
 import type { Client } from "@/features/clients-management/types/types";
 
+export type ClientOptionSeed = Pick<Client, "id" | "client_name">;
+
 export type ClientsTableRowProps = {
   client: Client;
   canEdit: boolean;
@@ -49,4 +51,5 @@ export type ClientComboboxProps = {
   activeClientIds?: string[];
   placeholder?: string;
   preload?: boolean;
+  seedClient?: ClientOptionSeed | null;
 };

@@ -49,6 +49,7 @@ export function PostDialog({
             values={values}
             statusOptions={statusOptions}
             disabled={isSaving}
+            preloadOptions={open}
             patchValues={patchValues}
           />
 

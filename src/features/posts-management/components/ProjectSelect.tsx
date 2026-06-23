@@ -1,9 +1,11 @@
 import { FolderKanban } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { fetchProjects } from "@/features/projects-management/utils/projectsRepository";
 import { getProjectDisplayLabel } from "@/features/projects-management/utils/projectFormUtils";
 import type { ProjectSelectProps } from "@/features/posts-management/types/components";
+import { useLazyEntityList } from "@/shared/hooks/useLazyEntityList";
+import { mergeOptionsByValue } from "@/shared/utils/mergeOptionsByValue";
 import { ComboBox } from "@/shared/ui/ComboBox";
 
 export function ProjectSelect({
@@ -11,32 +13,34 @@ export function ProjectSelect({
   value,
   onChange,
   disabled = false,
+  preload = false,
+  selectedLabel,
 }: ProjectSelectProps) {
-  const [projects, setProjects] = useState<
-    Awaited<ReturnType<typeof fetchProjects>>
-  >([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const loadProjects = useCallback(() => {
-    setIsLoading(true);
-    fetchProjects()
-      .then(setProjects)
-      .catch((err) => {
-        console.error("Failed to load projects in select:", err);
-        setProjects([]);
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  const options = useMemo(
-    () =>
-      projects.map((project) => ({
-        value: project.id,
-        label: getProjectDisplayLabel(project),
-        icon: <FolderKanban className="size-3.5 opacity-70" />,
-      })),
-    [projects],
+  const { items: projects, isLoading, handleOpenChange } = useLazyEntityList(
+    fetchProjects,
+    { preload },
   );
+
+  const options = useMemo(() => {
+    const seedOptions =
+      value && selectedLabel
+        ? [
+            {
+              value,
+              label: selectedLabel,
+              icon: <FolderKanban className="size-3.5 opacity-70" />,
+            },
+          ]
+        : [];
+
+    const fetchedOptions = projects.map((project) => ({
+      value: project.id,
+      label: getProjectDisplayLabel(project),
+      icon: <FolderKanban className="size-3.5 opacity-70" />,
+    }));
+
+    return mergeOptionsByValue(seedOptions, fetchedOptions);
+  }, [projects, selectedLabel, value]);
 
   return (
     <ComboBox
@@ -51,11 +55,7 @@ export function ProjectSelect({
       emptyMessage="No projects found. Create a project first."
       noMatchMessage="No matching projects found."
       mode="value"
-      onOpenChange={(open) => {
-        if (open) {
-          loadProjects();
-        }
-      }}
+      onOpenChange={handleOpenChange}
     />
   );
 }

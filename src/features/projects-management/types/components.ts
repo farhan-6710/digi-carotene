@@ -1,6 +1,15 @@
 import type { Post } from "@/features/posts-management/types/types";
+import type {
+  ProjectClient,
+  ProjectListItem,
+  ProjectManager,
+} from "@/features/projects-management/types/types";
 import type { ProjectFormValues } from "@/features/projects-management/utils/projectFormUtils";
-import type { ProjectListItem } from "@/features/projects-management/types/types";
+
+export type ProjectFormSeeds = {
+  client: ProjectClient | null;
+  manager: ProjectManager | null;
+};
 
 export type ProjectsTableRowProps = {
   project: ProjectListItem;
@@ -14,6 +23,7 @@ export type ProjectDialogProps = {
   isEditing: boolean;
   isSaving?: boolean;
   values: ProjectFormValues;
+  formSeeds?: ProjectFormSeeds | null;
   onFieldChange: (
     field: keyof Pick<ProjectFormValues, "projectName" | "facebook" | "instagram" | "linkedin" | "youtube">,
     value: string,
@@ -45,6 +55,8 @@ export type ProjectManagerSelectProps = {
   value: string;
   onChange: (managerId: string) => void;
   disabled?: boolean;
+  preload?: boolean;
+  seedManager?: ProjectManager | null;
 };
 
 export type ProjectTeamMembersSelectProps = {
@@ -52,6 +64,7 @@ export type ProjectTeamMembersSelectProps = {
   onChange: (memberIds: string[]) => void;
   excludeMemberIds?: string[];
   disabled?: boolean;
+  preload?: boolean;
 };
 
 export type ClientProjectsSectionProps = {

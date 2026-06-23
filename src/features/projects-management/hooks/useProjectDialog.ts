@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 
+import type { ProjectFormSeeds } from "@/features/projects-management/types/components";
 import type { ProjectListItem } from "@/features/projects-management/types/types";
 import {
   createProject,
@@ -26,10 +27,12 @@ export function useProjectDialog({ reload, setError }: UseProjectDialogOptions) 
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [values, setValues] = useState<ProjectFormValues>(emptyProjectFormValues);
+  const [formSeeds, setFormSeeds] = useState<ProjectFormSeeds | null>(null);
 
   const resetForm = useCallback(() => {
     setValues(emptyProjectFormValues());
     setEditingProjectId(null);
+    setFormSeeds(null);
   }, []);
 
   const onFieldChange = useCallback((field: ProjectFormField, value: string) => {
@@ -70,6 +73,10 @@ export function useProjectDialog({ reload, setError }: UseProjectDialogOptions) 
   const openEditDialog = useCallback((project: ProjectListItem) => {
     setEditingProjectId(project.id);
     setValues(projectToFormValues(project));
+    setFormSeeds({
+      client: project.clients,
+      manager: project.team_members,
+    });
     setIsDialogOpen(true);
   }, []);
 
@@ -149,6 +156,7 @@ export function useProjectDialog({ reload, setError }: UseProjectDialogOptions) 
       isEditing: editingProjectId !== null,
       isSaving,
       values,
+      formSeeds,
       onFieldChange,
       onClientChange,
       onManagerChange,

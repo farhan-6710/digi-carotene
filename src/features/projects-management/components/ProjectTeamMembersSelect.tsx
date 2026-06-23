@@ -10,9 +10,11 @@ export function ProjectTeamMembersSelect({
   onChange,
   excludeMemberIds = [],
   disabled = false,
+  preload = false,
 }: ProjectTeamMembersSelectProps) {
   const { items: members, isLoading, handleOpenChange } = useLazyEntityList(
     fetchTeamMembers,
+    { preload },
   );
 
   const options = useMemo(
@@ -35,7 +37,6 @@ export function ProjectTeamMembersSelect({
       placeholder="Select team members"
       emptyMessage="No team members available."
       excludeValues={excludeMemberIds}
-      fallbackSelectedLabel="Team member"
       onOpenChange={handleOpenChange}
     />
   );

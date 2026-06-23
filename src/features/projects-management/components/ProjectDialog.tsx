@@ -24,6 +24,7 @@ export function ProjectDialog({
   isEditing,
   isSaving = false,
   values,
+  formSeeds = null,
   onFieldChange,
   onClientChange,
   onManagerChange,
@@ -72,6 +73,7 @@ export function ProjectDialog({
                   disabled={isSaving}
                   placeholder="e.g. Bloom Skincare"
                   preload={open}
+                  seedClient={formSeeds?.client}
                 />
               </div>
             </label>
@@ -89,6 +91,8 @@ export function ProjectDialog({
                   value={values.managerId}
                   onChange={onManagerChange}
                   disabled={isSaving}
+                  preload={open}
+                  seedManager={formSeeds?.manager}
                 />
               </div>
             </label>
@@ -98,6 +102,7 @@ export function ProjectDialog({
               onChange={onTeamMemberIdsChange}
               excludeMemberIds={values.managerId ? [values.managerId] : []}
               disabled={isSaving}
+              preload={open}
             />
           </div>
 
