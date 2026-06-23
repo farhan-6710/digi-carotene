@@ -9,7 +9,7 @@ export const staffShellConfig: ShellSidebarConfig = {
   nav: primaryNav,
   quickAction: {
     title: "Quick Actions",
-    description: "Review today's client posts and content schedule.",
+    description: "Review today's scheduled posts and open the content calendar.",
     buttonLabel: "View Posts",
     buttonTo: "/staff-portal/posts-management",
   },

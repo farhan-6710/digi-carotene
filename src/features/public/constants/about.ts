@@ -4,7 +4,7 @@ import { buildAuthUrl } from "@/features/auth/utils/authUrlParams";
 export const aboutContent = {
   title: "About Digi Carotene",
   intro:
-    "Digi Carotene is a digital marketing agency built around one belief: growth should feel structured, creative, and measurable.",
+    "Digi Carotene is a digital marketing agency. We help brands grow through structured content, social campaigns, and measurable results — backed by a service management workspace our team uses every day.",
   sections: [
     {
       title: "Our approach",
@@ -15,8 +15,8 @@ export const aboutContent = {
       body: "From local brands building their first social presence to established companies scaling multi-channel campaigns, our team supports a wide range of marketing goals with the same level of attention and professionalism.",
     },
     {
-      title: "Agency operations",
-      body: "Our team portal keeps posts, client schedules, and campaign activity organised — so strategists can focus on creative work while operations run smoothly behind the scenes.",
+      title: "How we work",
+      body: "The Digi Carotene staff portal keeps clients, projects, and posts organised — so strategists can focus on creative work while service delivery stays on track behind the scenes.",
     },
   ],
   values: [
@@ -42,16 +42,16 @@ export const aboutValuesSectionContent = {
   badge: "Our Values",
   title: "The principles that drive our work",
   description:
-    "We don't believe in guesswork. We believe in structured creativity, absolute transparency, and delivering real business outcomes.",
+    "Structured creativity, absolute transparency, and delivering real business outcomes for every client we serve.",
 } as const;
 
 export const aboutCtaContent = {
-  title: "Ready to experience the Digi Carotene difference?",
+  title: "Ready to work with Digi Carotene?",
   description:
-    "Get in touch with our team for custom services, or log in to your dedicated portal to manage campaign schedules and publishing performance.",
+    "Get in touch for agency services, or sign in to your client or staff portal to manage content and campaigns.",
   homeCta: { label: "Back to Home", to: "/" },
   portalCta: {
-    label: "Dashboard",
+    label: "Sign in",
     to: buildAuthUrl(AUTH_FORM_TYPES.login),
   },
 } as const;

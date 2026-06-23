@@ -4,7 +4,7 @@ export const servicesSectionContent = {
   badge: "What We Do",
   title: "Marketing services built for impact",
   description:
-    "Campaigns and content programmes designed to meet your brand where it is and take it further. We deliver structured, creative, and measurable results.",
+    "Campaigns and content programmes for brands that partner with Digi Carotene — structured, creative, and measurable.",
 } as const;
 
 export const servicesData: ServiceItem[] = [

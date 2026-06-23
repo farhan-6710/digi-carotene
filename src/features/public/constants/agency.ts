@@ -2,7 +2,9 @@ export const agencyMeta = {
   name: "Digi Carotene",
   tagline: "Digital Marketing Agency",
   description:
-    "Strategic content, social campaigns, and brand growth — delivered with clarity, creativity, and measurable results.",
+    "Full-service digital marketing with a unified workspace to manage clients, projects, content calendars, and publishing.",
+  staffPortalLabel: "Staff Portal",
+  clientPortalLabel: "Client Portal",
 } as const;
 
 export const agencyStats = [

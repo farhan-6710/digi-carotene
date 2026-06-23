@@ -49,7 +49,7 @@ export function ClientAccountPage() {
   return (
     <PageShell
       heading="Account"
-      description="Your login, brand on file with Digi Carotene, and content performance snapshot."
+      description="Your sign-in, brand on file with Digi Carotene, and content performance snapshot."
       error={error && !loading ? error : null}
     >
       <AccountHeader user={user} roleLabel="Client account" bio={bio} />

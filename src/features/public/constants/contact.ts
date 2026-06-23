@@ -4,7 +4,7 @@ export const contactSectionContent = {
   badge: "Get In Touch",
   title: "Let's build something great together",
   description:
-    "Ready to take your social presence and brand growth to the next level? Fill out the form and our team will get back to you within 24 hours.",
+    "Ready to grow with Digi Carotene? Tell us about your brand and our team will respond within 24 hours.",
 } as const;
 
 export const contactDetails: ContactDetailItem[] = [

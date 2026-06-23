@@ -1,6 +1,6 @@
 # Digi Carotene — Documentation
 
-Reference docs for agents and developers. Source of truth for database schema, DTOs, and feature behavior.
+Reference docs for the Digi Carotene service management app: database schema, DTOs, and feature behavior for staff and client portals.
 
 ## Database setup
 

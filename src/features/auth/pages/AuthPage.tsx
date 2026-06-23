@@ -79,7 +79,7 @@ export function AuthPage() {
             <p className="mt-1 text-sm text-muted-foreground">
               {isSignup
                 ? "Sign up with your email — no password needed."
-                : "Sign in to your staff or client portal."}
+                : "Sign in to the Digi Carotene staff or client portal."}
             </p>
           </div>
 

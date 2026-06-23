@@ -1,6 +1,6 @@
 # Agent guidelines — Digi Carotene
 
-Follow these conventions when adding or changing code in this repo. Keep structure simple; do not introduce extra layers unless they solve a real problem.
+Service management app for the Digi Carotene digital marketing agency (staff portal + client portal). Follow these conventions when adding or changing code in this repo.
 
 ## Top-level layout
 

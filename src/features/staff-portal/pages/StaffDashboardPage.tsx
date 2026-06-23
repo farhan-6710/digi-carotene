@@ -14,7 +14,7 @@ export function StaffDashboardPage() {
     <section className="space-y-8">
       <PageHeader
         heading="Dashboard"
-        description="Real-time operations, team workload, and publishing performance."
+        description="Agency overview — team workload, publishing performance, and posts needing attention."
       />
 
       {error ? <ErrorBanner message={error} /> : null}

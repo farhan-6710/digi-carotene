@@ -10,7 +10,7 @@ export function AnalyticsPage() {
     <section className="space-y-8">
       <PageHeader
         heading="Analytics"
-        description="Explore posts, clients, team members, and agency-wide performance in one place."
+        description="Explore posts, clients, team members, and agency-wide publishing performance."
       />
 
       <AnalyticsTabNav activeTab={activeTab} onTabChange={setActiveTab} />

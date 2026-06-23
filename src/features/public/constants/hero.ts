@@ -1,10 +1,10 @@
 import type { HeroChartPoint } from "@/features/public/types/types";
 
 export const heroContent = {
-  eyebrow: "Digital Marketing & Content Strategy",
+  eyebrow: "Digital Marketing Agency",
   title: "Grow your brand with Digi Carotene",
   description:
-    "Full-service digital marketing for brands that want stronger social presence, smarter content calendars, and campaigns that convert.",
+    "Strategy, content calendars, and social campaigns — managed in one service workspace for our team and your brand.",
   primaryCta: { label: "Explore Services", to: "#services" },
   secondaryCta: { label: "About Our Agency", to: "/about" },
 } as const;
@@ -20,7 +20,7 @@ export const heroChartData: HeroChartPoint[] = [
 ];
 
 export const heroDashboardMeta = {
-  eyebrow: "Live Operations",
+  eyebrow: "Service Management",
   title: "Digi Carotene",
   url: "digicarotene.vercel.app",
   performanceLabel: "Publishing Performance",

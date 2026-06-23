@@ -1,87 +1,79 @@
-# Digi Carotene Hub — Content Calendar & Agency Operations
+# Digi Carotene — Service Management
 
-A premium, full-featured digital marketing agency operations dashboard and client portal. Digi Carotene Hub streamlines workflows between agency specialists (admins/managers) and registered brands (clients) with real-time calendars, publishing performance analytics, and workload tracking.
+Service management app for **Digi Carotene**, a digital marketing agency. Staff manage clients, projects, posts, and team assignments in the **Staff Portal**; registered brands track their content schedule in the **Client Portal**.
 
 ![Digi Carotene Dashboard](public/image.png)
 
-## Key Features
+## What it does
 
-### 1. Public Landing Page & About Page
-- **Modern UI/UX**: Sleek dark-themed design matching the dashboard's aesthetic with glowing accents, responsive layouts, and interactive elements.
-- **Services Showcase**: Detailed marketing service highlights with custom Lucide icons.
-- **Interactive Hero Widget**: A mock live operations preview featuring real-time stats and a publishing performance chart.
-- **Portals Access**: Clear entry points for both the **Client Portal** and **Team Portal**.
-- **Contact Form**: Interactive form with toast notifications on successful submission.
+Digi Carotene runs client work through a clear hierarchy: **clients → projects → posts**. Staff schedule and publish social content, assign managers and team members to projects, and review analytics and reports. Clients get a read-only view of their brand’s posts and account details.
 
-### 2. Admin & Team Management Workspace
-- **Real-time Dashboard**: Live metrics for team members, total clients, total posts, and not posted posts, complete with custom sparklines.
-- **Publishing Performance Chart**: Beautiful dual-line Recharts visualization comparing current and previous month publishing rates.
-- **Team Management**: Comprehensive CRUD for agency specialists, featuring roles (`executive`, `manager`, `admin`), contact details, and project history.
-- **Client Assignments**: Track active and historical project assignments for each team member.
+## Key features
 
-### 3. Client Portal Workspace
-- **Dedicated Dashboard**: Tailored view for registered brands to track their active campaigns and scheduled posts.
-- **Content Calendar**: Interactive week and day-based calendar views with status-aware post cards (`Not posted`, `Scheduled`, `Posted`).
-- **One-Click Approvals**: Streamlined client approval workflow for scheduled content.
+### Public site
+- Marketing landing page, services, about, and contact
+- Sign-in entry points for staff and client portals
 
-### 4. Advanced Analytics & Reporting
-- **Performance Analytics**: Detailed tabbed analytics views with custom linear sparklines displaying real-time-like data trends.
-- **Status Reporter**: Daily status reports and email preview dialogs for client updates.
+### Staff Portal (`/staff-portal`)
+- **Dashboard** — team workload, publishing performance, posts needing attention
+- **Team** — agency specialists (executives, managers, staff) and project history
+- **Clients** — company registry and contact details
+- **Projects** — social profile URLs, manager, and team assignments per client engagement
+- **Posts** — month calendar with status-aware scheduling (`Not posted`, `Scheduled`, `Posted`)
+- **Analytics & Reports** — agency-wide and client activity views
+
+### Client Portal (`/client-portal`)
+- Dashboard, posts list, and account for the signed-in brand
 
 ---
 
-## Tech Stack
+## Tech stack
 
 - **Frontend**: React, React Router v7, Tailwind CSS, Shadcn UI
-- **Data Visualization**: Recharts (with custom linear/angular sparklines)
-- **Icons**: Lucide React
-- **Backend & Database**: Supabase (PostgreSQL, Row Level Security, Real-time)
-- **Build Tool**: Bun / Vite
+- **Charts**: Recharts
+- **Backend**: Supabase (PostgreSQL, RLS)
+- **Build**: Bun / Vite
 
 ---
 
-## Getting Started
+## Getting started
 
-### 1. Install Dependencies
+### 1. Install dependencies
+
 ```bash
 bun install
-# or
-npm install
 ```
 
-### 2. Set Up Supabase
+### 2. Set up Supabase
 
 Run in Supabase **SQL Editor**:
 
 - **New project:** [`scripts/migrations/001_initial_schema.sql`](scripts/migrations/001_initial_schema.sql)
-- **Existing project:** apply only missing files from [`scripts/migrations/`](scripts/migrations/) (see README there)
+- **Existing project:** apply missing files from [`scripts/migrations/`](scripts/migrations/)
 
-See [docs/database.md](docs/database.md) and [docs/README.md](docs/README.md) for schema details and DTOs.
+See [docs/database.md](docs/database.md) and [docs/README.md](docs/README.md).
 
-### 3. Start the Development Server
+### 3. Development
+
 ```bash
 bun run dev
-# or
-npm run dev
 ```
 
-### 4. Build for Production
+### 4. Production build
+
 ```bash
 bun run build
-# or
-npm run build
 ```
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
 src/
-  app/              Router, App shell, global styles
-  features/         Feature modules (staff-dashboard, client-portal, public, team-management, etc.)
-  shared/           Cross-feature UI (Shadcn), layouts, utils, and toast helpers
-docs/               Schema, DTOs, and feature docs (see docs/README.md)
-  staff-portal/     Per-feature docs under docs/staff-portal/<feature>/
-scripts/migrations/ Numbered SQL migrations (001 = full schema for new projects)
+  app/              Router and app shell
+  features/         Feature modules (staff-portal, client-portal, public, …)
+  shared/           Cross-feature UI, layouts, utils
+docs/               Schema, DTOs, and feature docs
+scripts/migrations/ Numbered SQL migrations
 ```

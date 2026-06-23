@@ -13,7 +13,7 @@ export function AccountPage() {
     <section className="space-y-8">
       <PageHeader
         heading="Account"
-        description="Your Digi Carotene team account, credentials, and current agency performance snapshot."
+        description="Your Digi Carotene staff account, sign-in details, and agency performance snapshot."
       />
 
 

@@ -23,7 +23,7 @@ export function ClientDashboardPage() {
   return (
     <PageShell
       heading={client?.client_name ?? "Your brand"}
-      description="Overview of your content schedule, social profiles, and account with Digi Carotene."
+      description="Overview of your content schedule, social profiles, and Digi Carotene account."
       error={error && !loading ? error : null}
     >
       <StatsCards cards={statCards} isLoading={loading} />

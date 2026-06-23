@@ -8,7 +8,7 @@ export function AgencyAnalyticsPanel() {
   return (
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
-        Year-at-a-glance agency publishing consistency and posting streaks.
+        Year-at-a-glance publishing consistency and posting streaks across Digi Carotene.
       </p>
       <StatsCards cards={statCards} />
     </div>
