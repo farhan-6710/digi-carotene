@@ -1,6 +1,7 @@
 import type { TeamMemberRole } from "@/features/team-management/constants/teamMemberRoles";
 import type { TeamMember } from "@/features/team-management/types/types";
 import { mapDbRowToTeamMember } from "@/features/team-management/utils/teamMemberDb";
+import { resetProfilesForTeamMember } from "@/features/auth/utils/profileRepository";
 import { supabase } from "@/shared/lib/supabase";
 
 function formatTeamMemberError(error: { code?: string; message?: string }): Error {
@@ -94,6 +95,12 @@ export async function updateTeamMember(
 }
 
 export async function deleteTeamMember(memberId: string): Promise<void> {
+  try {
+    await resetProfilesForTeamMember(memberId);
+  } catch {
+    // DB trigger also resets profiles; continue with delete.
+  }
+
   const { error } = await supabase.from("team_members").delete().eq("id", memberId);
 
   if (error) {

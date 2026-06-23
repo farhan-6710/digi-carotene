@@ -8,7 +8,7 @@ import { useAuth } from "@/features/auth/providers/AuthProvider";
 import { CenteredLoading } from "@/shared/components/LoadingSpinner";
 
 export function StaffRoute() {
-  const { loading, user, isStaff, isClient, profile } = useAuth();
+  const { loading, user, isStaff, isClient, isPending, profile } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -23,7 +23,7 @@ export function StaffRoute() {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  if (!isStaff) {
+  if (isPending || !isStaff) {
     return <Navigate to={isClient ? CLIENT_HOME : USER_HOME} replace />;
   }
 

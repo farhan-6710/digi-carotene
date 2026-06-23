@@ -19,6 +19,7 @@ import {
   isPendingAccess,
 } from "@/features/auth/types/profile";
 import { buildAuthUrl } from "@/features/auth/utils/authUrlParams";
+import { useProfileAccessSync } from "@/features/auth/hooks/useProfileAccessSync";
 import { loadProfileForUser } from "@/features/auth/utils/profileRoleSync";
 import { fetchTeamRoleByMemberId } from "@/features/auth/utils/teamRoleRepository";
 import type { TeamMemberRole } from "@/features/team-management/constants/teamMemberRoles";
@@ -151,6 +152,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [profile?.team_member_id]);
 
   const loading = !authReady || (user !== null && !profileReady);
+
+  useProfileAccessSync({
+    userId: user?.id,
+    loading,
+    profile,
+    refreshProfile,
+  });
 
   const role = profile?.role ?? null;
   const clientId = profile?.client_id ?? null;

@@ -232,3 +232,27 @@ create trigger on_team_member_deleted
   before delete on public.team_members
   for each row
   execute function public.handle_team_member_deleted();
+
+-- When a client is removed, linked profiles return to pending access.
+create or replace function public.handle_client_deleted()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update public.profiles
+  set role = 'user',
+      client_id = null
+  where client_id = old.id;
+
+  return old;
+end;
+$$;
+
+create trigger on_client_deleted
+  before delete on public.clients
+  for each row
+  execute function public.handle_client_deleted();
+
+alter publication supabase_realtime add table public.profiles;

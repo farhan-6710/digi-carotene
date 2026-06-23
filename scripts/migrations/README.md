@@ -20,6 +20,7 @@ Run only migrations you have **not** applied yet, in order:
 | `005_signup_default_user_role.sql` | Signup still creates `profiles.role = 'client'` |
 | `006_profiles_team_member_id.sql` | `profiles.team_member_id` column missing |
 | `007_reset_profile_on_team_member_delete.sql` | Deleting team members does not reset linked profiles |
+| `008_reset_profile_on_client_delete_and_realtime.sql` | Client delete + instant profile sync (realtime) |
 
 Also rename `team_members.admin_team_role` → `team_role` in Supabase (Table Editor or SQL) before running app code that expects `team_role`.
 
@@ -27,7 +28,7 @@ Skip any step that is already reflected in your database.
 
 ## Adding a new change
 
-1. Create the next file: `008_<short_description>.sql`
+1. Create the next file: `009_<short_description>.sql`
 2. Document what it does in a header comment
 3. Update [`docs/database.md`](../docs/database.md) if the domain model changes
 
