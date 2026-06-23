@@ -1,4 +1,4 @@
--- Migration 009 — add clients.email (portal contact reference; manual profile linking).
+-- Migration 009 — add clients.email (portal user email; used by 011 auto-link triggers).
 
 alter table public.clients
   add column if not exists email text;

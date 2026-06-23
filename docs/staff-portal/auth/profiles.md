@@ -20,25 +20,36 @@ Links Supabase Auth users to app roles and portal access via linked ids.
 
 | Role | Portal access requires |
 |------|------------------------|
-| `user` | Default on signup — pending until staff links ids below |
+| `user` | Default on signup — pending until email matches roster |
 | `staff` | `team_member_id` set (plus `role = staff`) |
 | `client` | `client_id` set (plus `role = client`) |
 
-Signup alone does **not** grant portal access. Staff must link the appropriate id after the user signs up.
+### Auto-link by email (migration 011)
 
-### Signup trigger
+One function — `link_profile_by_email(email)` — plus triggers:
 
-On new `auth.users` insert → auto-insert `profiles` row with `role = 'user'`, `client_id = null`, `team_member_id = null`.
+| When | What runs |
+|------|-----------|
+| User signs up | `handle_new_user` creates profile, then links if email matches |
+| Staff saves team member | `on_team_member_portal_link` |
+| Staff saves client (with email) | `on_client_portal_link` |
 
-Defined in `scripts/migrations/001_initial_schema.sql` (`handle_new_user` + `on_auth_user_created`).  
-Existing DBs: run `scripts/migrations/006_profiles_team_member_id.sql` once.
+Team member email wins if both match. Lookup is by indexed email on `auth.users` — one profile row updated, no table scan. Realtime on `profiles` picks up changes for logged-in users.
+
+Requires `clients.email` (migration 009).
 
 ### Signup flow (V1)
 
 1. User signs up at `/auth?form-type=signup` with **email magic link** or **Google** (no password).
 2. Profile created with `role = user` → redirected to `/user-portal` (pending).
-3. Staff links `team_member_id` + sets `role = staff` → user refreshes → staff portal.
-4. Staff links `client_id` + sets `role = client` → user refreshes → client portal.
+3. Staff creates a **team member** or **client** with that email → DB links profile automatically (or links on signup if roster row already existed).
+4. User refreshes → correct portal.
+
+### Signup trigger
+
+On new `auth.users` insert → auto-insert `profiles` row, then `link_profile_by_email`.
+
+Defined in `scripts/migrations/001_initial_schema.sql`. Existing DBs: run `scripts/migrations/011_auto_link_profiles_by_email.sql` once.
 
 ---
 
@@ -59,9 +70,9 @@ type Profile = {
 
 ---
 
-## Manual setup (after signup)
+## Manual override (rare)
 
-**Grant staff portal access:**
+If auto-link did not run (wrong email, migration not applied):
 
 ```sql
 update public.profiles
@@ -71,8 +82,6 @@ set role = 'staff',
 where id = '<auth-user-uuid>';
 ```
 
-**Grant client portal access:**
-
 ```sql
 update public.profiles
 set role = 'client',
@@ -80,8 +89,6 @@ set role = 'client',
     team_member_id = null
 where id = '<auth-user-uuid>';
 ```
-
-Use `clients.email` and `team_members.email` in the app to find the right row id when linking.
 
 ---
 

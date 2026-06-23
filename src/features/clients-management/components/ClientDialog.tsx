@@ -41,9 +41,8 @@ export function ClientDialog({
           <DialogHeader className="shrink-0">
             <DialogTitle>{isEditing ? "Edit Client" : "Add Client"}</DialogTitle>
             <DialogDescription>
-              Register a client company. Portal user email is stored for reference
-              when you link portal access manually. Social accounts and posts are
-              managed per project.
+              Register a client company. Portal user email links portal access when it
+              matches an existing signup. Social accounts and posts are managed per project.
             </DialogDescription>
           </DialogHeader>
 

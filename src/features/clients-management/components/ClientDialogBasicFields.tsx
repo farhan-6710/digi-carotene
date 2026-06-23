@@ -26,7 +26,7 @@ export function ClientDialogBasicFields({
           type="email"
           value={values.email}
           onChange={(event) => onFieldChange("email", event.target.value)}
-          placeholder="e.g. contact@brand.com (portal login reference)"
+          placeholder="e.g. contact@brand.com"
           className={formFieldClassName}
           disabled={disabled}
         />

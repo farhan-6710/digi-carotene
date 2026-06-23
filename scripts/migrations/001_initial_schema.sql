@@ -196,7 +196,65 @@ $$;
 
 grant execute on function public.is_team_member_email(text) to anon, authenticated;
 
--- Auto-create profile on signup (default role: user until staff links ids manually).
+-- Link profile when auth email matches team_members or clients.email.
+create or replace function public.link_profile_by_email(lookup_email text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  user_id uuid;
+  tm_id uuid;
+  cl_id uuid;
+begin
+  if lookup_email is null or trim(lookup_email) = '' then
+    return;
+  end if;
+
+  select id into user_id
+  from auth.users
+  where lower(trim(email)) = lower(trim(lookup_email));
+
+  if user_id is null then
+    return;
+  end if;
+
+  insert into public.profiles (id, role, client_id, team_member_id)
+  values (user_id, 'user', null, null)
+  on conflict (id) do nothing;
+
+  select id into tm_id
+  from public.team_members
+  where lower(trim(email)) = lower(trim(lookup_email))
+  limit 1;
+
+  if tm_id is not null then
+    update public.profiles
+    set role = 'staff',
+        team_member_id = tm_id,
+        client_id = null
+    where id = user_id;
+    return;
+  end if;
+
+  select id into cl_id
+  from public.clients
+  where email is not null
+    and lower(trim(email)) = lower(trim(lookup_email))
+  limit 1;
+
+  if cl_id is not null then
+    update public.profiles
+    set role = 'client',
+        client_id = cl_id,
+        team_member_id = null
+    where id = user_id;
+  end if;
+end;
+$$;
+
+-- Auto-create profile on signup; link portal access when email matches roster.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -207,6 +265,8 @@ begin
   insert into public.profiles (id, role, client_id, team_member_id)
   values (new.id, 'user', null, null)
   on conflict (id) do nothing;
+
+  perform public.link_profile_by_email(new.email);
   return new;
 end;
 $$;
@@ -238,6 +298,23 @@ create trigger on_team_member_deleted
   for each row
   execute function public.handle_team_member_deleted();
 
+create or replace function public.handle_team_member_portal_link()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  perform public.link_profile_by_email(new.email);
+  return new;
+end;
+$$;
+
+create trigger on_team_member_portal_link
+  after insert or update of email on public.team_members
+  for each row
+  execute function public.handle_team_member_portal_link();
+
 -- When a client is removed, linked profiles return to pending access.
 create or replace function public.handle_client_deleted()
 returns trigger
@@ -259,5 +336,22 @@ create trigger on_client_deleted
   before delete on public.clients
   for each row
   execute function public.handle_client_deleted();
+
+create or replace function public.handle_client_portal_link()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  perform public.link_profile_by_email(new.email);
+  return new;
+end;
+$$;
+
+create trigger on_client_portal_link
+  after insert or update of email on public.clients
+  for each row
+  execute function public.handle_client_portal_link();
 
 alter publication supabase_realtime add table public.profiles;

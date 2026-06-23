@@ -14,7 +14,7 @@ Company registry: name, contact, website. Social profile URLs live on **projects
 |--------|------|----------|-------------|
 | `id` | uuid | No | PK, `gen_random_uuid()` |
 | `client_name` | text | No | Company / brand name |
-| `email` | text | Yes | Portal user email (unique when set); reference when manually linking `profiles.client_id` |
+| `email` | text | Yes | Portal user email (unique when set); used to auto-link `profiles.client_id` |
 | `mobile_number` | text | Yes | Contact phone |
 | `website_name` | text | Yes | Website URL or label |
 | `created_at` | timestamptz | No | Default `now()` |
@@ -88,10 +88,9 @@ type ClientFormValues = {
 
 ## UI flow
 
-1. **Clients Management** — list, add, edit, delete clients. Optional **portal user email** is stored on the client for reference.
+1. **Clients Management** — list, add, edit, delete clients. **Portal user email** links portal access when it matches a signup email (DB trigger).
 2. **Client detail** — profile card + list of projects for this client (links to Projects).
-3. Portal access: staff updates `profiles.client_id` manually in Supabase (see [Auth profiles](../auth/profiles.md)).
-4. Before deleting a client: remove or reassign linked projects. Deleting the client resets linked profiles to pending (`role = user`, `client_id = null`).
+3. Before deleting a client: remove or reassign linked projects. Deleting the client resets linked profiles to pending (`role = user`, `client_id = null`).
 
 ---
 

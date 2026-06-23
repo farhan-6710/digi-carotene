@@ -6,7 +6,7 @@ All schema changes go here as **new numbered files**. Do not edit older migratio
 
 Run **only** [`001_initial_schema.sql`](./001_initial_schema.sql) in the Supabase SQL Editor.
 
-That file creates the full current schema (tables, RLS, triggers, `is_team_member_email`, signup default `user` role).
+That file creates the full current schema (tables, RLS, triggers, auto-link by email, signup default `user` role).
 
 ## Existing project (already has tables)
 
@@ -23,6 +23,7 @@ Run only migrations you have **not** applied yet, in order:
 | `008_reset_profile_on_client_delete_and_realtime.sql` | Client delete + instant profile sync (realtime) |
 | `009_clients_email.sql` | `clients.email` column + unique index |
 | `010_remove_portal_auto_link.sql` | Remove auto-link triggers/RPCs only (if an old 009 draft was applied) |
+| `011_auto_link_profiles_by_email.sql` | DB triggers: link profile on team member / client save or signup |
 
 Also rename `team_members.admin_team_role` → `team_role` in Supabase (Table Editor or SQL) before running app code that expects `team_role`.
 
