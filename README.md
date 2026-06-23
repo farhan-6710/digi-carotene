@@ -1,79 +1,55 @@
-# Digi Carotene — Service Management
+# Digi Carotene
 
-Service management app for **Digi Carotene**, a digital marketing agency. Staff manage clients, projects, posts, and team assignments in the **Staff Portal**; registered brands track their content schedule in the **Client Portal**.
+Service management app for **Digi Carotene**, a digital marketing agency.
 
-![Digi Carotene Dashboard](public/image.png)
+![Dashboard](public/image.png)
 
-## What it does
+**Staff Portal** (`/staff-portal`) — manage clients, projects, posts, team, analytics, and reports.
+**Client Portal** (`/client-portal`) — read-only view of a brand’s posts and account.
 
-Digi Carotene runs client work through a clear hierarchy: **clients → projects → posts**. Staff schedule and publish social content, assign managers and team members to projects, and review analytics and reports. Clients get a read-only view of their brand’s posts and account details.
+**Domain:** `clients → projects → posts` (social URLs and team live on projects).
 
-## Key features
+## Features (staff)
 
-### Public site
-- Marketing landing page, services, about, and contact
-- Sign-in entry points for staff and client portals
+| Area | What |
+|------|------|
+| Dashboard | Workload, publishing chart, posts needing attention |
+| Team | Staff roles, contact details, project history |
+| Clients | Company registry |
+| Projects | Social links, manager, team assignments |
+| Posts | Month calendar — `Not posted`, `Scheduled`, `Posted` |
+| Analytics & Reports | Agency and client activity |
 
-### Staff Portal (`/staff-portal`)
-- **Dashboard** — team workload, publishing performance, posts needing attention
-- **Team** — agency specialists (executives, managers, staff) and project history
-- **Clients** — company registry and contact details
-- **Projects** — social profile URLs, manager, and team assignments per client engagement
-- **Posts** — month calendar with status-aware scheduling (`Not posted`, `Scheduled`, `Posted`)
-- **Analytics & Reports** — agency-wide and client activity views
-
-### Client Portal (`/client-portal`)
-- Dashboard, posts list, and account for the signed-in brand
-
----
-
-## Tech stack
-
-- **Frontend**: React, React Router v7, Tailwind CSS, Shadcn UI
-- **Charts**: Recharts
-- **Backend**: Supabase (PostgreSQL, RLS)
-- **Build**: Bun / Vite
-
----
+Public marketing site (home, about, contact) plus auth at `/auth`.
 
 ## Getting started
 
-### 1. Install dependencies
-
 ```bash
 bun install
+bun run dev      # http://localhost:5173
+bun run build    # production
 ```
 
-### 2. Set up Supabase
+**Supabase (SQL Editor):**
 
-Run in Supabase **SQL Editor**:
+- New project → [`scripts/migrations/001_initial_schema.sql`](scripts/migrations/001_initial_schema.sql)
+- Existing project → apply only missing files in [`scripts/migrations/`](scripts/migrations/) (see [`scripts/migrations/README.md`](scripts/migrations/README.md))
 
-- **New project:** [`scripts/migrations/001_initial_schema.sql`](scripts/migrations/001_initial_schema.sql)
-- **Existing project:** apply missing files from [`scripts/migrations/`](scripts/migrations/)
+Schema and DTOs: [docs/README.md](docs/README.md) · [docs/database.md](docs/database.md)
 
-See [docs/database.md](docs/database.md) and [docs/README.md](docs/README.md).
+## Tech stack
 
-### 3. Development
-
-```bash
-bun run dev
-```
-
-### 4. Production build
-
-```bash
-bun run build
-```
-
----
+React · React Router v7 · Tailwind CSS · Shadcn UI · Recharts · Supabase (PostgreSQL, RLS) · Vite · Bun
 
 ## Project structure
 
 ```
 src/
-  app/              Router and app shell
-  features/         Feature modules (staff-portal, client-portal, public, …)
-  shared/           Cross-feature UI, layouts, utils
-docs/               Schema, DTOs, and feature docs
-scripts/migrations/ Numbered SQL migrations
+  app/         Router, App shell
+  features/    staff-portal, client-portal, public, team-management, …
+  shared/      UI, layouts, utils
+docs/          Schema, RLS, per-feature docs
+scripts/migrations/   Numbered SQL migrations
 ```
+
+Agent conventions: [AGENTS.md](AGENTS.md)
