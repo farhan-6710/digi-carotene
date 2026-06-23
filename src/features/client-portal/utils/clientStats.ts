@@ -42,7 +42,7 @@ export function buildClientStatCards(posts: Post[]): StatCardItem[] {
       id: "client-not-posted",
       label: "Not posted",
       value: String(countByStatus(posts, "Not posted")),
-      description: "Missed or pending action",
+      description: "Awaiting publish or follow-up",
       icon: XCircle,
       href: "/client-portal/posts",
     },
@@ -54,15 +54,15 @@ export function getUpcomingPosts(posts: Post[], limit = 5): Post[] {
 
   return posts
     .filter(
-      (post) => post.status !== "Posted" && post.scheduled_date >= today,
+      (post) => post.status !== "Posted" && post.to_be_posted_date >= today,
     )
     .sort((a, b) => {
-      const dateCompare = a.scheduled_date.localeCompare(b.scheduled_date);
+      const dateCompare = a.to_be_posted_date.localeCompare(b.to_be_posted_date);
       if (dateCompare !== 0) {
         return dateCompare;
       }
 
-      return (a.scheduled_time ?? "").localeCompare(b.scheduled_time ?? "");
+      return (a.to_be_posted_time ?? "").localeCompare(b.to_be_posted_time ?? "");
     })
     .slice(0, limit);
 }

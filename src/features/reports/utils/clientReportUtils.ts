@@ -11,7 +11,7 @@ export function buildDummyClientReport(clientName: string): ClientReportDetail {
     highlights: [
       "Strong posting consistency across Instagram and Facebook.",
       "Highest engagement on mid-week afternoon slots.",
-      "One missed post flagged for follow-up with the client.",
+      "One not posted post flagged for follow-up with the client.",
     ],
     recentPosts: [
       { date: "May 28, 2026", time: "2:00 PM", status: "Posted" },

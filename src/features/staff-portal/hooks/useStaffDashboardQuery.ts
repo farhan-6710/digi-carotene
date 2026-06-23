@@ -16,7 +16,7 @@ export function useStaffDashboardQuery() {
   const [clientsCount, setClientsCount] = useState<number | null>(null);
   const [teamMembersCount, setTeamMembersCount] = useState<number | null>(null);
   const [totalPostsCount, setTotalPostsCount] = useState<number | null>(null);
-  const [missedPostsCount, setMissedPostsCount] = useState<number | null>(null);
+  const [notPostedPostsCount, setNotPostedPostsCount] = useState<number | null>(null);
   const [isCountsLoading, setIsCountsLoading] = useState(true);
   const [countsError, setCountsError] = useState<string | null>(null);
 
@@ -25,7 +25,7 @@ export function useStaffDashboardQuery() {
     setCountsError(null);
 
     try {
-      const [clients, teamMembers, postsRes, missedRes] = await Promise.all([
+      const [clients, teamMembers, postsRes, notPostedRes] = await Promise.all([
         fetchClients(),
         fetchTeamMembers(),
         supabase.from("posts").select("*", { count: "exact", head: true }),
@@ -38,7 +38,7 @@ export function useStaffDashboardQuery() {
       setClientsCount(clients.length);
       setTeamMembersCount(teamMembers.length);
       setTotalPostsCount(postsRes.count);
-      setMissedPostsCount(missedRes.count);
+      setNotPostedPostsCount(notPostedRes.count);
     } catch (err) {
       setCountsError(
         err instanceof Error ? err.message : "Failed to load dashboard counts.",
@@ -59,9 +59,9 @@ export function useStaffDashboardQuery() {
         clientsCount,
         teamMembersCount,
         totalPostsCount,
-        missedPostsCount,
+        notPostedPostsCount,
       }),
-    [clientsCount, teamMembersCount, totalPostsCount, missedPostsCount],
+    [clientsCount, teamMembersCount, totalPostsCount, notPostedPostsCount],
   );
 
   return {

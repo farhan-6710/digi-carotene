@@ -41,7 +41,7 @@ export type PostsTopClient = {
   name: string;
   posts: number;
   scheduled: number;
-  missed: number;
+  notPosted: number;
 };
 
 export type AnalyticsStatGridItem = {

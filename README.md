@@ -14,7 +14,7 @@ A premium, full-featured digital marketing agency operations dashboard and clien
 - **Contact Form**: Interactive form with toast notifications on successful submission.
 
 ### 2. Admin & Team Management Workspace
-- **Real-time Dashboard**: Live metrics for team members, total clients, total posts, and missed posts, complete with custom sparklines.
+- **Real-time Dashboard**: Live metrics for team members, total clients, total posts, and not posted posts, complete with custom sparklines.
 - **Publishing Performance Chart**: Beautiful dual-line Recharts visualization comparing current and previous month publishing rates.
 - **Team Management**: Comprehensive CRUD for agency specialists, featuring roles (`executive`, `manager`, `admin`), contact details, and project history.
 - **Client Assignments**: Track active and historical project assignments for each team member.

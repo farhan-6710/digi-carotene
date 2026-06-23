@@ -57,7 +57,12 @@ export function PostDialogFormFields({
 
       <StatusSelect
         value={values.clientStatus}
-        onChange={(clientStatus) => patchValues({ clientStatus })}
+        onChange={(clientStatus) =>
+          patchValues({
+            clientStatus,
+            postedOn: clientStatus === "Posted" ? values.postedOn : null,
+          })
+        }
         options={statusOptions}
         disabled={disabled}
       />

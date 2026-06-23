@@ -41,7 +41,7 @@ export const ANALYTICS_STAT_CARD_META = {
     sparklineData: clientsSparklineData,
     sparklineColor: "var(--primary)",
   },
-  postsMissed: {
+  postsNotPosted: {
     icon: XCircle,
     sparklineData: missedPostsSparklineData,
     sparklineColor: "var(--accent)",

@@ -13,14 +13,14 @@ type StaffStatCounts = {
   clientsCount: number | null;
   teamMembersCount: number | null;
   totalPostsCount: number | null;
-  missedPostsCount: number | null;
+  notPostedPostsCount: number | null;
 };
 
 export function buildStaffStatCards({
   clientsCount,
   teamMembersCount,
   totalPostsCount,
-  missedPostsCount,
+  notPostedPostsCount,
 }: StaffStatCounts): StatCardItem[] {
   return [
     {
@@ -54,9 +54,9 @@ export function buildStaffStatCards({
       href: "/staff-portal/posts-management",
     },
     {
-      id: "missed-posts",
+      id: "not-posted-posts",
       label: "Not Posted Posts",
-      value: String(missedPostsCount ?? 0),
+      value: String(notPostedPostsCount ?? 0),
       description: "Unpublished or failed slots",
       icon: XCircle,
       sparklineData: missedPostsSparklineData,

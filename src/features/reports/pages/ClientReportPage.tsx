@@ -74,7 +74,7 @@ export function ClientReportPage() {
 
         <div className="rounded-2xl border border-border bg-card shadow-sm">
           <div className="border-b border-border px-6 py-5">
-            <h2 className="text-sm font-semibold">Recent scheduled posts</h2>
+            <h2 className="text-sm font-semibold">Recent posts</h2>
           </div>
           <div className="divide-y divide-border">
             {report.recentPosts.map((post) => (

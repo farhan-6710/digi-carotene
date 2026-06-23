@@ -8,8 +8,7 @@ import {
   getUpcomingPosts,
 } from "@/features/client-portal/utils/clientStats";
 import {
-  statusColors,
-  statusText,
+  statusBadgeStyles,
 } from "@/features/posts-management/constants/postsManagement";
 import { PageShell } from "@/shared/components/PageShell";
 import { LoadingSpinner, TableLoadingState } from "@/shared/components/LoadingSpinner";
@@ -62,15 +61,14 @@ export function ClientDashboardPage() {
                         {post.post_title?.trim() || "Untitled post"}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {format(parseISO(post.scheduled_date), "MMM d, yyyy")}
-                        {post.scheduled_time ? ` · ${post.scheduled_time}` : ""}
+                        {format(parseISO(post.to_be_posted_date), "MMM d, yyyy")}
+                        {post.to_be_posted_time ? ` · ${post.to_be_posted_time}` : ""}
                       </p>
                     </div>
                     <span
                       className={[
                         "rounded-full px-2.5 py-1 text-xs font-semibold",
-                        statusColors[post.status],
-                        statusText[post.status],
+                        statusBadgeStyles[post.status],
                       ].join(" ")}
                     >
                       {post.status}

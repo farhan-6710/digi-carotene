@@ -7,15 +7,15 @@ export const CLIENT_POSTS_ROW_GRID_CLASS =
 
 export const clientPostsColumns: DirectoryTableColumn[] = [
   { label: "TITLE" },
-  { label: "SCHEDULED" },
+  { label: "TO BE POSTED ON" },
   { label: "PLATFORMS" },
   { label: "STATUS" },
 ];
 
 export const clientPostsDirectoryConfig = {
   title: "Posts",
-  description: "Read-only view of every post scheduled for your brand.",
+  description: "Read-only view of every post for your brand.",
   gridClass: CLIENT_POSTS_GRID_CLASS,
   columns: clientPostsColumns,
-  emptyMessage: "No posts scheduled for your brand yet.",
+  emptyMessage: "No posts for your brand yet.",
 } as const;

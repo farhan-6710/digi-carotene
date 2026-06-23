@@ -38,3 +38,12 @@ export const statusText: Record<StatusKey, string> = {
   Scheduled: "text-status-scheduled",
   Posted: "text-status-posted",
 };
+
+export const statusBadgeStyles: Record<StatusKey, string> = {
+  "Not posted":
+    "border border-status-not-posted/50 bg-status-not-posted/15 text-status-not-posted ring-1 ring-status-not-posted/20",
+  Scheduled:
+    "border border-status-scheduled/50 bg-status-scheduled/15 text-status-scheduled ring-1 ring-status-scheduled/20",
+  Posted:
+    "border border-status-posted/50 bg-status-posted/15 text-status-posted ring-1 ring-status-posted/20",
+};

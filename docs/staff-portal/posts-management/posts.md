@@ -17,8 +17,8 @@ Scheduled content per **project**. Post-level platform tags and published links 
 | `post_title` | text | Yes | Optional title |
 | `socials` | text[] | Yes | Platforms for this post |
 | `post_links` | jsonb | No | Default `{}`; published URLs per platform |
-| `scheduled_date` | date | No | Planned publish date |
-| `scheduled_time` | text | No | e.g. `"10:00 AM"` |
+| `to_be_posted_date` | date | No | Target publish date (“To be posted on”) |
+| `to_be_posted_time` | text | No | e.g. `"10:00 AM"` |
 | `posted_date` | date | Yes | Actual publish date |
 | `posted_time` | text | Yes | Actual publish time |
 | `status` | text | No | CHECK: `Not posted`, `Scheduled`, `Posted` |
@@ -87,8 +87,8 @@ type Post = {
   post_title: string | null;
   socials: string[] | null;
   post_links: PostLinks | null;
-  scheduled_date: string;
-  scheduled_time: string;
+  to_be_posted_date: string;
+  to_be_posted_time: string;
   posted_date: string | null;
   posted_time: string | null;
   status: StatusKey;
@@ -107,8 +107,8 @@ type SlotClient = {
   postTitle: string | null;
   socials: string[] | null;
   postLinks: PostLinks | null;
-  scheduledDate: string;
-  scheduledTime: string;
+  toBePostedDate: string;
+  toBePostedTime: string;
   postedDate: string | null;
   postedTime: string | null;
   status: StatusKey;
@@ -131,13 +131,15 @@ type CreatePostInput = {
   postTitle: string | null;
   socials: string[] | null;
   postLinks?: PostLinks | null;
-  scheduled: { date: string; time: string };
+  toBePostedOn: { date: string; time: string };
   posted: { date: string; time: string } | null;
   status: StatusKey;
 };
 
 type UpdatePostInput = CreatePostInput;
 ```
+
+When `status` is not `Posted`, `posted_date` and `posted_time` are saved as `null`.
 
 ### Form values
 
@@ -162,7 +164,7 @@ type PostFormValues = {
 | `postTitle` | `post_title` |
 | `socials` | `socials` |
 | `postLinks` | `post_links` |
-| `toBePostedOn` | `scheduled_date` + `scheduled_time` |
+| `toBePostedOn` | `to_be_posted_date` + `to_be_posted_time` |
 | `postedOn` | `posted_date` + `posted_time` |
 | `clientStatus` | `status` |
 
@@ -176,13 +178,13 @@ When calendar shows May 2026:
 await supabase
   .from("posts")
   .select("*, projects(project_name, clients(client_name))")
-  .gte("scheduled_date", "2026-05-01")
-  .lte("scheduled_date", "2026-05-31")
-  .order("scheduled_date")
-  .order("scheduled_time");
+  .gte("to_be_posted_date", "2026-05-01")
+  .lte("to_be_posted_date", "2026-05-31")
+  .order("to_be_posted_date")
+  .order("to_be_posted_time");
 ```
 
-Frontend groups by `scheduled_date` into calendar cells.
+Frontend groups by `to_be_posted_date` into calendar cells.
 
 ---
 

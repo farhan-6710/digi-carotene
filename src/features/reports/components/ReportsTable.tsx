@@ -32,7 +32,7 @@ export function ReportsTable({
           <div className="text-sm font-semibold">Client activity report</div>
           <p className="mt-1 text-xs text-muted-foreground">
             {hasGenerated
-              ? `Posts scheduled between ${periodLabel}, sorted by most posted clients first.`
+              ? `Posts with to-be-posted dates between ${periodLabel}, sorted by most posted clients first.`
               : "Select a date range above to view client posts."}
           </p>
         </div>
@@ -47,7 +47,7 @@ export function ReportsTable({
       <div className="border-t border-border">
         <div className="grid grid-cols-[1.2fr_0.9fr_0.7fr_0.8fr_1fr] gap-4 bg-muted px-6 py-3 text-xs font-semibold tracking-wider text-muted-foreground max-lg:hidden">
           <div>CLIENT</div>
-          <div>SCHEDULED DATE</div>
+          <div>TO BE POSTED ON</div>
           <div>TIME</div>
           <div>STATUS</div>
           <div>POSTED ON</div>
@@ -100,14 +100,14 @@ export function ReportsTable({
                       <span className="font-semibold tracking-wider text-muted-foreground lg:hidden">
                         DATE{" "}
                       </span>
-                      {formatReportTableDate(row.scheduledDate)}
+                      {formatReportTableDate(row.toBePostedDate)}
                     </div>
 
                     <div className="font-mono text-sm text-muted-foreground max-lg:text-xs">
                       <span className="font-semibold tracking-wider text-muted-foreground lg:hidden">
                         TIME{" "}
                       </span>
-                      {row.scheduledTime}
+                      {row.toBePostedTime}
                     </div>
 
                     <div>

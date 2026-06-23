@@ -125,8 +125,8 @@ export type DelayInfo = {
 };
 
 export function calculateDelay(
-  scheduledDate: string,
-  scheduledTime: string,
+  toBePostedDate: string,
+  toBePostedTime: string,
   postedDate: string | null,
   postedTime: string | null,
 ): DelayInfo {
@@ -134,14 +134,14 @@ export function calculateDelay(
     return { isDelayed: false, hours: 0 };
   }
 
-  const scheduledDateTime = parseDateTime(scheduledDate, scheduledTime);
+  const toBePostedDateTime = parseDateTime(toBePostedDate, toBePostedTime);
   const postedDateTime = parseDateTime(postedDate, postedTime);
 
-  if (!scheduledDateTime || !postedDateTime) {
+  if (!toBePostedDateTime || !postedDateTime) {
     return { isDelayed: false, hours: 0 };
   }
 
-  const diffMs = postedDateTime.getTime() - scheduledDateTime.getTime();
+  const diffMs = postedDateTime.getTime() - toBePostedDateTime.getTime();
   if (diffMs <= 0) {
     return { isDelayed: false, hours: 0 };
   }

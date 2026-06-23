@@ -64,11 +64,11 @@ export function buildEditFormValues(
     socials: client.socials ?? [],
     postLinks: (client.postLinks as Record<string, string>) ?? {},
     toBePostedOn:
-      toPostDateTimeValue(client.scheduledDate, client.scheduledTime) ?? {
+      toPostDateTimeValue(client.toBePostedDate, client.toBePostedTime) ?? {
         year: slotYear,
         month: slotMonth,
         day: date,
-        time: normalizePostTime(client.scheduledTime),
+        time: normalizePostTime(client.toBePostedTime),
       },
     postedOn: toPostDateTimeValue(client.postedDate, client.postedTime),
     clientStatus: client.status,
@@ -76,10 +76,14 @@ export function buildEditFormValues(
 }
 
 export function validatePostForm(values: PostFormValues): string | null {
-  const scheduled = toRepositoryDateTime(values.toBePostedOn);
-  const posted = toRepositoryDateTime(values.postedOn);
+  const toBePostedOn = toRepositoryDateTime(values.toBePostedOn);
+  const posted =
+    values.clientStatus === "Posted"
+      ? toRepositoryDateTime(values.postedOn)
+      : null;
   const hasPostedInput = Boolean(
-    values.postedOn &&
+    values.clientStatus === "Posted" &&
+      values.postedOn &&
       (values.postedOn.time.trim() ||
         values.postedOn.day ||
         values.postedOn.month ||
@@ -90,7 +94,7 @@ export function validatePostForm(values: PostFormValues): string | null {
     return "Project is required.";
   }
 
-  if (!scheduled) {
+  if (!toBePostedOn) {
     return "To be posted on requires both date and time.";
   }
 
@@ -102,15 +106,18 @@ export function validatePostForm(values: PostFormValues): string | null {
 }
 
 export function postFormToPayload(values: PostFormValues) {
-  const scheduled = toRepositoryDateTime(values.toBePostedOn)!;
-  const posted = toRepositoryDateTime(values.postedOn);
+  const toBePostedOn = toRepositoryDateTime(values.toBePostedOn)!;
+  const posted =
+    values.clientStatus === "Posted"
+      ? toRepositoryDateTime(values.postedOn)
+      : null;
 
   return {
     projectId: values.projectId.trim(),
     postTitle: values.postTitle.trim() || null,
     socials: values.socials.length > 0 ? values.socials : null,
     postLinks: values.postLinks,
-    scheduled,
+    toBePostedOn,
     posted,
     status: values.clientStatus,
   };

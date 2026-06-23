@@ -1,6 +1,9 @@
 import { Link } from "react-router";
 
-import { PROJECTS_MANAGEMENT_PATH } from "@/features/projects-management/constants/routes";
+import {
+  buildProjectDetailPath,
+  PROJECTS_MANAGEMENT_PATH,
+} from "@/features/projects-management/constants/routes";
 import type { ClientProjectsSectionProps } from "@/features/projects-management/types/components";
 
 export function ClientProjectsSection({
@@ -35,7 +38,12 @@ export function ClientProjectsSection({
             >
               <div>
                 <div className="text-sm font-medium text-foreground">
-                  {project.project_name}
+                  <Link
+                    to={buildProjectDetailPath(project.id)}
+                    className="hover:text-primary hover:underline"
+                  >
+                    {project.project_name}
+                  </Link>
                 </div>
                 <div className="mt-1 text-xs text-muted-foreground">
                   Manager: {project.team_members?.member_name ?? "—"}

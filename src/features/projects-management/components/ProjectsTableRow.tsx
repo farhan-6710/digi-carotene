@@ -1,5 +1,7 @@
+import { Link } from "react-router";
 import { Pencil } from "lucide-react";
 
+import { buildProjectDetailPath } from "@/features/projects-management/constants/routes";
 import { PROJECTS_DIRECTORY_ROW_GRID_CLASS } from "@/features/projects-management/constants/projectsDirectory";
 import type { ProjectsTableRowProps } from "@/features/projects-management/types/components";
 import { SocialPlatformButtons } from "@/shared/components/SocialPlatformButtons";
@@ -21,7 +23,12 @@ export function ProjectsTableRow({
         <span className="mb-1 block text-xs font-semibold tracking-wider text-muted-foreground sm:hidden">
           PROJECT
         </span>
-        {project.project_name}
+        <Link
+          to={buildProjectDetailPath(project.id)}
+          className="hover:text-primary hover:underline"
+        >
+          {project.project_name}
+        </Link>
       </div>
 
       <div className="text-sm text-muted-foreground">

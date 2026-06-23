@@ -26,7 +26,7 @@ export function PostsTopClientsTable({
           <div>CLIENT</div>
           <div className="text-right">POSTS</div>
           <div className="text-right">SCHEDULED</div>
-          <div className="text-right">MISSED</div>
+          <div className="text-right">NOT POSTED</div>
         </div>
 
         {isLoading ? (
@@ -71,8 +71,8 @@ export function PostsTopClientsTable({
                 <div className="text-right font-mono text-sm text-status-scheduled">
                   {client.scheduled}
                 </div>
-                <div className="text-right font-mono text-sm text-status-missed">
-                  {client.missed}
+                <div className="text-right font-mono text-sm text-status-not-posted">
+                  {client.notPosted}
                 </div>
               </div>
             ))}

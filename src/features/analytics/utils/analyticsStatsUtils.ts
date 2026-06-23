@@ -46,13 +46,12 @@ export function buildPostsAnalyticsStatCards(
   currentPosts: Post[],
   previousPosts: Post[],
 ): StatCardItem[] {
-  console.log("currentPosts", currentPosts);
   const currentPublished = currentPosts.filter((post) => post.status === "Posted").length;
   const previousPublished = previousPosts.filter((post) => post.status === "Posted").length;
   const currentScheduled = currentPosts.filter((post) => post.status === "Scheduled").length;
   const previousScheduled = previousPosts.filter((post) => post.status === "Scheduled").length;
-  const currentMissed = currentPosts.filter((post) => post.status === "Not posted").length;
-  const previousMissed = previousPosts.filter((post) => post.status === "Not posted").length;
+  const currentNotPosted = currentPosts.filter((post) => post.status === "Not posted").length;
+  const previousNotPosted = previousPosts.filter((post) => post.status === "Not posted").length;
   const currentActiveClients = new Set(currentPosts.map((post) => post.client_name)).size;
   const previousClients = new Set(previousPosts.map((post) => post.client_name));
   const currentClients = new Set(currentPosts.map((post) => post.client_name));
@@ -95,12 +94,12 @@ export function buildPostsAnalyticsStatCards(
       deltaLabel: "new this month",
     }),
     toStatCard(
-      "posts-missed",
-      "postsMissed",
+      "posts-not-posted",
+      "postsNotPosted",
       {
-        label: "Missed Posts This Month",
-        value: String(currentMissed),
-        delta: formatSignedDelta(currentMissed, previousMissed),
+        label: "Not Posted Posts This Month",
+        value: String(currentNotPosted),
+        delta: formatSignedDelta(currentNotPosted, previousNotPosted),
         deltaLabel: "from last month",
       },
       true,

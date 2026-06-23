@@ -29,18 +29,18 @@ export function buildClientReportSummaries(posts: Post[]): ClientReportSummary[]
       const rows: ReportPostRow[] = clientPosts
         .slice()
         .sort((a, b) => {
-          const dateCompare = a.scheduled_date.localeCompare(b.scheduled_date);
+          const dateCompare = a.to_be_posted_date.localeCompare(b.to_be_posted_date);
           if (dateCompare !== 0) {
             return dateCompare;
           }
 
-          return comparePostTimes(a.scheduled_time, b.scheduled_time);
+          return comparePostTimes(a.to_be_posted_time, b.to_be_posted_time);
         })
         .map((post) => ({
           id: post.id,
           clientName: post.client_name ?? clientName,
-          scheduledDate: post.scheduled_date,
-          scheduledTime: post.scheduled_time,
+          toBePostedDate: post.to_be_posted_date,
+          toBePostedTime: post.to_be_posted_time,
           status: post.status,
           postedDate: post.posted_date,
           postedTime: post.posted_time,

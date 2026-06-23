@@ -358,7 +358,7 @@ export function buildAnalyticsStats(
       trend: summary.currentStreak >= lastMonthStreak ? "positive" : "negative",
     },
     {
-      label: "Missed Post Days",
+      label: "Days Without Posts",
       value: summary.missedDays.toLocaleString(),
       delta: formatDayChange(summary.missedDays, priorMissedDays),
       deltaLabel: "from last year",

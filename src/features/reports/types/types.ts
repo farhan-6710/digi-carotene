@@ -8,8 +8,8 @@ export type ReportDateRange = {
 export type ReportPostRow = {
   id: string;
   clientName: string;
-  scheduledDate: string;
-  scheduledTime: string;
+  toBePostedDate: string;
+  toBePostedTime: string;
   status: StatusKey;
   postedDate: string | null;
   postedTime: string | null;

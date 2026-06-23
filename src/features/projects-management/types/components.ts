@@ -1,3 +1,4 @@
+import type { Post } from "@/features/posts-management/types/types";
 import type { ProjectFormValues } from "@/features/projects-management/utils/projectFormUtils";
 import type { ProjectListItem } from "@/features/projects-management/types/types";
 
@@ -56,6 +57,19 @@ export type ProjectTeamMembersSelectProps = {
 export type ClientProjectsSectionProps = {
   projects: ProjectListItem[];
   isLoading: boolean;
+};
+
+export type ProjectProfileCardProps = {
+  project: ProjectListItem;
+};
+
+export type ProjectPostsTableProps = {
+  posts: Post[];
+  isLoading: boolean;
+};
+
+export type ProjectPostsTableRowProps = {
+  post: Post;
 };
 
 export type ProjectDialogSocialFieldsProps = {

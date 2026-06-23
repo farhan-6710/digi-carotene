@@ -15,8 +15,8 @@ export type Post = {
   post_title: string | null;
   socials: string[] | null;
   post_links: PostLinks | null;
-  scheduled_date: string;
-  scheduled_time: string;
+  to_be_posted_date: string;
+  to_be_posted_time: string;
   posted_date: string | null;
   posted_time: string | null;
   status: StatusKey;
@@ -31,8 +31,8 @@ export type SlotClient = {
   postTitle: string | null;
   socials: string[] | null;
   postLinks: PostLinks | null;
-  scheduledDate: string;
-  scheduledTime: string;
+  toBePostedDate: string;
+  toBePostedTime: string;
   postedDate: string | null;
   postedTime: string | null;
   status: StatusKey;

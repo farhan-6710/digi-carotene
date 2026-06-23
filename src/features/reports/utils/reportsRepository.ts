@@ -9,8 +9,8 @@ const postSelect = `
   post_title,
   socials,
   post_links,
-  scheduled_date,
-  scheduled_time,
+  to_be_posted_date,
+  to_be_posted_time,
   posted_date,
   posted_time,
   status,
@@ -50,8 +50,8 @@ function mapPostRow(row: PostRow): Post {
     post_title: row.post_title,
     socials: row.socials,
     post_links: row.post_links,
-    scheduled_date: row.scheduled_date,
-    scheduled_time: row.scheduled_time,
+    to_be_posted_date: row.to_be_posted_date,
+    to_be_posted_time: row.to_be_posted_time,
     posted_date: row.posted_date,
     posted_time: row.posted_time,
     status: row.status,
@@ -86,10 +86,10 @@ export async function fetchPostsForDateRange(
   let query = supabase
     .from("posts")
     .select(postSelect)
-    .gte("scheduled_date", startDate)
-    .lte("scheduled_date", endDate)
-    .order("scheduled_date", { ascending: true })
-    .order("scheduled_time", { ascending: true });
+    .gte("to_be_posted_date", startDate)
+    .lte("to_be_posted_date", endDate)
+    .order("to_be_posted_date", { ascending: true })
+    .order("to_be_posted_time", { ascending: true });
 
   if (statuses && statuses.length > 0) {
     query = query.in("status", statuses);

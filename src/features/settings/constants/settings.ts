@@ -16,9 +16,9 @@ export const settingsSections: SettingsSection[] = [
       },
       {
         id: "no-show-alerts",
-        label: "Missed post alerts",
+        label: "Not posted alerts",
         description:
-          "Send an alert when a scheduled post is missed or not published on time.",
+          "Send an alert when a post is still not posted after its scheduled time.",
         defaultEnabled: true,
       },
       {

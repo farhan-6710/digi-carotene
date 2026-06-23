@@ -56,13 +56,13 @@ export function PostsWeekDayCell({
       <div className="mt-3 flex max-h-[160px] flex-1 flex-col gap-1.5 overflow-y-auto pr-1">
         {hasClients ? (
           [...(slot?.clients ?? [])]
-            .sort((a, b) => comparePostTimes(a.scheduledTime, b.scheduledTime))
+            .sort((a, b) => comparePostTimes(a.toBePostedTime, b.toBePostedTime))
             .map((client) => {
               const delay =
                 client.status === "Posted"
                   ? calculateDelay(
-                      client.scheduledDate,
-                      client.scheduledTime,
+                      client.toBePostedDate,
+                      client.toBePostedTime,
                       client.postedDate,
                       client.postedTime,
                     )
@@ -102,7 +102,7 @@ export function PostsWeekDayCell({
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-0.5">
                         <span className="font-mono text-[11px] text-muted-foreground">
-                          {client.scheduledTime}
+                          {client.toBePostedTime}
                         </span>
                         <span
                           className={`text-[11px] font-semibold ${statusText[client.status]}`}
