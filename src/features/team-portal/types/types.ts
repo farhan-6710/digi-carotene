@@ -1,7 +1,5 @@
 import type { StatusKey } from "@/features/posts-management/types/types";
 
-import type { StatusKey } from "@/features/posts-management/types/types";
-
 export type TeamDashboardPostItem = {
   id: string;
   label: string;
