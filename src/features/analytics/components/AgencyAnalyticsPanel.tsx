@@ -4,7 +4,7 @@ import { CategoryDonutChart } from "@/features/analytics/components/CategoryDonu
 import { HorizontalBarChart } from "@/features/analytics/components/HorizontalBarChart";
 import { MonthlyTrendChart } from "@/features/analytics/components/MonthlyTrendChart";
 import type { AnalyticsPanelProps } from "@/features/analytics/types/components";
-import { PageRevealGroup } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { resolveAnalyticsDateRange } from "@/features/analytics/utils/analyticsFilterUtils";
 import {
   buildMonthlyTrend,
@@ -32,7 +32,7 @@ export function AgencyAnalyticsPanel({
   }, [filteredPosts, filter]);
 
   return (
-    <PageRevealGroup className="space-y-6">
+    <PageContent className="space-y-6">
       <MonthlyTrendChart
         title="Agency Publishing Trend"
         description={`Posts by status — ${periodLabel.toLowerCase()}.`}
@@ -54,6 +54,6 @@ export function AgencyAnalyticsPanel({
           emptyMessage="No platform data in this period."
         />
       </div>
-    </PageRevealGroup>
+    </PageContent>
   );
 }

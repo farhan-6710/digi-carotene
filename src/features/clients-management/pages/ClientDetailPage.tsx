@@ -5,7 +5,7 @@ import { ClientProfileCard } from "@/features/clients-management/components/Clie
 import { CLIENTS_MANAGEMENT_PATH } from "@/features/clients-management/constants/routes";
 import { useClientDetailQuery } from "@/features/clients-management/hooks/useClientDetailQuery";
 import { ClientProjectsSection } from "@/features/projects-management/components/ClientProjectsSection";
-import { PageContent } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";

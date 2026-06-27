@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { Menu, Moon, Search, Sun } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { useTheme } from "@/shared/providers/ThemeProvider";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -12,6 +13,7 @@ import {
   PageTransitionMain,
   PageTransitionProvider,
 } from "@/shared/providers/PageTransitionProvider";
+import { SHELL_HEADER_MOTION } from "@/shared/constants/pageMotion";
 import type { AppShellLayoutProps } from "@/shared/types/components";
 import { Button } from "@/shared/ui/button";
 import { Switch } from "@/shared/ui/switch";
@@ -44,7 +46,10 @@ export function AppShellLayout({
         <ShellSidebar config={sidebarConfig} collapsed={isSidebarCollapsed} />
 
         <div className="grid min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden">
-          <header className="flex shrink-0 items-center gap-4 border-b border-border/60 bg-card px-4 py-4 sm:px-6">
+          <motion.header
+            {...SHELL_HEADER_MOTION}
+            className="flex shrink-0 items-center gap-4 border-b border-border/60 bg-card px-4 py-4 sm:px-6"
+          >
             <Button
               type="button"
               variant="secondary"
@@ -111,11 +116,11 @@ export function AppShellLayout({
                 )}
               </Link>
             </div>
-          </header>
+          </motion.header>
 
           <PageTransitionMain
             mainRef={mainRef}
-            className="min-h-0 overflow-y-auto overscroll-y-none px-6 py-6 lg:px-8"
+            className="min-h-0 overflow-y-auto px-6 py-6 lg:px-8"
           />
         </div>
       </div>

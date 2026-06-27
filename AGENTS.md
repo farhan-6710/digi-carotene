@@ -8,7 +8,7 @@ Team + client portal for a digital marketing agency. Read [DESIGN.md](DESIGN.md)
 - **Beginner-friendly** — one function, one job. Readable paths over clever abstractions.
 - **Maintainable & modular** — clear folder structure (`features/`, `services/`, `shared/`). DRY where it actually removes duplication, not preemptively.
 - **Handle V1 edge cases** without over-engineering.
-- Portal page transitions: `PageTransitionProvider` + `PageTransitionMain` (`shared/providers/`), motion values in `shared/constants/pageMotion.ts`, sidebar links via `TransitionLink`. In-page section stagger: `PageContent` / `PageRevealGroup` (`shared/components/PageReveal.tsx`).
+- Portal motion: values in `shared/constants/pageMotion.ts`. Route transitions via `PageTransitionProvider` + `TransitionLink`. In-page section stagger via `PageContent` (`shared/components/PageContent.tsx`). No motion inside presentational components (e.g. stat cards).
 
 ## Where code goes
 

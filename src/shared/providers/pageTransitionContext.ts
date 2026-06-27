@@ -1,11 +1,10 @@
 import { createContext, useContext } from "react";
 import type { To } from "react-router";
 
+/** Public API — sidebar links and transition navigation. */
 export type PageTransitionContextValue = {
   navigateWithTransition: (to: To) => void;
   activePath: string;
-  isVisible: boolean;
-  onExitComplete: () => void;
 };
 
 export const PageTransitionContext =

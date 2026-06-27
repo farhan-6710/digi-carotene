@@ -5,12 +5,8 @@ import { useTeamDashboardPostStatusChange } from "@/features/team-portal/hooks/u
 import { useTeamDashboardQuery } from "@/features/team-portal/hooks/useTeamDashboardQuery";
 import { PostsTopClientsTable } from "@/features/analytics/components/PostsTopClientsTable";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
+import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
-import {
-  PageContent,
-  PageReveal,
-  PageRevealItem,
-} from "@/shared/components/PageReveal";
 import { StatsCards } from "@/shared/components/StatsCards";
 
 export function TeamDashboardPage() {
@@ -40,72 +36,58 @@ export function TeamDashboardPage() {
       <StatsCards cards={statCards} isLoading={isStatsLoading} />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
-          <PageReveal className="space-y-6">
-            <PageRevealItem>
-              <TeamPostingChart />
-            </PageRevealItem>
-            <PageRevealItem>
-              <PostsTopClientsTable
-                clients={topClients}
-                isLoading={isPostsLoading}
-              />
-            </PageRevealItem>
-          </PageReveal>
-        </div>
+        <PageContent className="space-y-6 lg:col-span-2">
+          <TeamPostingChart />
+          <PostsTopClientsTable
+            clients={topClients}
+            isLoading={isPostsLoading}
+          />
+        </PageContent>
 
-        <div className="space-y-6 lg:col-span-1">
-          <PageReveal className="space-y-6">
-            <PageRevealItem>
-              <TeamTodaysPosts
-                items={todaysPosts}
-                isLoading={isSidebarPostsLoading}
-                error={error}
-                updatingPostId={updatingPostId}
-                onStatusChange={(postId, status) => {
-                  const item = todaysPosts.find((row) => row.id === postId);
-                  if (!item) {
-                    return;
+        <PageContent className="space-y-6 lg:col-span-1">
+          <TeamTodaysPosts
+            items={todaysPosts}
+            isLoading={isSidebarPostsLoading}
+            error={error}
+            updatingPostId={updatingPostId}
+            onStatusChange={(postId, status) => {
+              const item = todaysPosts.find((row) => row.id === postId);
+              if (!item) {
+                return;
+              }
+
+              void changeStatus(
+                postId,
+                status,
+                item.postStatus,
+                updateTodayPostStatus,
+              );
+            }}
+          />
+          <TeamNeedsAttention
+            items={needsAttentionPosts}
+            isLoading={isSidebarPostsLoading}
+            error={error}
+            updatingPostId={updatingPostId}
+            onStatusChange={(postId, status) => {
+              const item = needsAttentionPosts.find((row) => row.id === postId);
+              if (!item) {
+                return;
+              }
+
+              void changeStatus(
+                postId,
+                status,
+                item.postStatus,
+                (id, newStatus) => {
+                  if (newStatus !== "Not posted") {
+                    removeNeedsAttentionPost(id);
                   }
-
-                  void changeStatus(
-                    postId,
-                    status,
-                    item.postStatus,
-                    updateTodayPostStatus,
-                  );
-                }}
-              />
-            </PageRevealItem>
-            <PageRevealItem>
-              <TeamNeedsAttention
-                items={needsAttentionPosts}
-                isLoading={isSidebarPostsLoading}
-                error={error}
-                updatingPostId={updatingPostId}
-                onStatusChange={(postId, status) => {
-                  const item = needsAttentionPosts.find(
-                    (row) => row.id === postId,
-                  );
-                  if (!item) {
-                    return;
-                  }
-
-                  void changeStatus(
-                    postId,
-                    status,
-                    item.postStatus,
-                    (id, newStatus) => {
-                      if (newStatus !== "Not posted") {
-                        removeNeedsAttentionPost(id);
-                      }
-                    },
-                  );
-                }}
-              />
-            </PageRevealItem>
-          </PageReveal>
-        </div>
+                },
+              );
+            }}
+          />
+        </PageContent>
       </div>
     </PageContent>
   );

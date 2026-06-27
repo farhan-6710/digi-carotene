@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { PageRevealGroup } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { CategoryDonutChart } from "@/features/analytics/components/CategoryDonutChart";
 import { HorizontalBarChart } from "@/features/analytics/components/HorizontalBarChart";
 import { MonthlyTrendChart } from "@/features/analytics/components/MonthlyTrendChart";
@@ -40,7 +40,7 @@ export function PostsAnalyticsPanel({
     filter.mode === "all" ? "All scheduled posts." : `Posts in ${periodLabel.toLowerCase()}.`;
 
   return (
-    <PageRevealGroup className="space-y-6">
+    <PageContent className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-2">
         <CategoryDonutChart
           title="Posts by Status"
@@ -64,6 +64,6 @@ export function PostsAnalyticsPanel({
 
       <PostsTopClientsTable clients={view.topClients} isLoading={isLoading} />
       <SessionActivityGraph />
-    </PageRevealGroup>
+    </PageContent>
   );
 }

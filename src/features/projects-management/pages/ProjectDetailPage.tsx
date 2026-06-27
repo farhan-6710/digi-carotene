@@ -7,7 +7,7 @@ import { ProjectProfileCard } from "@/features/projects-management/components/Pr
 import { PROJECTS_MANAGEMENT_PATH } from "@/features/projects-management/constants/routes";
 import { useProjectDetailQuery } from "@/features/projects-management/hooks/useProjectDetailQuery";
 import { buildProjectPostStats } from "@/features/projects-management/utils/projectPostStatsUtils";
-import { PageContent } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";

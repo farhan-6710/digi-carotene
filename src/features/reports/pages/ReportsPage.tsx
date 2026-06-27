@@ -2,7 +2,7 @@ import { ReportStatCards } from "@/features/reports/components/ReportStatCards";
 import { ReportDateRangePicker } from "@/features/reports/components/ReportDateRangePicker";
 import { ReportsTable } from "@/features/reports/components/ReportsTable";
 import { useReportsManagement } from "@/features/reports/hooks/useReportsManagement";
-import { PageContent } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";
 

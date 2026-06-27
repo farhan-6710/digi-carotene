@@ -1,6 +1,9 @@
-import { TransitionLink } from "@/shared/components/TransitionLink";
+import { motion } from "framer-motion";
 
+import { TransitionLink } from "@/shared/components/TransitionLink";
+import { SHELL_SIDEBAR_MOTION } from "@/shared/constants/pageMotion";
 import { shellNavIcons } from "@/shared/constants/shellNavIcons";
+import { cn } from "@/shared/lib/utils";
 import type {
   ShellMobileNavSheetProps,
   ShellSidebarContentProps,
@@ -127,18 +130,21 @@ export function ShellSidebarContent({
   );
 }
 
+const MotionAside = motion.aside;
+
 export function ShellSidebar({ config, collapsed }: ShellSidebarProps) {
   return (
     <TooltipProvider>
-      <aside
-        className={[
+      <MotionAside
+        {...SHELL_SIDEBAR_MOTION}
+        className={cn(
           "hidden min-h-0 shrink-0 border-r border-sidebar-border/80 bg-sidebar text-sidebar-foreground md:block",
           "transition-[width] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
           collapsed ? "w-20" : "w-64",
-        ].join(" ")}
+        )}
       >
         <ShellSidebarContent config={config} collapsed={collapsed} />
-      </aside>
+      </MotionAside>
     </TooltipProvider>
   );
 }

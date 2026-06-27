@@ -1,6 +1,6 @@
 import { SettingsSectionCard } from "@/features/settings/components/SettingsSectionCard";
 import { useSettingsPreferences } from "@/features/settings/hooks/useSettingsPreferences";
-import { PageContent } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 
 export function SettingsPage() {

@@ -1,5 +1,7 @@
 import {
+  createContext,
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -14,13 +16,18 @@ import { Outlet, createPath, useLocation, useNavigate, type To } from "react-rou
 import { PAGE_MAIN_MOTION } from "@/shared/constants/pageMotion";
 import {
   PageTransitionContext,
-  usePageTransition,
   type PageTransitionContextValue,
 } from "@/shared/providers/pageTransitionContext";
 import { routePath } from "@/shared/utils/routePath";
 
+const PageTransitionAnimationContext = createContext<{
+  isVisible: boolean;
+  onExitComplete: () => void;
+} | null>(null);
+
 function isSameRoute(pathname: string, search: string, to: To) {
-  return routePath(to) === createPath({ pathname, search }).split("?")[0];
+  const current = routePath(createPath({ pathname, search }));
+  return routePath(to) === current;
 }
 
 export function PageTransitionProvider({ children }: { children: ReactNode }) {
@@ -68,14 +75,21 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     }
   }, [location.key, location.pathname]);
 
-  const value = useMemo<PageTransitionContextValue>(
-    () => ({ navigateWithTransition, activePath, isVisible, onExitComplete }),
-    [navigateWithTransition, activePath, isVisible, onExitComplete],
+  const navValue = useMemo<PageTransitionContextValue>(
+    () => ({ navigateWithTransition, activePath }),
+    [navigateWithTransition, activePath],
+  );
+
+  const animationValue = useMemo(
+    () => ({ isVisible, onExitComplete }),
+    [isVisible, onExitComplete],
   );
 
   return (
-    <PageTransitionContext.Provider value={value}>
-      {children}
+    <PageTransitionContext.Provider value={navValue}>
+      <PageTransitionAnimationContext.Provider value={animationValue}>
+        {children}
+      </PageTransitionAnimationContext.Provider>
     </PageTransitionContext.Provider>
   );
 }
@@ -87,8 +101,15 @@ export function PageTransitionMain({
   mainRef: RefObject<HTMLElement | null>;
   className?: string;
 }) {
-  const { pathname } = useLocation();
-  const { isVisible, onExitComplete } = usePageTransition();
+  const { pathname, key: locationKey } = useLocation();
+  const animation = useContext(PageTransitionAnimationContext);
+  if (!animation) {
+    throw new Error(
+      "PageTransitionMain must be used within PageTransitionProvider",
+    );
+  }
+
+  const { isVisible, onExitComplete } = animation;
 
   useLayoutEffect(() => {
     mainRef.current?.scrollTo(0, 0);
@@ -96,9 +117,9 @@ export function PageTransitionMain({
 
   return (
     <main ref={mainRef} className={className}>
-      <AnimatePresence mode="wait" initial={false} onExitComplete={onExitComplete}>
+      <AnimatePresence mode="wait" onExitComplete={onExitComplete}>
         {isVisible ? (
-          <motion.div key={pathname} {...PAGE_MAIN_MOTION}>
+          <motion.div key={locationKey} {...PAGE_MAIN_MOTION}>
             <Outlet />
           </motion.div>
         ) : null}

@@ -4,7 +4,7 @@ import { teamAccount } from "@/features/account/constants/teamAccount";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { AccountHeader } from "@/shared/components/account/AccountHeader";
 import { AccountStatsGrid } from "@/shared/components/account/AccountStatsGrid";
-import { PageContent } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 
 export function AccountPage() {

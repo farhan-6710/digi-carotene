@@ -1,6 +1,6 @@
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
+import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
-import { PageRevealGroup } from "@/shared/components/PageReveal";
 import type { PageShellProps } from "@/shared/types/components";
 
 export function PageShell({
@@ -12,7 +12,7 @@ export function PageShell({
   dialog,
 }: PageShellProps) {
   return (
-    <PageRevealGroup>
+    <PageContent>
       <PageHeader
         heading={heading}
         description={description}
@@ -24,6 +24,6 @@ export function PageShell({
       {children}
 
       {dialog}
-    </PageRevealGroup>
+    </PageContent>
   );
 }

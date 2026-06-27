@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { PageRevealGroup } from "@/shared/components/PageReveal";
+import { PageContent } from "@/shared/components/PageContent";
 import { AnalyticsBreakdownTable } from "@/features/analytics/components/AnalyticsBreakdownTable";
 import { CategoryDonutChart } from "@/features/analytics/components/CategoryDonutChart";
 import { HorizontalBarChart } from "@/features/analytics/components/HorizontalBarChart";
@@ -29,7 +29,7 @@ export function EmployeesAnalyticsPanel({
   }, [filteredPosts, projects, teamMembers]);
 
   return (
-    <PageRevealGroup className="space-y-6">
+    <PageContent className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-2">
         <CategoryDonutChart
           title="Team by Role"
@@ -53,6 +53,6 @@ export function EmployeesAnalyticsPanel({
         isLoading={isLoading}
         emptyMessage="No managed posts in this period."
       />
-    </PageRevealGroup>
+    </PageContent>
   );
 }

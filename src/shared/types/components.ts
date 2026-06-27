@@ -72,7 +72,7 @@ export type PageShellProps = {
   dialog?: ReactNode;
 };
 
-export type PageRevealProps = {
+export type PageContentProps = {
   className?: string;
   children: ReactNode;
 };
