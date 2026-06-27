@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import { PageRevealGroup } from "@/shared/components/PageReveal";
 import { AnalyticsBreakdownTable } from "@/features/analytics/components/AnalyticsBreakdownTable";
 import { HorizontalBarChart } from "@/features/analytics/components/HorizontalBarChart";
 import type { AnalyticsPanelProps } from "@/features/analytics/types/components";
@@ -25,7 +26,7 @@ export function ClientsAnalyticsPanel({
   }, [filteredPosts, clients]);
 
   return (
-    <div className="space-y-6">
+    <PageRevealGroup className="space-y-6">
       <HorizontalBarChart
         title="Top Clients by Posts"
         description={`Post volume per client — ${periodLabel.toLowerCase()}.`}
@@ -41,6 +42,6 @@ export function ClientsAnalyticsPanel({
         isLoading={isLoading}
         emptyMessage="No client posts in this period."
       />
-    </div>
+    </PageRevealGroup>
   );
 }

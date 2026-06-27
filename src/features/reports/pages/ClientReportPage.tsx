@@ -8,6 +8,7 @@ import {
 import { buildDummyClientReport } from "@/features/reports/utils/clientReportUtils";
 import { decodeClientReportId } from "@/features/reports/utils/reportsUtils";
 import { buildReportsListPath } from "@/features/reports/utils/reportsUrlParams";
+import { PageContent } from "@/shared/components/PageReveal";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -20,7 +21,7 @@ export function ClientReportPage() {
   const backToReportsPath = buildReportsListPath(searchParams);
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader
         heading={report.clientName}
         description={`Dummy overview for ${report.periodLabel}. Live analytics will replace this view in a later iteration.`}
@@ -101,6 +102,6 @@ export function ClientReportPage() {
           </div>
         </div>
       </div>
-    </section>
+    </PageContent>
   );
 }

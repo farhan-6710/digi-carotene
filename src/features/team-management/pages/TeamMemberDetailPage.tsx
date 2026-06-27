@@ -10,6 +10,7 @@ import { TEAM_MANAGEMENT_PATH } from "@/features/team-management/constants/route
 import { useTeamMemberProjectActions } from "@/features/team-management/hooks/useTeamMemberProjectActions";
 import { useTeamMemberDetailQuery } from "@/features/team-management/hooks/useTeamMemberDetailQuery";
 import { usePermissions } from "@/shared/hooks/usePermissions";
+import { PageContent } from "@/shared/components/PageReveal";
 import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";
@@ -68,7 +69,7 @@ export function TeamMemberDetailPage() {
   }
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader backButton={<TeamMemberDetailBackButton />} />
 
       {error ? <ErrorBanner message={error} /> : null}
@@ -99,6 +100,6 @@ export function TeamMemberDetailPage() {
           onAssign={assignProject}
         />
       ) : null}
-    </section>
+    </PageContent>
   );
 }

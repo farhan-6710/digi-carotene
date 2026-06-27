@@ -4,13 +4,14 @@ import { teamAccount } from "@/features/account/constants/teamAccount";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { AccountHeader } from "@/shared/components/account/AccountHeader";
 import { AccountStatsGrid } from "@/shared/components/account/AccountStatsGrid";
+import { PageContent } from "@/shared/components/PageReveal";
 import { PageHeader } from "@/shared/components/PageHeader";
 
 export function AccountPage() {
   const { user, teamRole } = useAuth();
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader
         heading="Account"
         description="Your Digi Carotene team account, sign-in details, and agency performance snapshot."
@@ -37,6 +38,6 @@ export function AccountPage() {
           specializations={teamAccount.specializations}
         />
       </div>
-    </section>
+    </PageContent>
   );
 }

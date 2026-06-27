@@ -7,6 +7,7 @@ import { useAnalyticsData } from "@/features/analytics/hooks/useAnalyticsData";
 import { useAnalyticsFilters } from "@/features/analytics/hooks/useAnalyticsFilters";
 import { useAnalyticsTab } from "@/features/analytics/hooks/useAnalyticsTab";
 import { filterPostsByAnalyticsFilter } from "@/features/analytics/utils/analyticsFilterUtils";
+import { PageContent } from "@/shared/components/PageReveal";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";
 
@@ -21,7 +22,7 @@ export function AnalyticsPage() {
   );
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader
         heading="Analytics"
         description="Explore posts, clients, team members, and agency-wide publishing performance."
@@ -58,6 +59,6 @@ export function AnalyticsPage() {
         periodLabel={filters.periodLabel}
         isLoading={isLoading}
       />
-    </section>
+    </PageContent>
   );
 }

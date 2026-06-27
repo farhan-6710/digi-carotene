@@ -2,6 +2,7 @@ import { ReportStatCards } from "@/features/reports/components/ReportStatCards";
 import { ReportDateRangePicker } from "@/features/reports/components/ReportDateRangePicker";
 import { ReportsTable } from "@/features/reports/components/ReportsTable";
 import { useReportsManagement } from "@/features/reports/hooks/useReportsManagement";
+import { PageContent } from "@/shared/components/PageReveal";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";
 
@@ -27,7 +28,7 @@ export function ReportsPage() {
   } = useReportsManagement();
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader
         heading="Reports"
         description="View client post activity for any date range. Results are sorted by clients with the most posted content first."
@@ -59,6 +60,6 @@ export function ReportsPage() {
         activeStatuses={activeStatuses}
         onToggleStatusFilter={toggleStatusFilter}
       />
-    </section>
+    </PageContent>
   );
 }

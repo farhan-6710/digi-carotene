@@ -39,7 +39,7 @@ Schema and DTOs: [docs/README.md](docs/README.md) · [docs/database.md](docs/dat
 
 ## Tech stack
 
-React · React Router v7 · Tailwind CSS · Shadcn UI · Recharts · Supabase (PostgreSQL, RLS) · Vite · Bun
+React · React Router v7 · Framer Motion · Tailwind CSS · Shadcn UI · Recharts · Supabase (PostgreSQL, RLS) · Vite · Bun
 
 ## Project structure
 

@@ -17,7 +17,7 @@ function StatCardShell({
   glowBg?: "primary" | "accent";
 }) {
   const className = cn(
-    "group relative rounded-2xl border border-border bg-card p-6 shadow-xs transition",
+    "group relative block h-full rounded-2xl border border-border bg-card p-6 shadow-xs transition",
     glowBg === "primary"
       ? "border-primary/40 bg-glow-bg-primary"
       : "border-accent/40 bg-glow-bg-accent",

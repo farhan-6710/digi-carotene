@@ -11,6 +11,7 @@ import {
 import { usePostsCalendarSelection } from "@/features/posts-management/hooks/usePostsCalendarSelection";
 import { usePostsManagement } from "@/features/posts-management/hooks/usePostsManagement";
 import { usePermissions } from "@/shared/hooks/usePermissions";
+import { PageContent } from "@/shared/components/PageReveal";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { LoadingSpinner } from "@/shared/components/LoadingSpinner";
 import { PageHeader } from "@/shared/components/PageHeader";
@@ -25,7 +26,7 @@ export function PostsManagementPage() {
     usePostsManagement(year, month);
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader
         heading="Posts Management"
         description="Manage daily client posts by time and status. Click any day to add a post or tap one to update it."
@@ -83,6 +84,6 @@ export function PostsManagementPage() {
       )}
 
       <PostDialog {...dialog} />
-    </section>
+    </PageContent>
   );
 }

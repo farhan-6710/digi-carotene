@@ -1,5 +1,6 @@
 import { SettingsSectionCard } from "@/features/settings/components/SettingsSectionCard";
 import { useSettingsPreferences } from "@/features/settings/hooks/useSettingsPreferences";
+import { PageContent } from "@/shared/components/PageReveal";
 import { PageHeader } from "@/shared/components/PageHeader";
 
 export function SettingsPage() {
@@ -7,7 +8,7 @@ export function SettingsPage() {
     useSettingsPreferences();
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader
         heading="Settings"
         description="Manage notifications, appearance, and workflow preferences for the Digi Carotene team portal."
@@ -23,6 +24,6 @@ export function SettingsPage() {
           />
         ))}
       </div>
-    </section>
+    </PageContent>
   );
 }

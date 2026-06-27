@@ -2,6 +2,14 @@
 
 Team + client portal for a digital marketing agency. Read [DESIGN.md](DESIGN.md) for architecture (layers, services, data flow). This file is the rulebook for making changes.
 
+## Code style (V1)
+
+- **Least code, more output** — prefer the smallest change that solves the problem. Fewer files, fewer wrappers, less indirection. Reach for shared constants/utils only when something is reused twice or more.
+- **Beginner-friendly** — one function, one job. Readable paths over clever abstractions.
+- **Maintainable & modular** — clear folder structure (`features/`, `services/`, `shared/`). DRY where it actually removes duplication, not preemptively.
+- **Handle V1 edge cases** without over-engineering.
+- Portal page transitions: `PageTransitionProvider` + `PageTransitionMain` (`shared/providers/`), motion values in `shared/constants/pageMotion.ts`, sidebar links via `TransitionLink`. In-page section stagger: `PageContent` / `PageRevealGroup` (`shared/components/PageReveal.tsx`).
+
 ## Where code goes
 
 ```

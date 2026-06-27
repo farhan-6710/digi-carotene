@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router";
+import { useRef, useState } from "react";
+import { Link } from "react-router";
 import { Menu, Moon, Search, Sun } from "lucide-react";
 
 import { useTheme } from "@/shared/providers/ThemeProvider";
@@ -8,6 +8,10 @@ import {
   ShellMobileNavSheet,
   ShellSidebar,
 } from "@/shared/components/ShellSidebar";
+import {
+  PageTransitionMain,
+  PageTransitionProvider,
+} from "@/shared/providers/PageTransitionProvider";
 import type { AppShellLayoutProps } from "@/shared/types/components";
 import { Button } from "@/shared/ui/button";
 import { Switch } from "@/shared/ui/switch";
@@ -32,10 +36,10 @@ export function AppShellLayout({
   const displayName = getUserDisplayName(user);
   const initials = getUserInitials(user);
   const avatarUrl = getUserAvatarUrl(user);
-  const { pathname } = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
 
   return (
-    <>
+    <PageTransitionProvider>
       <div className="fixed inset-0 grid grid-cols-[auto_minmax(0,1fr)] overflow-hidden bg-background text-foreground">
         <ShellSidebar config={sidebarConfig} collapsed={isSidebarCollapsed} />
 
@@ -109,12 +113,10 @@ export function AppShellLayout({
             </div>
           </header>
 
-          <main
-            key={pathname}
-            className="min-h-0 overflow-y-auto px-6 py-6 lg:px-8"
-          >
-            <Outlet />
-          </main>
+          <PageTransitionMain
+            mainRef={mainRef}
+            className="min-h-0 overflow-y-auto overscroll-y-none px-6 py-6 lg:px-8"
+          />
         </div>
       </div>
 
@@ -124,6 +126,6 @@ export function AppShellLayout({
         onOpenChange={setIsMobileNavOpen}
         sheetDescription={mobileNavDescription}
       />
-    </>
+    </PageTransitionProvider>
   );
 }

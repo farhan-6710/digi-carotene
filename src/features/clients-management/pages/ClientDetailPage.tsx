@@ -5,6 +5,7 @@ import { ClientProfileCard } from "@/features/clients-management/components/Clie
 import { CLIENTS_MANAGEMENT_PATH } from "@/features/clients-management/constants/routes";
 import { useClientDetailQuery } from "@/features/clients-management/hooks/useClientDetailQuery";
 import { ClientProjectsSection } from "@/features/projects-management/components/ClientProjectsSection";
+import { PageContent } from "@/shared/components/PageReveal";
 import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";
@@ -40,7 +41,7 @@ export function ClientDetailPage() {
   }
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader backButton={<ClientDetailBackButton />} />
 
       {error ? <ErrorBanner message={error} /> : null}
@@ -48,6 +49,6 @@ export function ClientDetailPage() {
       <ClientProfileCard client={client} />
 
       <ClientProjectsSection projects={projects} isLoading={isLoading} />
-    </section>
+    </PageContent>
   );
 }

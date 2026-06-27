@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { TransitionLink } from "@/shared/components/TransitionLink";
 
 import { shellNavIcons } from "@/shared/constants/shellNavIcons";
 import type {
@@ -28,7 +28,7 @@ export function ShellSidebarContent({
 
   return (
     <div className="flex h-full flex-col">
-      <Link
+      <TransitionLink
         to={config.homeLink}
         onClick={onNavigate}
         className="flex items-center justify-center border-b border-sidebar-border/80 p-4"
@@ -58,13 +58,13 @@ export function ShellSidebarContent({
             ) : null}
           </div>
         </div>
-      </Link>
+      </TransitionLink>
 
       <nav className="min-h-0 flex-1 space-y-1.5 overflow-y-auto p-4">
         {config.nav.map((item) => {
           const Icon = shellNavIcons[item.icon];
           const navLinkEl = (
-            <NavLink
+            <TransitionLink
               key={item.to}
               to={item.to}
               onClick={onNavigate}
@@ -84,7 +84,7 @@ export function ShellSidebarContent({
               ) : (
                 <span>{item.label}</span>
               )}
-            </NavLink>
+            </TransitionLink>
           );
 
           if (collapsed) {
@@ -113,13 +113,13 @@ export function ShellSidebarContent({
             <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
               {config.quickAction.description}
             </p>
-            <Link
+            <TransitionLink
               to={config.quickAction.buttonTo}
               onClick={onNavigate}
               className="mt-4 inline-flex w-full items-center justify-center truncate rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground shadow-xs transition hover:opacity-95"
             >
               {config.quickAction.buttonLabel}
-            </Link>
+            </TransitionLink>
           </div>
         </div>
       ) : null}

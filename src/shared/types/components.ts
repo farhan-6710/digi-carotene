@@ -72,6 +72,11 @@ export type PageShellProps = {
   dialog?: ReactNode;
 };
 
+export type PageRevealProps = {
+  className?: string;
+  children: ReactNode;
+};
+
 export type ShellNavItem = {
   label: string;
   to: string;

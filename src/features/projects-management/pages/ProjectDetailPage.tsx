@@ -7,6 +7,7 @@ import { ProjectProfileCard } from "@/features/projects-management/components/Pr
 import { PROJECTS_MANAGEMENT_PATH } from "@/features/projects-management/constants/routes";
 import { useProjectDetailQuery } from "@/features/projects-management/hooks/useProjectDetailQuery";
 import { buildProjectPostStats } from "@/features/projects-management/utils/projectPostStatsUtils";
+import { PageContent } from "@/shared/components/PageReveal";
 import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageHeader } from "@/shared/components/PageHeader";
@@ -43,7 +44,7 @@ export function ProjectDetailPage() {
   }
 
   return (
-    <section className="space-y-8">
+    <PageContent>
       <PageHeader backButton={<ProjectDetailBackButton />} />
 
       {error ? <ErrorBanner message={error} /> : null}
@@ -55,6 +56,6 @@ export function ProjectDetailPage() {
       />
 
       <ProjectPostsTable posts={posts} isLoading={isLoading} />
-    </section>
+    </PageContent>
   );
 }
