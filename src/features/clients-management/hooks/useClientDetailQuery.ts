@@ -1,49 +1,37 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import type { Client } from "@/features/clients-management/types/types";
 import { fetchClientById } from "@/services/clientsService";
 import type { ProjectListItem } from "@/features/projects-management/types/types";
 import { fetchProjectsByClientId } from "@/services/projectsService";
+import { useFetch } from "@/shared/hooks/useFetch";
+
+type ClientDetail = {
+  client: Client | null;
+  projects: ProjectListItem[];
+};
+
+const EMPTY: ClientDetail = { client: null, projects: [] };
 
 export function useClientDetailQuery(clientId: string) {
-  const [client, setClient] = useState<Client | null>(null);
-  const [projects, setProjects] = useState<ProjectListItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const reload = useCallback(async () => {
+  const load = useCallback(async (): Promise<ClientDetail> => {
     if (!clientId) {
-      setClient(null);
-      setProjects([]);
-      setIsLoading(false);
-      return;
+      return EMPTY;
     }
 
-    setIsLoading(true);
-    setError(null);
+    const [client, projects] = await Promise.all([
+      fetchClientById(clientId),
+      fetchProjectsByClientId(clientId),
+    ]);
 
-    try {
-      const [clientRow, projectRows] = await Promise.all([
-        fetchClientById(clientId),
-        fetchProjectsByClientId(clientId),
-      ]);
-
-      setClient(clientRow);
-      setProjects(projectRows);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load client.");
-    } finally {
-      setIsLoading(false);
-    }
+    return { client, projects };
   }, [clientId]);
 
-  useEffect(() => {
-    void reload();
-  }, [reload]);
+  const { data, isLoading, error, setError, reload } = useFetch(load, EMPTY);
 
   return {
-    client,
-    projects,
+    client: data.client,
+    projects: data.projects,
     isLoading,
     error,
     setError,

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useTeamReviewerAccess } from "@/features/post-approvals/providers/TeamReviewerAccessProvider";
+import { useTeamReviewerAccess } from "@/features/post-approvals/providers/teamReviewerAccessContext";
 import { canAccessApprovalsNav } from "@/features/post-approvals/utils/postApprovalRules";
 import {
   approvalsNavItem,

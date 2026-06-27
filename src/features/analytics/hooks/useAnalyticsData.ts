@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import type { AnalyticsDataset } from "@/features/analytics/types/types";
 import { fetchClients } from "@/services/clientsService";
 import { fetchAllPosts } from "@/services/postsService";
 import { fetchProjects } from "@/services/projectsService";
 import { fetchTeamMembers } from "@/services/teamMembersService";
+import { useFetch } from "@/shared/hooks/useFetch";
 
 const EMPTY_DATASET: AnalyticsDataset = {
   posts: [],
@@ -14,36 +15,18 @@ const EMPTY_DATASET: AnalyticsDataset = {
 };
 
 export function useAnalyticsData() {
-  const [data, setData] = useState<AnalyticsDataset>(EMPTY_DATASET);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const load = useCallback(async (): Promise<AnalyticsDataset> => {
+    const [posts, clients, teamMembers, projects] = await Promise.all([
+      fetchAllPosts(),
+      fetchClients(),
+      fetchTeamMembers(),
+      fetchProjects(),
+    ]);
 
-  const reload = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const [posts, clients, teamMembers, projects] = await Promise.all([
-        fetchAllPosts(),
-        fetchClients(),
-        fetchTeamMembers(),
-        fetchProjects(),
-      ]);
-
-      setData({ posts, clients, teamMembers, projects });
-    } catch (err) {
-      setData(EMPTY_DATASET);
-      setError(
-        err instanceof Error ? err.message : "Failed to load analytics data.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    return { posts, clients, teamMembers, projects };
   }, []);
 
-  useEffect(() => {
-    void reload();
-  }, [reload]);
+  const { data, isLoading, error, reload } = useFetch(load, EMPTY_DATASET);
 
   return { data, isLoading, error, reload };
 }

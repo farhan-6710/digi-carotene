@@ -46,10 +46,11 @@ React · React Router v7 · Tailwind CSS · Shadcn UI · Recharts · Supabase (P
 ```
 src/
   app/         Router, App shell
+  services/    API layer — Supabase client + all data calls
   features/    team-portal, client-portal, public, team-management, …
-  shared/      UI, layouts, utils
+  shared/      UI, layouts, utils, hooks
 docs/          Schema, RLS, per-feature docs
 scripts/migrations/   Numbered SQL migrations
 ```
 
-Agent conventions: [AGENTS.md](AGENTS.md)
+Architecture: [DESIGN.md](DESIGN.md) · Agent conventions: [AGENTS.md](AGENTS.md)

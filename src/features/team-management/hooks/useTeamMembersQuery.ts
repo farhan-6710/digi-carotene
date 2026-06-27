@@ -1,31 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import type { TeamMember } from "@/features/team-management/types/types";
 import { fetchTeamMembers } from "@/services/teamMembersService";
+import { useFetch } from "@/shared/hooks/useFetch";
 
 export function useTeamMembersQuery() {
-  const [members, setMembers] = useState<TeamMember[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const reload = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const data = await fetchTeamMembers();
-      setMembers(data);
-    } catch (err) {
-      setMembers([]);
-      setError(err instanceof Error ? err.message : "Failed to load team members.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void reload();
-  }, [reload]);
+  const load = useCallback(() => fetchTeamMembers(), []);
+  const { data: members, isLoading, error, setError, reload } = useFetch<TeamMember[]>(
+    load,
+    [],
+  );
 
   return { members, isLoading, error, setError, reload };
 }

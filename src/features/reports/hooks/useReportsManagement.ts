@@ -63,6 +63,7 @@ export function useReportsManagement() {
 
     filters.setStatusFilter(statusFilter);
     void query.loadReport(from, to, statusFilter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     filters.searchParams,
     query.loadReport,

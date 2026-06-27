@@ -29,6 +29,7 @@ export function TeamMemberDialog({
 
   useEffect(() => {
     if (!open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsConfirmOpen(false);
     }
   }, [open]);

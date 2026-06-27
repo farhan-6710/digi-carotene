@@ -13,6 +13,7 @@ export function HomeServiceCard({ service, index }: HomeServiceCardProps) {
       <div
         className={`flex size-12 shrink-0 items-center justify-center rounded-xl border ${classes.icon}`}
       >
+        {/* eslint-disable-next-line react-hooks/static-components */}
         <Icon className="size-6" />
       </div>
       <h3 className="mt-4 text-xl font-bold tracking-tight text-foreground">

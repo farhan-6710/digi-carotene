@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import type { Post } from "@/features/posts-management/types/types";
 import { fetchPostsForProjectId } from "@/services/postsService";
@@ -7,65 +7,46 @@ import { orderTeamMembersByIds } from "@/features/team-management/utils/teamMemb
 import { fetchTeamMembersByIds } from "@/services/teamMembersService";
 import type { ProjectListItem } from "@/features/projects-management/types/types";
 import { fetchProjectById } from "@/services/projectsService";
+import { useFetch } from "@/shared/hooks/useFetch";
+
+type ProjectDetail = {
+  project: ProjectListItem | null;
+  posts: Post[];
+  teamMembers: Pick<TeamMember, "id" | "member_name">[];
+};
+
+const EMPTY: ProjectDetail = { project: null, posts: [], teamMembers: [] };
 
 export function useProjectDetailQuery(projectId: string) {
-  const [project, setProject] = useState<ProjectListItem | null>(null);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [teamMembers, setTeamMembers] = useState<
-    Pick<TeamMember, "id" | "member_name">[]
-  >([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const reload = useCallback(async () => {
+  const load = useCallback(async (): Promise<ProjectDetail> => {
     if (!projectId) {
-      setProject(null);
-      setPosts([]);
-      setTeamMembers([]);
-      setIsLoading(false);
-      return;
+      return EMPTY;
     }
 
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const projectRow = await fetchProjectById(projectId);
-
-      if (!projectRow) {
-        setProject(null);
-        setPosts([]);
-        setTeamMembers([]);
-        return;
-      }
-
-      const memberIds = projectRow.team_member_ids;
-      const [postRows, memberRows] = await Promise.all([
-        fetchPostsForProjectId(projectId),
-        memberIds.length > 0
-          ? fetchTeamMembersByIds(memberIds)
-          : Promise.resolve([]),
-      ]);
-
-      setProject(projectRow);
-      setPosts(postRows);
-      setTeamMembers(orderTeamMembersByIds(memberRows, memberIds));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load project.");
-    } finally {
-      setIsLoading(false);
+    const project = await fetchProjectById(projectId);
+    if (!project) {
+      return EMPTY;
     }
+
+    const memberIds = project.team_member_ids;
+    const [posts, memberRows] = await Promise.all([
+      fetchPostsForProjectId(projectId),
+      memberIds.length > 0 ? fetchTeamMembersByIds(memberIds) : Promise.resolve([]),
+    ]);
+
+    return {
+      project,
+      posts,
+      teamMembers: orderTeamMembersByIds(memberRows, memberIds),
+    };
   }, [projectId]);
 
-  useEffect(() => {
-    // eslint-disable-next-line
-    void reload();
-  }, [reload]);
+  const { data, isLoading, error, reload } = useFetch(load, EMPTY);
 
   return {
-    project,
-    posts,
-    teamMembers,
+    project: data.project,
+    posts: data.posts,
+    teamMembers: data.teamMembers,
     isLoading,
     error,
     reload,

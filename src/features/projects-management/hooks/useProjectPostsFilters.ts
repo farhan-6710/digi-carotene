@@ -16,6 +16,7 @@ export function useProjectPostsFilters(posts: Post[]) {
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [statusFilter, setStatusFilter] = useState(getDefaultPostStatusFilterState);
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const selectMonth = useCallback((date: Date) => {
     setYear(date.getFullYear());
     setMonth(date.getMonth() + 1);

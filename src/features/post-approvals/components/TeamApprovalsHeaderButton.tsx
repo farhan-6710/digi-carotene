@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { ClipboardCheck } from "lucide-react";
 
 import { POST_APPROVALS_PATH } from "@/features/post-approvals/constants/postApprovals";
-import { useTeamReviewerAccess } from "@/features/post-approvals/providers/TeamReviewerAccessProvider";
+import { useTeamReviewerAccess } from "@/features/post-approvals/providers/teamReviewerAccessContext";
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
 

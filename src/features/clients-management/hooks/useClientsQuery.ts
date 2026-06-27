@@ -1,29 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import type { Client } from "@/features/clients-management/types/types";
 import { fetchClients } from "@/services/clientsService";
+import { useFetch } from "@/shared/hooks/useFetch";
 
 export function useClientsQuery() {
-  const [clients, setClients] = useState<Client[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const reload = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      setClients(await fetchClients());
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load clients.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void reload();
-  }, [reload]);
+  const load = useCallback(() => fetchClients(), []);
+  const { data: clients, isLoading, error, setError, reload } = useFetch<Client[]>(
+    load,
+    [],
+  );
 
   return { clients, isLoading, error, setError, reload };
 }

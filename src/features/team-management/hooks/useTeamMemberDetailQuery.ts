@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 import type {
   ManagedProjectSummary,
@@ -11,58 +11,44 @@ import {
 } from "@/services/projectTeamMembersService";
 import { splitMemberAssignments } from "@/features/team-management/utils/teamMemberAssignmentUtils";
 import { fetchTeamMemberById } from "@/services/teamMembersService";
+import { useFetch } from "@/shared/hooks/useFetch";
+
+type MemberDetail = {
+  member: TeamMember | null;
+  assignments: MemberProjectAssignment[];
+  managedProjects: ManagedProjectSummary[];
+};
+
+const EMPTY: MemberDetail = { member: null, assignments: [], managedProjects: [] };
 
 export function useTeamMemberDetailQuery(memberId: string) {
-  const [member, setMember] = useState<TeamMember | null>(null);
-  const [assignments, setAssignments] = useState<MemberProjectAssignment[]>([]);
-  const [managedProjects, setManagedProjects] = useState<ManagedProjectSummary[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const reload = useCallback(async () => {
+  const load = useCallback(async (): Promise<MemberDetail> => {
     if (!memberId) {
-      setMember(null);
-      setAssignments([]);
-      setManagedProjects([]);
-      setIsLoading(false);
-      return;
+      return EMPTY;
     }
 
-    setIsLoading(true);
-    setError(null);
+    const [member, assignments, managedProjects] = await Promise.all([
+      fetchTeamMemberById(memberId),
+      fetchMemberProjectAssignments(memberId),
+      fetchManagedProjects(memberId),
+    ]);
 
-    try {
-      const [memberRow, assignmentRows, managedRows] = await Promise.all([
-        fetchTeamMemberById(memberId),
-        fetchMemberProjectAssignments(memberId),
-        fetchManagedProjects(memberId),
-      ]);
-
-      setMember(memberRow);
-      setAssignments(assignmentRows);
-      setManagedProjects(managedRows);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load team member.");
-    } finally {
-      setIsLoading(false);
-    }
+    return { member, assignments, managedProjects };
   }, [memberId]);
 
-  useEffect(() => {
-    void reload();
-  }, [reload]);
+  const { data, isLoading, error, setError, reload } = useFetch(load, EMPTY);
 
   const { active: activeAssignments, past: pastAssignments } = useMemo(
-    () => splitMemberAssignments(assignments),
-    [assignments],
+    () => splitMemberAssignments(data.assignments),
+    [data.assignments],
   );
 
   return {
-    member,
-    assignments,
+    member: data.member,
+    assignments: data.assignments,
     activeAssignments,
     pastAssignments,
-    managedProjects,
+    managedProjects: data.managedProjects,
     isLoading,
     error,
     setError,

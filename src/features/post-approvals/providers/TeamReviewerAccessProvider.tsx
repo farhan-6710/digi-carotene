@@ -1,22 +1,13 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { POST_APPROVALS_UPDATED_EVENT } from "@/features/post-approvals/constants/postApprovals";
 import { canAccessApprovalsNav } from "@/features/post-approvals/utils/postApprovalRules";
+import { TeamReviewerAccessContext } from "@/features/post-approvals/providers/teamReviewerAccessContext";
 import {
   countPendingApprovalsForReviewer,
   managesAnyProject,
 } from "@/services/postApprovalsService";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-
-type TeamReviewerAccessContextValue = {
-  managesProject: boolean;
-  canReview: boolean;
-  pendingCount: number;
-  reload: () => Promise<void>;
-};
-
-const TeamReviewerAccessContext =
-  createContext<TeamReviewerAccessContextValue | null>(null);
 
 export function TeamReviewerAccessProvider({ children }: { children: ReactNode }) {
   const { teamMemberId, teamRole } = useAuth();
@@ -55,6 +46,7 @@ export function TeamReviewerAccessProvider({ children }: { children: ReactNode }
   }, [teamMemberId, teamRole]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void reload();
 
     const handleUpdated = () => {
@@ -69,12 +61,7 @@ export function TeamReviewerAccessProvider({ children }: { children: ReactNode }
   }, [reload]);
 
   const value = useMemo(
-    () => ({
-      managesProject,
-      canReview,
-      pendingCount,
-      reload,
-    }),
+    () => ({ managesProject, canReview, pendingCount, reload }),
     [canReview, managesProject, pendingCount, reload],
   );
 
@@ -83,13 +70,4 @@ export function TeamReviewerAccessProvider({ children }: { children: ReactNode }
       {children}
     </TeamReviewerAccessContext.Provider>
   );
-}
-
-export function useTeamReviewerAccess(): TeamReviewerAccessContextValue {
-  const context = useContext(TeamReviewerAccessContext);
-  if (!context) {
-    throw new Error("useTeamReviewerAccess must be used within TeamReviewerAccessProvider.");
-  }
-
-  return context;
 }
