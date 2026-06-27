@@ -1,4 +1,5 @@
 import type { Profile } from "@/features/auth/types/profile";
+import { hasEstablishedPortalAccess } from "@/features/auth/utils/profileAccessUtils";
 import { supabase } from "@/shared/lib/supabase";
 
 async function linkedTeamMemberExists(teamMemberId: string): Promise<boolean> {
@@ -22,6 +23,10 @@ async function linkedClientExists(clientId: string): Promise<boolean> {
 }
 
 export async function validateProfileLinks(profile: Profile): Promise<Profile> {
+  if (hasEstablishedPortalAccess(profile)) {
+    return profile;
+  }
+
   let teamMemberId = profile.team_member_id;
   let clientId = profile.client_id;
 

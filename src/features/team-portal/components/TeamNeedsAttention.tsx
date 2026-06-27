@@ -1,11 +1,13 @@
 import { TeamDashboardPostList } from "@/features/team-portal/components/TeamDashboardPostList";
-import { useTeamDashboardPostStatusChange } from "@/features/team-portal/hooks/useTeamDashboardPostStatusChange";
-import { useTeamNeedsAttentionQuery } from "@/features/team-portal/hooks/useTeamNeedsAttentionQuery";
+import type { TeamNeedsAttentionProps } from "@/features/team-portal/types/components";
 
-export function TeamNeedsAttention() {
-  const { items, isLoading, error, removeItem } = useTeamNeedsAttentionQuery();
-  const { changeStatus, updatingPostId } = useTeamDashboardPostStatusChange();
-
+export function TeamNeedsAttention({
+  items,
+  isLoading,
+  error,
+  updatingPostId,
+  onStatusChange,
+}: TeamNeedsAttentionProps) {
   return (
     <TeamDashboardPostList
       title="Needs Attention"
@@ -14,18 +16,7 @@ export function TeamNeedsAttention() {
       error={error}
       emptyMessage="No other not posted posts right now."
       updatingPostId={updatingPostId}
-      onStatusChange={(postId, status) => {
-        const item = items.find((row) => row.id === postId);
-        if (!item) {
-          return;
-        }
-
-        void changeStatus(postId, status, item.postStatus, (id, newStatus) => {
-          if (newStatus !== "Not posted") {
-            removeItem(id);
-          }
-        });
-      }}
+      onStatusChange={onStatusChange}
     />
   );
 }

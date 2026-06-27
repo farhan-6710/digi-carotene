@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import {
   CLIENT_HOME,
@@ -64,6 +64,8 @@ export function useProfileAccessSync({
   profile,
   refreshProfile,
 }: UseProfileAccessSyncOptions) {
+  const wasHiddenRef = useRef(false);
+
   useEffect(() => {
     if (loading || !userId) {
       return;
@@ -77,21 +79,21 @@ export function useProfileAccessSync({
       return;
     }
 
-    const handleRefresh = () => {
-      void refreshProfile();
-    };
-
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
+      if (document.visibilityState === "hidden") {
+        wasHiddenRef.current = true;
+        return;
+      }
+
+      if (document.visibilityState === "visible" && wasHiddenRef.current) {
+        wasHiddenRef.current = false;
         void refreshProfile();
       }
     };
 
-    window.addEventListener("focus", handleRefresh);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      window.removeEventListener("focus", handleRefresh);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [refreshProfile, userId]);

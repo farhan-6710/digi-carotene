@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
+import { useTeamReviewerAccess } from "@/features/post-approvals/providers/TeamReviewerAccessProvider";
 import { canAccessApprovalsNav } from "@/features/post-approvals/utils/postApprovalRules";
-import { managesAnyProject } from "@/features/post-approvals/utils/postApprovalsRepository";
 import {
   approvalsNavItem,
   primaryNav,
@@ -11,25 +11,8 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import type { ShellSidebarConfig } from "@/shared/types/components";
 
 export function useTeamShellConfig(): ShellSidebarConfig {
-  const { teamRole, teamMemberId } = useAuth();
-  const [managesProject, setManagesProject] = useState(false);
-
-  const loadReviewerAccess = useCallback(async () => {
-    if (!teamMemberId) {
-      setManagesProject(false);
-      return;
-    }
-
-    try {
-      setManagesProject(await managesAnyProject(teamMemberId));
-    } catch {
-      setManagesProject(false);
-    }
-  }, [teamMemberId]);
-
-  useEffect(() => {
-    void loadReviewerAccess();
-  }, [loadReviewerAccess]);
+  const { teamRole } = useAuth();
+  const { managesProject } = useTeamReviewerAccess();
 
   return useMemo(() => {
     const showApprovals = canAccessApprovalsNav(teamRole, managesProject);

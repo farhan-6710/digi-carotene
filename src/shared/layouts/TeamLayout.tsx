@@ -1,8 +1,9 @@
 import { TeamApprovalsHeaderButton } from "@/features/post-approvals/components/TeamApprovalsHeaderButton";
 import { useTeamShellConfig } from "@/features/post-approvals/hooks/useTeamShellConfig";
+import { TeamReviewerAccessProvider } from "@/features/post-approvals/providers/TeamReviewerAccessProvider";
 import { AppShellLayout } from "@/shared/layouts/AppShellLayout";
 
-export function TeamLayout() {
+function TeamLayoutShell() {
   const sidebarConfig = useTeamShellConfig();
 
   return (
@@ -13,5 +14,13 @@ export function TeamLayout() {
       mobileNavDescription="Team portal navigation links and quick actions"
       scrollContainerId="team-portal"
     />
+  );
+}
+
+export function TeamLayout() {
+  return (
+    <TeamReviewerAccessProvider>
+      <TeamLayoutShell />
+    </TeamReviewerAccessProvider>
   );
 }

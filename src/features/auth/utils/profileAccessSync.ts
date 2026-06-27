@@ -1,6 +1,7 @@
 import type { User } from "@supabase/supabase-js";
 
 import type { Profile } from "@/features/auth/types/profile";
+import { hasEstablishedPortalAccess } from "@/features/auth/utils/profileAccessUtils";
 import { supabase } from "@/shared/lib/supabase";
 
 function normalizePortalEmail(email: string): string {
@@ -75,6 +76,10 @@ export async function syncProfileAccessForUser(
   user: User,
   profile: Profile,
 ): Promise<Profile> {
+  if (hasEstablishedPortalAccess(profile)) {
+    return profile;
+  }
+
   const email = user.email ? normalizePortalEmail(user.email) : null;
   if (!email) {
     return profile;

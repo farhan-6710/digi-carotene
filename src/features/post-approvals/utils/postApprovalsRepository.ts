@@ -92,8 +92,59 @@ export async function countPendingApprovalsForReviewer(
   teamMemberId: string,
   teamRole: TeamMemberRole,
 ): Promise<number> {
-  const requests = await fetchPendingApprovalsForReviewer(teamMemberId, teamRole);
-  return requests.length;
+  if (teamRole === "admin") {
+    const { count, error } = await supabase
+      .from("post_approval_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending");
+
+    if (error) {
+      throw error;
+    }
+
+    return count ?? 0;
+  }
+
+  if (teamRole === "manager") {
+    const { count, error } = await supabase
+      .from("post_approval_requests")
+      .select("id, projects!inner(manager_id)", { count: "exact", head: true })
+      .eq("status", "pending")
+      .eq("projects.manager_id", teamMemberId);
+
+    if (error) {
+      throw error;
+    }
+
+    return count ?? 0;
+  }
+
+  return 0;
+}
+
+const managesProjectCache = new Map<string, Promise<boolean>>();
+
+export async function managesAnyProject(teamMemberId: string): Promise<boolean> {
+  const cached = managesProjectCache.get(teamMemberId);
+  if (cached) {
+    return cached;
+  }
+
+  const promise = (async () => {
+    const { count, error } = await supabase
+      .from("projects")
+      .select("id", { count: "exact", head: true })
+      .eq("manager_id", teamMemberId);
+
+    if (error) {
+      throw error;
+    }
+
+    return (count ?? 0) > 0;
+  })();
+
+  managesProjectCache.set(teamMemberId, promise);
+  return promise;
 }
 
 export async function approvePostApprovalRequest(
@@ -173,17 +224,4 @@ export async function rejectPostApprovalRequest(
 
   notifyPostApprovalsUpdated();
   return mapDbRowToPostApprovalRequest(data);
-}
-
-export async function managesAnyProject(teamMemberId: string): Promise<boolean> {
-  const { count, error } = await supabase
-    .from("projects")
-    .select("id", { count: "exact", head: true })
-    .eq("manager_id", teamMemberId);
-
-  if (error) {
-    throw error;
-  }
-
-  return (count ?? 0) > 0;
 }

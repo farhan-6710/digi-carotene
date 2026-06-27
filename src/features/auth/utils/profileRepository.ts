@@ -1,20 +1,23 @@
 import { supabase } from "@/shared/lib/supabase";
 import type { Profile } from "@/features/auth/types/profile";
+import { dedupeAsync } from "@/shared/utils/dedupeAsync";
 
 export async function fetchProfileByUserId(
   userId: string,
 ): Promise<Profile | null> {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("id, role, client_id, team_member_id")
-    .eq("id", userId)
-    .maybeSingle();
+  return dedupeAsync(`profile:${userId}`, async () => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, role, client_id, team_member_id")
+      .eq("id", userId)
+      .maybeSingle();
 
-  if (error) {
-    throw error;
-  }
+    if (error) {
+      throw error;
+    }
 
-  return (data as Profile | null) ?? null;
+    return (data as Profile | null) ?? null;
+  });
 }
 
 export async function resetProfilesForTeamMember(

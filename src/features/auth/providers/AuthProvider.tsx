@@ -2,6 +2,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -34,19 +35,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [teamRole, setTeamRole] = useState<TeamMemberRole | null>(null);
   const [authReady, setAuthReady] = useState(false);
-  const [profileReady, setProfileReady] = useState(true);
+  const userRef = useRef<User | null>(null);
+  const profileLoadUserIdRef = useRef<string | null>(null);
+
+  userRef.current = user;
 
   const clearSession = useCallback(async () => {
     await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
     setTeamRole(null);
+    profileLoadUserIdRef.current = null;
   }, []);
 
   const loadProfile = useCallback(
-    async (authUser: User, options?: { silent?: boolean }) => {
-      if (!options?.silent) {
-        setProfileReady(false);
+    async (authUser: User, options?: { force?: boolean }) => {
+      if (!options?.force && profileLoadUserIdRef.current === authUser.id) {
+        return;
       }
 
       try {
@@ -55,35 +60,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await clearSession();
           return;
         }
+
+        profileLoadUserIdRef.current = authUser.id;
         setProfile(nextProfile);
       } catch {
         await clearSession();
-      } finally {
-        setProfileReady(true);
       }
     },
     [clearSession],
   );
 
   const refreshProfile = useCallback(async () => {
-    if (!user) {
+    const authUser = userRef.current;
+    if (!authUser) {
       return;
     }
 
-    await loadProfile(user, { silent: true });
-  }, [loadProfile, user]);
+    await loadProfile(authUser, { force: true });
+  }, [loadProfile]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!isMounted) {
-        return;
-      }
-      setUser(session?.user ?? null);
-      setAuthReady(true);
-    });
-
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -92,36 +88,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => {
-      isMounted = false;
       subscription.unsubscribe();
     };
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      // eslint-disable-next-line
+    const userId = user?.id ?? null;
+
+    if (!userId) {
+      profileLoadUserIdRef.current = null;
       setProfile(null);
-      setProfileReady(true);
+      setTeamRole(null);
       return;
     }
 
-    let isMounted = true;
+    const authUser = userRef.current;
+    if (!authUser) {
+      return;
+    }
 
-    void loadProfile(user).then(() => {
-      if (!isMounted) {
-        return;
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [user, loadProfile]);
+    void loadProfile(authUser);
+  }, [user?.id, loadProfile]);
 
   useEffect(() => {
     const teamMemberId = profile?.team_member_id;
     if (!teamMemberId) {
-      // eslint-disable-next-line
       setTeamRole(null);
       return;
     }
@@ -145,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [profile?.team_member_id]);
 
-  const loading = !authReady || (user !== null && !profileReady);
+  const loading = !authReady || (user !== null && profile === null);
 
   useProfileAccessSync({
     userId: user?.id,
