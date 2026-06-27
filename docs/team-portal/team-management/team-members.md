@@ -95,7 +95,7 @@ type ManagedProjectSummary = {
 };
 ```
 
-### Repository inputs
+### Service inputs
 
 ```ts
 type CreateTeamMemberInput = {

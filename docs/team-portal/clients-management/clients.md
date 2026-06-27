@@ -51,7 +51,7 @@ type Client = {
 };
 ```
 
-### Repository inputs
+### Service inputs
 
 ```ts
 type CreateClientInput = {

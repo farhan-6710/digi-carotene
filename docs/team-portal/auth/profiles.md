@@ -36,7 +36,7 @@ One function — `link_profile_by_email(email)` — plus triggers:
 
 Team member email wins if both match. Lookup is by indexed email on `auth.users` — one profile row updated, no table scan.
 
-Requires `clients.email` (migration 009). If linking still fails after the staff → team rename, run `014_fix_link_profile_team_role.sql` and `015_ensure_profile_link_triggers.sql`.
+Requires `clients.email` (migration 009). If linking still fails, re-run `011_auto_link_profiles_by_email.sql` and `015_ensure_profile_link_triggers.sql` (015 makes `link_profile_by_email` set `role = 'team'` and re-creates the triggers).
 
 ### App fallback link
 

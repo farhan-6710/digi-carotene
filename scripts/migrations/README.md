@@ -14,7 +14,7 @@ Run only migrations you have **not** applied yet, in order:
 
 | File | When to run |
 |------|-------------|
-| `002_rename_profiles_admin_role_to_team.sql` | `profiles.role` still contains `'admin'` |
+| `002_rename_profiles_admin_role_to_staff.sql` | `profiles.role` still contains `'admin'` (renames it to `'team'`) |
 | `003_rename_team_members_role_column.sql` | `team_members` still has column `role` (not `admin_team_role`) |
 | `004_is_team_member_email_function.sql` | `is_team_member_email()` does not exist |
 | `005_signup_default_user_role.sql` | Signup still creates `profiles.role = 'client'` |
@@ -26,7 +26,7 @@ Run only migrations you have **not** applied yet, in order:
 | `011_auto_link_profiles_by_email.sql` | DB triggers: link profile on team member / client save or signup |
 | `012_rename_scheduled_to_to_be_posted.sql` | Rename `scheduled_date/time` → `to_be_posted_date/time`; clear stale posted fields |
 | `013_post_approval_requests.sql` | Backdated post approval requests for executives |
-| `014_fix_link_profile_team_role.sql` | Fix `link_profile_by_email` to set `profiles.role = 'team'` (not `staff`) |
+| `015_ensure_profile_link_triggers.sql` | Re-create profile auto-link triggers + signup hook; ensure `link_profile_by_email` sets `profiles.role = 'team'` and grant its execute (idempotent) |
 
 Also rename `team_members.admin_team_role` → `team_role` in Supabase (Table Editor or SQL) before running app code that expects `team_role`.
 

@@ -123,7 +123,7 @@ type Slot = {
 };
 ```
 
-### Repository inputs
+### Service inputs
 
 ```ts
 type CreatePostInput = {

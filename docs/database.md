@@ -10,7 +10,7 @@ Run **only** [`scripts/migrations/001_initial_schema.sql`](../scripts/migrations
 
 ## Existing project
 
-Run only migrations you have not applied yet (`002`–`005`), in order. Skip any step already reflected in your database.
+Run only the migrations you have not applied yet, in order (`002` onward). See [`scripts/migrations/README.md`](../scripts/migrations/README.md) for the per-file checklist, and skip any step already reflected in your database.
 
 **Do not** edit old migration files after they have been applied. Add a new numbered file for every schema change.
 

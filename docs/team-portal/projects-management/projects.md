@@ -123,7 +123,7 @@ type ManagedProject = {
 };
 ```
 
-### Repository inputs
+### Service inputs
 
 ```ts
 type CreateProjectInput = {
