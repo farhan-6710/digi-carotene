@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useLocation } from "react-router";
 import { Menu, Moon, Search, Sun } from "lucide-react";
 
 import { useTheme } from "@/shared/providers/ThemeProvider";
@@ -32,14 +32,15 @@ export function AppShellLayout({
   const displayName = getUserDisplayName(user);
   const initials = getUserInitials(user);
   const avatarUrl = getUserAvatarUrl(user);
+  const { pathname } = useLocation();
 
   return (
     <>
-      <div className="min-h-dvh bg-background text-foreground md:grid md:grid-cols-[auto_minmax(0,1fr)]">
+      <div className="fixed inset-0 grid grid-cols-[auto_minmax(0,1fr)] overflow-hidden bg-background text-foreground">
         <ShellSidebar config={sidebarConfig} collapsed={isSidebarCollapsed} />
 
-        <div className="min-w-0">
-          <header className="sticky top-0 z-20 flex items-center gap-4 border-b border-border/60 bg-card px-4 py-4 sm:px-6">
+        <div className="grid min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)] overflow-hidden">
+          <header className="flex shrink-0 items-center gap-4 border-b border-border/60 bg-card px-4 py-4 sm:px-6">
             <Button
               type="button"
               variant="secondary"
@@ -108,7 +109,10 @@ export function AppShellLayout({
             </div>
           </header>
 
-          <main className="px-6 py-6 lg:px-8">
+          <main
+            key={pathname}
+            className="min-h-0 overflow-y-auto px-6 py-6 lg:px-8"
+          >
             <Outlet />
           </main>
         </div>

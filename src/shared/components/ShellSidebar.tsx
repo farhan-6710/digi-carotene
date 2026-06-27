@@ -132,7 +132,7 @@ export function ShellSidebar({ config, collapsed }: ShellSidebarProps) {
     <TooltipProvider>
       <aside
         className={[
-          "sticky top-0 hidden h-dvh shrink-0 border-r border-sidebar-border/80 bg-sidebar text-sidebar-foreground md:block",
+          "hidden min-h-0 shrink-0 border-r border-sidebar-border/80 bg-sidebar text-sidebar-foreground md:block",
           "transition-[width] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
           collapsed ? "w-20" : "w-64",
         ].join(" ")}
