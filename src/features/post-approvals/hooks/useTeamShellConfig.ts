@@ -17,11 +17,7 @@ export function useTeamShellConfig(): ShellSidebarConfig {
   return useMemo(() => {
     const showApprovals = canAccessApprovalsNav(teamRole, managesProject);
     const nav = showApprovals
-      ? [
-          ...primaryNav.slice(0, 5),
-          approvalsNavItem,
-          ...primaryNav.slice(5),
-        ]
+      ? [...primaryNav.slice(0, 5), approvalsNavItem, ...primaryNav.slice(5)]
       : primaryNav;
 
     return {

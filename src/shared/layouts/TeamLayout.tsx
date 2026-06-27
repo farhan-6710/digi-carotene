@@ -12,7 +12,6 @@ function TeamLayoutShell() {
       accountPath="/team-portal/account"
       headerActions={<TeamApprovalsHeaderButton />}
       mobileNavDescription="Team portal navigation links and quick actions"
-      scrollContainerId="team-portal"
     />
   );
 }

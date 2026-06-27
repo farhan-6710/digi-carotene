@@ -124,7 +124,6 @@ export type AppShellLayoutProps = {
   headerCenter?: ReactNode;
   headerActions?: ReactNode;
   mobileNavDescription: string;
-  scrollContainerId?: string;
 };
 
 export type DetailPageLoadingProps = {

@@ -6,10 +6,13 @@ import { useFetch } from "@/shared/hooks/useFetch";
 
 export function useClientsQuery() {
   const load = useCallback(() => fetchClients(), []);
-  const { data: clients, isLoading, error, setError, reload } = useFetch<Client[]>(
-    load,
-    [],
-  );
+  const {
+    data: clients,
+    isLoading,
+    error,
+    setError,
+    reload,
+  } = useFetch<Client[]>(load, []);
 
   return { clients, isLoading, error, setError, reload };
 }

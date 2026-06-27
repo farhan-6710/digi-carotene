@@ -41,7 +41,9 @@ export function usePostApprovalsQuery({
       setRequests(nextRequests);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to load approval requests.",
+        err instanceof Error
+          ? err.message
+          : "Failed to load approval requests.",
       );
       setRequests([]);
     } finally {

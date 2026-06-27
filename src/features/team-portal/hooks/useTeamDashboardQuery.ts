@@ -38,8 +38,12 @@ export function useTeamDashboardQuery() {
     setError(null);
 
     try {
-      const { counts: nextCounts, todayPosts, notPostedPosts, currentMonthPosts } =
-        await fetchTeamDashboardPostsBundle();
+      const {
+        counts: nextCounts,
+        todayPosts,
+        notPostedPosts,
+        currentMonthPosts,
+      } = await fetchTeamDashboardPostsBundle();
 
       setCounts({
         clientsCount: nextCounts.clientsCount,
@@ -129,10 +133,7 @@ export function useTeamDashboardQuery() {
     }));
   }, []);
 
-  const statCards = useMemo(
-    () => buildTeamStatCards(counts),
-    [counts],
-  );
+  const statCards = useMemo(() => buildTeamStatCards(counts), [counts]);
 
   return {
     statCards,

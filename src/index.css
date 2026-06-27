@@ -241,10 +241,6 @@ body {
   color: var(--foreground);
 }
 
-.main-content {
-  min-height: 100dvh;
-}
-
 /* custom scrollbar css */
 
 /* width */

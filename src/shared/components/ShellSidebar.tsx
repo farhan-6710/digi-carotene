@@ -31,7 +31,7 @@ export function ShellSidebarContent({
       <Link
         to={config.homeLink}
         onClick={onNavigate}
-        className="flex items-center justify-center border-b border-sidebar-border/80 p-4.5"
+        className="flex items-center justify-center border-b border-sidebar-border/80 p-4"
       >
         <div
           className={
@@ -60,7 +60,7 @@ export function ShellSidebarContent({
         </div>
       </Link>
 
-      <nav className="flex-1 space-y-1.5 p-4">
+      <nav className="min-h-0 flex-1 space-y-1.5 overflow-y-auto p-4">
         {config.nav.map((item) => {
           const Icon = shellNavIcons[item.icon];
           const navLinkEl = (
@@ -132,7 +132,7 @@ export function ShellSidebar({ config, collapsed }: ShellSidebarProps) {
     <TooltipProvider>
       <aside
         className={[
-          "hidden h-full shrink-0 border-r border-sidebar-border/80 bg-sidebar text-sidebar-foreground md:block",
+          "sticky top-0 hidden h-dvh shrink-0 border-r border-sidebar-border/80 bg-sidebar text-sidebar-foreground md:block",
           "transition-[width] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]",
           collapsed ? "w-20" : "w-64",
         ].join(" ")}

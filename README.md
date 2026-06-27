@@ -11,14 +11,14 @@ Service management app for **Digi Carotene**, a digital marketing agency.
 
 ## Features (team)
 
-| Area | What |
-|------|------|
-| Dashboard | Workload, publishing chart, posts needing attention |
-| Team | Team roles, contact details, project history |
-| Clients | Company registry |
-| Projects | Social links, manager, team assignments |
-| Posts | Month calendar — `Not posted`, `Scheduled`, `Posted` |
-| Analytics & Reports | Agency and client activity |
+| Area                | What                                                 |
+| ------------------- | ---------------------------------------------------- |
+| Dashboard           | Workload, publishing chart, posts needing attention  |
+| Team                | Team roles, contact details, project history         |
+| Clients             | Company registry                                     |
+| Projects            | Social links, manager, team assignments              |
+| Posts               | Month calendar — `Not posted`, `Scheduled`, `Posted` |
+| Analytics & Reports | Agency and client activity                           |
 
 Public marketing site (home, about, contact) plus auth at `/auth`.
 

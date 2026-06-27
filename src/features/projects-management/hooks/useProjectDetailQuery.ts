@@ -31,7 +31,9 @@ export function useProjectDetailQuery(projectId: string) {
     const memberIds = project.team_member_ids;
     const [posts, memberRows] = await Promise.all([
       fetchPostsForProjectId(projectId),
-      memberIds.length > 0 ? fetchTeamMembersByIds(memberIds) : Promise.resolve([]),
+      memberIds.length > 0
+        ? fetchTeamMembersByIds(memberIds)
+        : Promise.resolve([]),
     ]);
 
     return {

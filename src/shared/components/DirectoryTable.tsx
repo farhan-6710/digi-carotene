@@ -23,7 +23,7 @@ export function DirectoryTable({
         {headerAside ? <div className="shrink-0">{headerAside}</div> : null}
       </div>
 
-      <div className="border-t border-border">
+      <div className="overflow-x-auto border-t border-border">
         <div
           className={cn(
             "grid gap-4 bg-muted px-6 py-3 text-xs font-semibold tracking-wider text-muted-foreground max-sm:hidden",
