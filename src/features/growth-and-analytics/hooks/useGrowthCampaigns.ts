@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { fetchAdAccounts } from "@/services/growthAccountsService";
 import { fetchCampaignMetrics } from "@/services/growthAnalyticsService";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { showToast } from "@/shared/utils/showToast";
 
 import type { AdAccount, CampaignMetricRow } from "../types/types";
 import {
@@ -10,6 +11,8 @@ import {
   buildCampaignStatCards,
   buildSpendTrend,
 } from "../utils/campaignMetrics";
+import { saveGrowthReport } from "../utils/generateReport";
+import { resolveGrowthReportPeriod } from "../utils/reportPeriod";
 import { useGrowthDateRange } from "./useGrowthDateRange";
 
 const NO_ACCOUNTS: AdAccount[] = [];
@@ -22,6 +25,7 @@ export function useGrowthCampaigns() {
   const { data: accounts } = useFetch<AdAccount[]>(loadAccounts, NO_ACCOUNTS);
 
   const [selectedId, setSelectedId] = useState("");
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const activeAccount =
     accounts.find((account) => account.id === selectedId) ?? accounts[0];
   const adAccountId = activeAccount?.id ?? "";
@@ -56,6 +60,27 @@ export function useGrowthCampaigns() {
   const spendTrend = useMemo(() => buildSpendTrend(metrics), [metrics]);
   const campaignRows = useMemo(() => buildCampaignRows(metrics), [metrics]);
 
+  const generateReport = useCallback(async () => {
+    if (!activeAccount) {
+      showToast("error", "Connect an ad account before generating a report.");
+      return;
+    }
+
+    const { periodStart, periodEnd } = resolveGrowthReportPeriod(range);
+    setIsGeneratingReport(true);
+    try {
+      await saveGrowthReport({
+        title: `${activeAccount.accountName} — Campaign Analytics`,
+        type: "campaigns",
+        platform: "campaigns",
+        periodStart,
+        periodEnd,
+      });
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  }, [activeAccount, range]);
+
   return {
     accountOptions,
     adAccountId,
@@ -67,5 +92,8 @@ export function useGrowthCampaigns() {
     error,
     dateFilterProps,
     periodLabel,
+    generateReport,
+    isGeneratingReport,
+    hasAccounts: accounts.length > 0,
   };
 }

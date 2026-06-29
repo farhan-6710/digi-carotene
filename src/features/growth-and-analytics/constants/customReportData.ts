@@ -1,13 +1,3 @@
-import type { CustomReportFormState } from "../types/components";
-
-export const reportableAccounts = [
-  { id: "armario", label: "Armario Pro", platform: "Instagram" },
-  { id: "bloom", label: "Bloom Theory Cafe", platform: "Instagram" },
-  { id: "otc", label: "OTC Kompally", platform: "Facebook" },
-  { id: "sorshe", label: "Sorshe", platform: "Instagram" },
-  { id: "ninties", label: "90's Authentic Kitchen", platform: "Facebook" },
-];
-
 export const reportMetrics = [
   { id: "followers", label: "Follower growth" },
   { id: "reach", label: "Reach & impressions" },
@@ -24,7 +14,7 @@ export const reportFormatOptions = [
 ];
 
 export const defaultCustomReportForm = {
-  selectedAccountIds: ["armario", "bloom"],
+  selectedAccountIds: [] as string[],
   selectedMetricIds: ["followers", "reach", "engagement", "topPosts"],
   format: "pdf",
-} satisfies Omit<CustomReportFormState, "startDate" | "endDate">;
+};

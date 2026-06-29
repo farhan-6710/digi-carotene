@@ -3,6 +3,7 @@ import { GrowthTrendChart } from "../components/charts/GrowthTrendChart";
 import { TopAccountsTable } from "../components/tables/TopAccountsTable";
 import { useGrowthDashboard } from "../hooks/useGrowthDashboard";
 import { DateFilters } from "@/shared/components/DateFilters";
+import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatsCards } from "@/shared/components/StatsCards";
@@ -14,6 +15,7 @@ export function GrowthDashboardPage() {
     platformSplit,
     topAccounts,
     isLoading,
+    error,
     dateFilterProps,
   } = useGrowthDashboard();
 
@@ -24,6 +26,8 @@ export function GrowthDashboardPage() {
         description="Cross-account view of audience growth, reach, and engagement performance."
         actions={<DateFilters {...dateFilterProps} />}
       />
+
+      {error ? <ErrorBanner message={error} /> : null}
 
       <StatsCards cards={statCards} isLoading={isLoading} />
 

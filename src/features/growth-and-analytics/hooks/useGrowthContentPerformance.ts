@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { fetchOrganicAccounts } from "@/services/growthAccountsService";
 import { fetchPosts } from "@/services/growthAnalyticsService";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { showToast } from "@/shared/utils/showToast";
 
 import type { OrganicAccount, PostRow } from "../types/types";
 import {
@@ -11,6 +12,8 @@ import {
   buildEngagementByType,
   mapPostRows,
 } from "../utils/contentMetrics";
+import { saveGrowthReport } from "../utils/generateReport";
+import { resolveGrowthReportPeriod } from "../utils/reportPeriod";
 import { useGrowthDateRange } from "./useGrowthDateRange";
 
 const NO_ACCOUNTS: OrganicAccount[] = [];
@@ -27,7 +30,10 @@ export function useGrowthContentPerformance() {
   const { data: accounts } = useFetch<OrganicAccount[]>(loadAccounts, NO_ACCOUNTS);
 
   const [selectedId, setSelectedId] = useState("");
-  const accountId = selectedId || accounts[0]?.id || "";
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const activeAccount =
+    accounts.find((account) => account.id === selectedId) ?? accounts[0];
+  const accountId = activeAccount?.id ?? "";
 
   const loadPosts = useCallback(
     () => (accountId ? fetchPosts(accountId, range) : Promise.resolve(NO_POSTS)),
@@ -49,6 +55,27 @@ export function useGrowthContentPerformance() {
   const engagementByType = useMemo(() => buildEngagementByType(posts), [posts]);
   const postRows = useMemo(() => mapPostRows(posts), [posts]);
 
+  const generateReport = useCallback(async () => {
+    if (!activeAccount) {
+      showToast("error", "Connect an organic account before generating a report.");
+      return;
+    }
+
+    const { periodStart, periodEnd } = resolveGrowthReportPeriod(range);
+    setIsGeneratingReport(true);
+    try {
+      await saveGrowthReport({
+        title: `${activeAccount.accountName} — Content Performance`,
+        type: "content_performance",
+        platform: activeAccount.platform,
+        periodStart,
+        periodEnd,
+      });
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  }, [activeAccount, range]);
+
   return {
     accountOptions,
     accountId,
@@ -61,5 +88,8 @@ export function useGrowthContentPerformance() {
     error,
     dateFilterProps,
     periodLabel,
+    generateReport,
+    isGeneratingReport,
+    hasAccounts: accounts.length > 0,
   };
 }

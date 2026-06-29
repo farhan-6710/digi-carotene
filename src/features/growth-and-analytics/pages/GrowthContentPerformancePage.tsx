@@ -3,8 +3,8 @@ import { GrowthBarChart } from "../components/charts/GrowthBarChart";
 import { GrowthDonutChart } from "../components/charts/GrowthDonutChart";
 import { ContentPostsTable } from "../components/tables/ContentPostsTable";
 import { useGrowthContentPerformance } from "../hooks/useGrowthContentPerformance";
-import { generateGrowthReport } from "../utils/generateReport";
 import { DateFilters } from "@/shared/components/DateFilters";
+import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatsCards } from "@/shared/components/StatsCards";
@@ -20,8 +20,11 @@ export function GrowthContentPerformancePage() {
     engagementByType,
     postRows,
     isLoading,
+    error,
     dateFilterProps,
-    periodLabel,
+    generateReport,
+    isGeneratingReport,
+    hasAccounts,
   } = useGrowthContentPerformance();
 
   return (
@@ -33,14 +36,17 @@ export function GrowthContentPerformancePage() {
           <div className="flex flex-wrap items-center justify-end gap-2">
             <DateFilters {...dateFilterProps} />
             <Button
-              onClick={() => generateGrowthReport(periodLabel)}
+              onClick={() => void generateReport()}
+              disabled={!hasAccounts || isGeneratingReport}
               className="rounded-full"
             >
-              Generate Report
+              {isGeneratingReport ? "Saving..." : "Generate Report"}
             </Button>
           </div>
         }
       />
+
+      {error ? <ErrorBanner message={error} /> : null}
 
       <GrowthAccountComboBox
         label="Account"

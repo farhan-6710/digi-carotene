@@ -9,6 +9,7 @@ import type {
   LabeledValue,
   OrganicAccount,
   OrganicAccountForm,
+  ReportableAccount,
   ReportRow,
   ReportType,
   SpendPoint,
@@ -67,6 +68,7 @@ export type CampaignTableProps = {
 
 export type ReportsTableProps = {
   rows: ReportRow[];
+  isLoading?: boolean;
 };
 
 export type GrowthReportTabsProps = {
@@ -126,6 +128,10 @@ export type CustomReportFormState = {
 
 export type CustomReportBuilderFormProps = {
   values: CustomReportFormState;
+  accounts: ReportableAccount[];
+  isAccountsLoading?: boolean;
+  accountsEmpty?: boolean;
+  isGenerating?: boolean;
   onToggleAccount: (id: string) => void;
   onToggleMetric: (id: string) => void;
   onFieldChange: <Field extends "startDate" | "endDate" | "format">(

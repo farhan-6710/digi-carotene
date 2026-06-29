@@ -14,7 +14,7 @@ function typeLabel(type: string): string {
   return reportTabs.find((tab) => tab.id === type)?.label ?? type;
 }
 
-export function ReportsTable({ rows }: ReportsTableProps) {
+export function ReportsTable({ rows, isLoading = false }: ReportsTableProps) {
   return (
     <DirectoryTable
       title="Report Library"
@@ -26,7 +26,7 @@ export function ReportsTable({ rows }: ReportsTableProps) {
         { label: "PERIOD" },
         { label: "ACTIONS", align: "right" },
       ]}
-      isLoading={false}
+      isLoading={isLoading}
       isEmpty={rows.length === 0}
       emptyMessage="No reports match this filter yet."
     >

@@ -121,6 +121,22 @@ export type ReportRow = {
   createdAt: string;
 };
 
+export type CreateGrowthReportInput = {
+  title: string;
+  type: ReportType;
+  platform: ReportRow["platform"];
+  periodStart: string;
+  periodEnd: string;
+};
+
+export type ReportableAccount = {
+  id: string;
+  label: string;
+  caption: string;
+  kind: "organic" | "ad";
+  growthPlatform?: GrowthPlatform;
+};
+
 export type OrganicAccount = {
   id: string;
   platform: GrowthPlatform;

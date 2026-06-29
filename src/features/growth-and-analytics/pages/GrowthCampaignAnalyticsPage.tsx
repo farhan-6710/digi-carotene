@@ -2,8 +2,8 @@ import { GrowthAccountComboBox } from "../components/GrowthAccountComboBox";
 import { GrowthSpendChart } from "../components/charts/GrowthSpendChart";
 import { CampaignTable } from "../components/tables/CampaignTable";
 import { useGrowthCampaigns } from "../hooks/useGrowthCampaigns";
-import { generateGrowthReport } from "../utils/generateReport";
 import { DateFilters } from "@/shared/components/DateFilters";
+import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatsCards } from "@/shared/components/StatsCards";
@@ -18,8 +18,11 @@ export function GrowthCampaignAnalyticsPage() {
     spendTrend,
     campaignRows,
     isLoading,
+    error,
     dateFilterProps,
-    periodLabel,
+    generateReport,
+    isGeneratingReport,
+    hasAccounts,
   } = useGrowthCampaigns();
 
   return (
@@ -31,14 +34,17 @@ export function GrowthCampaignAnalyticsPage() {
           <div className="flex flex-wrap items-center justify-end gap-2">
             <DateFilters {...dateFilterProps} />
             <Button
-              onClick={() => generateGrowthReport(periodLabel)}
+              onClick={() => void generateReport()}
+              disabled={!hasAccounts || isGeneratingReport}
               className="rounded-full"
             >
-              Generate Report
+              {isGeneratingReport ? "Saving..." : "Generate Report"}
             </Button>
           </div>
         }
       />
+
+      {error ? <ErrorBanner message={error} /> : null}
 
       <GrowthAccountComboBox
         label="Ad Account"

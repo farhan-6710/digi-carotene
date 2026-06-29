@@ -8,7 +8,6 @@ import { GrowthStaticComboBox } from "./GrowthStaticComboBox";
 import {
   reportFormatOptions,
   reportMetrics,
-  reportableAccounts,
 } from "../constants/customReportData";
 import type { CustomReportBuilderFormProps } from "../types/components";
 
@@ -56,6 +55,10 @@ function ToggleChip({
 
 export function CustomReportBuilderForm({
   values,
+  accounts,
+  isAccountsLoading = false,
+  accountsEmpty = false,
+  isGenerating = false,
   onToggleAccount,
   onToggleMetric,
   onFieldChange,
@@ -70,15 +73,26 @@ export function CustomReportBuilderForm({
             Choose which accounts to include in the report.
           </p>
           <div className="grid gap-2 sm:grid-cols-2">
-            {reportableAccounts.map((account) => (
-              <ToggleChip
-                key={account.id}
-                label={account.label}
-                caption={account.platform}
-                selected={values.selectedAccountIds.includes(account.id)}
-                onClick={() => onToggleAccount(account.id)}
-              />
-            ))}
+            {isAccountsLoading ? (
+              <p className="col-span-full py-4 text-center text-xs text-muted-foreground">
+                Loading connected accounts...
+              </p>
+            ) : accountsEmpty ? (
+              <p className="col-span-full rounded-xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">
+                No connected accounts yet. Add organic or ad accounts in Manage
+                Accounts first.
+              </p>
+            ) : (
+              accounts.map((account) => (
+                <ToggleChip
+                  key={account.id}
+                  label={account.label}
+                  caption={account.caption}
+                  selected={values.selectedAccountIds.includes(account.id)}
+                  onClick={() => onToggleAccount(account.id)}
+                />
+              ))
+            )}
           </div>
         </section>
 
@@ -120,8 +134,12 @@ export function CustomReportBuilderForm({
         </section>
 
         <div className="flex justify-end border-t border-border/60 pt-4">
-          <Button onClick={onGenerate} className="rounded-full">
-            Generate Report
+          <Button
+            onClick={onGenerate}
+            disabled={isGenerating || accountsEmpty}
+            className="rounded-full"
+          >
+            {isGenerating ? "Saving..." : "Generate Report"}
           </Button>
         </div>
       </div>

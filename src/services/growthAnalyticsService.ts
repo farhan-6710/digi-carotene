@@ -2,6 +2,7 @@ import { DB } from "@/services/db";
 import { supabase } from "@/services/supabaseClient";
 import type {
   CampaignMetricRow,
+  CreateGrowthReportInput,
   DailyMetricRow,
   GrowthDateRange,
   PostRow,
@@ -175,4 +176,42 @@ export async function fetchReports(): Promise<ReportRow[]> {
     periodEnd: row.period_end,
     createdAt: row.created_at,
   }));
+}
+
+export async function createGrowthReport(
+  input: CreateGrowthReportInput,
+): Promise<ReportRow> {
+  const { data, error } = await supabase
+    .from(DB.GROWTH_REPORTS.TABLE)
+    .insert({
+      title: input.title,
+      type: input.type,
+      platform: input.platform,
+      period_start: input.periodStart,
+      period_end: input.periodEnd,
+    })
+    .select(DB.GROWTH_REPORTS.SELECT)
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  const row = data as {
+    id: string;
+    title: string;
+    type: ReportRow["type"];
+    platform: ReportRow["platform"];
+    period_start: string;
+    period_end: string;
+    created_at: string;
+  };
+
+  return {
+    id: row.id,
+    title: row.title,
+    type: row.type,
+    platform: row.platform,
+    periodStart: row.period_start,
+    periodEnd: row.period_end,
+    createdAt: row.created_at,
+  };
 }

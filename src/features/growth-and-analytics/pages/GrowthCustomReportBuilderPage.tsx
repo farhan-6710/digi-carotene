@@ -1,11 +1,22 @@
 import { CustomReportBuilderForm } from "../components/CustomReportBuilderForm";
 import { useCustomReportBuilder } from "../hooks/useCustomReportBuilder";
+import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 
 export function GrowthCustomReportBuilderPage() {
-  const { values, toggleAccount, toggleMetric, changeField, generate } =
-    useCustomReportBuilder();
+  const {
+    values,
+    reportableAccounts,
+    isAccountsLoading,
+    accountsError,
+    accountsEmpty,
+    isGenerating,
+    toggleAccount,
+    toggleMetric,
+    changeField,
+    generate,
+  } = useCustomReportBuilder();
 
   return (
     <PageContent>
@@ -14,12 +25,18 @@ export function GrowthCustomReportBuilderPage() {
         description="Assemble a tailored report by selecting accounts, metrics, date range, and export format."
       />
 
+      {accountsError ? <ErrorBanner message={accountsError} /> : null}
+
       <CustomReportBuilderForm
         values={values}
+        accounts={reportableAccounts}
+        isAccountsLoading={isAccountsLoading}
+        accountsEmpty={accountsEmpty}
+        isGenerating={isGenerating}
         onToggleAccount={toggleAccount}
         onToggleMetric={toggleMetric}
         onFieldChange={changeField}
-        onGenerate={generate}
+        onGenerate={() => void generate()}
       />
     </PageContent>
   );

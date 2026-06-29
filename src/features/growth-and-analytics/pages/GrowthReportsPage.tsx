@@ -5,12 +5,13 @@ import { ReportsTable } from "../components/tables/ReportsTable";
 import { useGrowthReports } from "../hooks/useGrowthReports";
 import { useReportsFilter } from "../hooks/useReportsFilter";
 import { filterReportsByType } from "../utils/reportsFilter";
+import { ErrorBanner } from "@/shared/components/ErrorBanner";
 import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 
 export function GrowthReportsPage() {
   const { activeType, setActiveType } = useReportsFilter();
-  const { reports } = useGrowthReports();
+  const { reports, isLoading, error } = useGrowthReports();
 
   const visibleReports = useMemo(
     () => filterReportsByType(reports, activeType),
@@ -24,9 +25,11 @@ export function GrowthReportsPage() {
         description="Browse generated Instagram, Facebook, campaign, and content reports."
       />
 
+      {error ? <ErrorBanner message={error} /> : null}
+
       <GrowthReportTabs activeType={activeType} onTypeChange={setActiveType} />
 
-      <ReportsTable rows={visibleReports} />
+      <ReportsTable rows={visibleReports} isLoading={isLoading} />
     </PageContent>
   );
 }
