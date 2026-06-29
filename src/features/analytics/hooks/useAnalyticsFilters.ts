@@ -18,6 +18,7 @@ import {
   formatAnalyticsRangeButtonLabel,
   resolveAnalyticsDateRange,
 } from "@/features/analytics/utils/analyticsFilterUtils";
+import type { DateFiltersProps } from "@/shared/types/components";
 
 export function useAnalyticsFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -145,6 +146,42 @@ export function useAnalyticsFilters() {
 
   const isDateRangeActive = filter.mode === "range";
 
+  const dateFilterProps = useMemo<DateFiltersProps>(
+    () => ({
+      quickPeriods: ANALYTICS_QUICK_PERIODS,
+      activeQuickPeriod,
+      isDateRangeActive,
+      periodLabel,
+      rangeButtonLabel,
+      pickerRange,
+      isPickerOpen,
+      pickerError,
+      onToggleQuickPeriod: toggleQuickPeriod,
+      onClearFilters: clearFilters,
+      onClearDateRange: clearDateRange,
+      onApplyDateRange: applyDateRange,
+      onPickerRangeChange: handlePickerRangeChange,
+      onPickerOpenChange: handlePickerOpenChange,
+      onPickerKeyDown: handlePickerKeyDown,
+    }),
+    [
+      activeQuickPeriod,
+      applyDateRange,
+      clearDateRange,
+      clearFilters,
+      handlePickerKeyDown,
+      handlePickerOpenChange,
+      handlePickerRangeChange,
+      isDateRangeActive,
+      isPickerOpen,
+      periodLabel,
+      pickerError,
+      pickerRange,
+      rangeButtonLabel,
+      toggleQuickPeriod,
+    ],
+  );
+
   return {
     filter,
     resolvedRange,
@@ -156,6 +193,7 @@ export function useAnalyticsFilters() {
     pickerRange,
     isPickerOpen,
     pickerError,
+    dateFilterProps,
     toggleQuickPeriod,
     clearFilters,
     clearDateRange,

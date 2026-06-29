@@ -54,10 +54,10 @@ export const campaignStatCards: StatCardItem[] = [
 ];
 
 export const spendTrend: SpendPoint[] = [
-  { label: "Week 1", spend: 98000, clicks: 18200 },
-  { label: "Week 2", spend: 112000, clicks: 21400 },
-  { label: "Week 3", spend: 134000, clicks: 24600 },
-  { label: "Week 4", spend: 138000, clicks: 22200 },
+  { label: "Week 1", spend: 98000, conversions: 620 },
+  { label: "Week 2", spend: 112000, conversions: 740 },
+  { label: "Week 3", spend: 134000, conversions: 890 },
+  { label: "Week 4", spend: 138000, conversions: 890 },
 ];
 
 export const campaigns: CampaignRow[] = [

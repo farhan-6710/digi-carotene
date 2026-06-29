@@ -30,3 +30,18 @@ export function serializeUrlDate(date: Date): string {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
+
+export function getTodayUrlDate(): string {
+  return serializeUrlDate(new Date());
+}
+
+export function readUrlDateString(
+  params: URLSearchParams,
+  key: string,
+): string | null {
+  const value = params.get(key);
+  if (!value || !parseUrlDateParam(value)) {
+    return null;
+  }
+  return value;
+}

@@ -80,6 +80,7 @@ export const contentPosts: ContentPostRow[] = [
     reach: 84200,
     likes: 6120,
     comments: 412,
+    saves: 980,
     engagementRate: 7.8,
   },
   {
@@ -89,6 +90,7 @@ export const contentPosts: ContentPostRow[] = [
     reach: 52100,
     likes: 3980,
     comments: 286,
+    saves: 640,
     engagementRate: 5.4,
   },
   {
@@ -98,6 +100,7 @@ export const contentPosts: ContentPostRow[] = [
     reach: 38600,
     likes: 2110,
     comments: 142,
+    saves: 210,
     engagementRate: 3.2,
   },
   {
@@ -107,6 +110,7 @@ export const contentPosts: ContentPostRow[] = [
     reach: 71300,
     likes: 5240,
     comments: 528,
+    saves: 820,
     engagementRate: 6.9,
   },
   {
@@ -116,6 +120,7 @@ export const contentPosts: ContentPostRow[] = [
     reach: 19800,
     likes: 640,
     comments: 38,
+    saves: 92,
     engagementRate: 1.8,
   },
 ];

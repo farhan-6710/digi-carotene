@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 
+import { useUrlDateFields } from "@/shared/hooks/useUrlDateFields";
 import { showToast } from "@/shared/utils/showToast";
 
 import { defaultCustomReportForm } from "../constants/customReportData";
@@ -12,19 +13,29 @@ function toggleId(ids: string[], id: string): string[] {
 }
 
 export function useCustomReportBuilder() {
-  const [values, setValues] = useState<CustomReportFormState>(
-    defaultCustomReportForm,
-  );
+  const { fromDate, toDate, setFromDate, setToDate } = useUrlDateFields();
+
+  const [localValues, setLocalValues] = useState(() => ({
+    selectedAccountIds: defaultCustomReportForm.selectedAccountIds,
+    selectedMetricIds: defaultCustomReportForm.selectedMetricIds,
+    format: defaultCustomReportForm.format,
+  }));
+
+  const values: CustomReportFormState = {
+    ...localValues,
+    startDate: fromDate,
+    endDate: toDate,
+  };
 
   const toggleAccount = useCallback((id: string) => {
-    setValues((prev) => ({
+    setLocalValues((prev) => ({
       ...prev,
       selectedAccountIds: toggleId(prev.selectedAccountIds, id),
     }));
   }, []);
 
   const toggleMetric = useCallback((id: string) => {
-    setValues((prev) => ({
+    setLocalValues((prev) => ({
       ...prev,
       selectedMetricIds: toggleId(prev.selectedMetricIds, id),
     }));
@@ -32,9 +43,17 @@ export function useCustomReportBuilder() {
 
   const changeField = useCallback(
     (field: "startDate" | "endDate" | "format", value: string) => {
-      setValues((prev) => ({ ...prev, [field]: value }));
+      if (field === "startDate") {
+        setFromDate(value);
+        return;
+      }
+      if (field === "endDate") {
+        setToDate(value);
+        return;
+      }
+      setLocalValues((prev) => ({ ...prev, [field]: value }));
     },
-    [],
+    [setFromDate, setToDate],
   );
 
   const generate = useCallback(() => {

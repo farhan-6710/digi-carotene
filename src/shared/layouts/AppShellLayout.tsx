@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router";
-import { Menu, Moon, Search, Sun } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { useTheme } from "@/shared/providers/ThemeProvider";
@@ -9,6 +9,7 @@ import {
   ShellMobileNavSheet,
   ShellSidebar,
 } from "@/shared/components/ShellSidebar";
+import { ShellNavSearch } from "@/shared/components/ShellNavSearch";
 import {
   PageTransitionMain,
   PageTransitionProvider,
@@ -72,18 +73,15 @@ export function AppShellLayout({
               <Menu className="size-4" aria-hidden="true" />
             </Button>
 
-            {headerCenter ?? (
-              <div className="relative w-full max-w-md">
-                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted-foreground">
-                  <Search className="size-4" aria-hidden="true" />
-                </span>
-                <input
-                  type="search"
-                  placeholder="Search clients or posts..."
-                  className="h-9 w-full rounded-full border border-muted-foreground/30 bg-muted/40 pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
-                />
-              </div>
-            )}
+            <div className="flex min-w-0 flex-1 items-center gap-4">
+              <ShellNavSearch
+                nav={sidebarConfig.nav}
+                placeholder={
+                  sidebarConfig.searchPlaceholder ?? "Search navigation..."
+                }
+              />
+              {headerCenter}
+            </div>
 
             <div className="ml-auto flex items-center gap-3">
               {headerActions}

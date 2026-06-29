@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
+import type { DateRange } from "react-day-picker";
+
+import type { AnalyticsQuickPeriodId } from "@/features/analytics/constants/analyticsFilters";
 
 export type ConfirmationModalProps = {
   open: boolean;
@@ -103,6 +106,7 @@ export type ShellSidebarConfig = {
   brandSubtitle?: string;
   nav: ShellNavItem[];
   quickAction?: ShellQuickAction;
+  searchPlaceholder?: string;
 };
 
 export type ShellSidebarContentProps = {
@@ -156,4 +160,54 @@ export type MultiSelectProps = {
   /** Shown on selected chips when the option label is not in `options` yet. */
   fallbackSelectedLabel?: string;
   onOpenChange?: (open: boolean) => void;
+};
+
+export type DateRangePickerProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  range: DateRange | undefined;
+  rangeLabel: string;
+  isActive: boolean;
+  onRangeChange: (range: DateRange | undefined) => void;
+  onApply: () => void;
+  onClear: () => void;
+  onKeyDown: (event: KeyboardEvent) => void;
+  error: string | null;
+};
+
+export type DateFiltersProps = {
+  quickPeriods: readonly { id: AnalyticsQuickPeriodId; label: string }[];
+  activeQuickPeriod: AnalyticsQuickPeriodId | null;
+  isDateRangeActive: boolean;
+  periodLabel: string;
+  rangeButtonLabel: string;
+  pickerRange: DateRange | undefined;
+  isPickerOpen: boolean;
+  pickerError: string | null;
+  onToggleQuickPeriod: (period: AnalyticsQuickPeriodId) => void;
+  onClearFilters: () => void;
+  onClearDateRange: () => void;
+  onApplyDateRange: () => void;
+  onPickerRangeChange: (range: DateRange | undefined) => void;
+  onPickerOpenChange: (open: boolean) => void;
+  onPickerKeyDown: (event: KeyboardEvent) => void;
+};
+
+export type DatePickerProps = {
+  id?: string;
+  label?: string;
+  /** `yyyy-MM-dd` or empty string when unset. */
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+  placeholder?: string;
+  clearable?: boolean;
+  onClear?: () => void;
+  className?: string;
+};
+
+export type ShellNavSearchProps = {
+  nav: ShellNavItem[];
+  placeholder?: string;
+  className?: string;
 };

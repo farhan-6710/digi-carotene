@@ -7,6 +7,7 @@ export const teamShellConfig: ShellSidebarConfig = {
   initials: appMeta.userInitials,
   brandName: appMeta.name,
   nav: primaryNav,
+  searchPlaceholder: "Search team portal pages...",
   quickAction: {
     title: "Quick Actions",
     description: "Review today's scheduled posts and open the content calendar.",

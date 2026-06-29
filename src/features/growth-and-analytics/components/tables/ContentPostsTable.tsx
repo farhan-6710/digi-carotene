@@ -5,7 +5,8 @@ import { MobileLabel } from "./tableBits";
 import type { ContentPostsTableProps } from "../../types/components";
 import { formatCompact, formatPercent } from "../../utils/formatters";
 
-const GRID_CLASS = "grid-cols-[2fr_0.8fr_0.8fr_0.7fr_0.8fr]";
+const GRID_CLASS =
+  "grid-cols-[2fr_0.7fr_0.7fr_0.6fr_0.6fr_0.6fr_0.7fr]";
 
 export function ContentPostsTable({ rows }: ContentPostsTableProps) {
   return (
@@ -18,6 +19,8 @@ export function ContentPostsTable({ rows }: ContentPostsTableProps) {
         { label: "TYPE" },
         { label: "REACH", align: "right" },
         { label: "LIKES", align: "right" },
+        { label: "COMMENTS", align: "right" },
+        { label: "SAVES", align: "right" },
         { label: "ENG. RATE", align: "right" },
       ]}
       isLoading={false}
@@ -47,6 +50,14 @@ export function ContentPostsTable({ rows }: ContentPostsTableProps) {
           <div className="text-right font-mono text-sm text-foreground">
             <MobileLabel>LIKES</MobileLabel>
             {formatCompact(row.likes)}
+          </div>
+          <div className="text-right font-mono text-sm text-foreground">
+            <MobileLabel>COMMENTS</MobileLabel>
+            {formatCompact(row.comments)}
+          </div>
+          <div className="text-right font-mono text-sm text-foreground">
+            <MobileLabel>SAVES</MobileLabel>
+            {formatCompact(row.saves)}
           </div>
           <div className="text-right font-mono text-sm text-primary">
             <MobileLabel>ENG. RATE</MobileLabel>

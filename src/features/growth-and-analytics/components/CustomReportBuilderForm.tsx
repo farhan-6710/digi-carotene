@@ -1,9 +1,10 @@
 import { Check } from "lucide-react";
 
 import { Button } from "@/shared/ui/button";
-import { formFieldClassName } from "@/shared/constants/formStyles";
+import { DatePicker } from "@/shared/components/DatePicker";
 import { cn } from "@/shared/lib/utils";
 
+import { GrowthStaticComboBox } from "./GrowthStaticComboBox";
 import {
   reportFormatOptions,
   reportMetrics,
@@ -99,38 +100,23 @@ export function CustomReportBuilderForm({
         </section>
 
         <section className="grid gap-4 sm:grid-cols-3">
-          <label className="block text-xs font-semibold text-muted-foreground">
-            Start date
-            <input
-              type="date"
-              value={values.startDate}
-              onChange={(event) => onFieldChange("startDate", event.target.value)}
-              className={formFieldClassName}
-            />
-          </label>
-          <label className="block text-xs font-semibold text-muted-foreground">
-            End date
-            <input
-              type="date"
-              value={values.endDate}
-              onChange={(event) => onFieldChange("endDate", event.target.value)}
-              className={formFieldClassName}
-            />
-          </label>
-          <label className="block text-xs font-semibold text-muted-foreground">
-            Format
-            <select
-              value={values.format}
-              onChange={(event) => onFieldChange("format", event.target.value)}
-              className={formFieldClassName}
-            >
-              {reportFormatOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <DatePicker
+            label="Start date"
+            value={values.startDate}
+            onChange={(value) => onFieldChange("startDate", value)}
+          />
+          <DatePicker
+            label="End date"
+            value={values.endDate}
+            onChange={(value) => onFieldChange("endDate", value)}
+          />
+          <GrowthStaticComboBox
+            label="Format"
+            value={values.format}
+            options={reportFormatOptions}
+            onChange={(value) => onFieldChange("format", value)}
+            placeholder="Select format"
+          />
         </section>
 
         <div className="flex justify-end border-t border-border/60 pt-4">

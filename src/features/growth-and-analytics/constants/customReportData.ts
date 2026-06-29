@@ -23,10 +23,8 @@ export const reportFormatOptions = [
   { value: "slides", label: "Presentation slides" },
 ];
 
-export const defaultCustomReportForm: CustomReportFormState = {
+export const defaultCustomReportForm = {
   selectedAccountIds: ["armario", "bloom"],
   selectedMetricIds: ["followers", "reach", "engagement", "topPosts"],
-  startDate: "2026-05-01",
-  endDate: "2026-05-31",
   format: "pdf",
-};
+} satisfies Omit<CustomReportFormState, "startDate" | "endDate">;

@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/shared/ui/dialog";
 
+import { GrowthStaticComboBox } from "../GrowthStaticComboBox";
 import { platformOptions } from "../../constants/accountsData";
 import type { OrganicAccountDialogProps } from "../../types/components";
 import type { GrowthPlatform } from "../../types/types";
@@ -38,22 +39,15 @@ export function OrganicAccountDialog({
         </DialogHeader>
 
         <div className="flex-1 space-y-4 overflow-y-auto py-1 pr-1">
-          <label className="block text-xs font-semibold text-muted-foreground">
-            Platform
-            <select
-              value={values.platform}
-              onChange={(event) =>
-                onFieldChange("platform", event.target.value as GrowthPlatform)
-              }
-              className={formFieldClassName}
-            >
-              {platformOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <GrowthStaticComboBox
+            label="Platform"
+            value={values.platform}
+            options={platformOptions}
+            onChange={(value) =>
+              onFieldChange("platform", value as GrowthPlatform)
+            }
+            placeholder="Select platform"
+          />
 
           <label className="block text-xs font-semibold text-muted-foreground">
             Account name

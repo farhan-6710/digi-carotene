@@ -1,10 +1,5 @@
-import type { KeyboardEvent, ReactNode } from "react";
-import type { DateRange } from "react-day-picker";
+import type { ReactNode } from "react";
 
-import {
-  ANALYTICS_QUICK_PERIODS,
-  type AnalyticsQuickPeriodId,
-} from "@/features/analytics/constants/analyticsFilters";
 import type { AnalyticsTabId } from "@/features/analytics/constants/analyticsTabs";
 import type {
   AnalyticsDataset,
@@ -37,37 +32,6 @@ export type AnalyticsPanelProps = {
   filter: AnalyticsDateFilterState;
   periodLabel: string;
   isLoading: boolean;
-};
-
-export type AnalyticsDateFiltersProps = {
-  quickPeriods: typeof ANALYTICS_QUICK_PERIODS;
-  activeQuickPeriod: AnalyticsQuickPeriodId | null;
-  isDateRangeActive: boolean;
-  periodLabel: string;
-  rangeButtonLabel: string;
-  pickerRange: DateRange | undefined;
-  isPickerOpen: boolean;
-  pickerError: string | null;
-  onToggleQuickPeriod: (period: AnalyticsQuickPeriodId) => void;
-  onClearFilters: () => void;
-  onClearDateRange: () => void;
-  onApplyDateRange: () => void;
-  onPickerRangeChange: (range: DateRange | undefined) => void;
-  onPickerOpenChange: (open: boolean) => void;
-  onPickerKeyDown: (event: KeyboardEvent) => void;
-};
-
-export type AnalyticsDateRangePickerProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  range: DateRange | undefined;
-  rangeLabel: string;
-  isActive: boolean;
-  onRangeChange: (range: DateRange | undefined) => void;
-  onApply: () => void;
-  onClear: () => void;
-  onKeyDown: (event: KeyboardEvent) => void;
-  error: string | null;
 };
 
 export type PostsTopClientsTableProps = {

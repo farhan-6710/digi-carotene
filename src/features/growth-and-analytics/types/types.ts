@@ -22,7 +22,7 @@ export type LabeledValue = {
 export type SpendPoint = {
   label: string;
   spend: number;
-  clicks: number;
+  conversions: number;
 };
 
 export type TopAccountRow = {
@@ -41,6 +41,7 @@ export type ContentPostRow = {
   reach: number;
   likes: number;
   comments: number;
+  saves: number;
   engagementRate: number;
 };
 

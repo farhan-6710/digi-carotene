@@ -1,6 +1,6 @@
 import { CalendarRange, X } from "lucide-react";
 
-import type { AnalyticsDateRangePickerProps } from "@/features/analytics/types/components";
+import type { DateRangePickerProps } from "@/shared/types/components";
 import { Button } from "@/shared/ui/button";
 import { Calendar } from "@/shared/ui/calendar";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/shared/ui/popover";
 import { cn } from "@/shared/lib/utils";
 
-export function AnalyticsDateRangePicker({
+export function DateRangePicker({
   open,
   onOpenChange,
   range,
@@ -21,7 +21,7 @@ export function AnalyticsDateRangePicker({
   onClear,
   onKeyDown,
   error,
-}: AnalyticsDateRangePickerProps) {
+}: DateRangePickerProps) {
   if (isActive) {
     return (
       <div

@@ -8,6 +8,7 @@ export const growthShellConfig: ShellSidebarConfig = {
   brandName: growthMeta.brandName,
   brandSubtitle: growthMeta.brandSubtitle,
   nav: growthNav,
+  searchPlaceholder: "Search growth & analytics pages...",
   quickAction: {
     title: "Quick Actions",
     description: "Build a tailored client report with the metrics that matter.",

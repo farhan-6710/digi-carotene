@@ -1,7 +1,7 @@
 import { useState } from "react";
 
+import { GrowthAccountComboBox } from "../components/GrowthAccountComboBox";
 import { GrowthSpendChart } from "../components/charts/GrowthSpendChart";
-import { GrowthPageSelect } from "../components/GrowthPageSelect";
 import { CampaignTable } from "../components/tables/CampaignTable";
 import {
   adAccountOptions,
@@ -9,12 +9,17 @@ import {
   campaigns,
   spendTrend,
 } from "../constants/campaignData";
+import { useAnalyticsFilters } from "@/features/analytics/hooks/useAnalyticsFilters";
+import { generateGrowthReport } from "../utils/generateReport";
+import { DateFilters } from "@/shared/components/DateFilters";
 import { PageContent } from "@/shared/components/PageContent";
 import { PageHeader } from "@/shared/components/PageHeader";
 import { StatsCards } from "@/shared/components/StatsCards";
+import { Button } from "@/shared/ui/button";
 
 export function GrowthCampaignAnalyticsPage() {
   const [adAccountId, setAdAccountId] = useState(adAccountOptions[0].value);
+  const { periodLabel, dateFilterProps } = useAnalyticsFilters();
 
   return (
     <PageContent>
@@ -22,20 +27,31 @@ export function GrowthCampaignAnalyticsPage() {
         heading="Campaign Analytics"
         description="Track paid performance — spend, reach, clicks, and conversions."
         actions={
-          <GrowthPageSelect
-            label="Ad Account"
-            value={adAccountId}
-            options={adAccountOptions}
-            onChange={setAdAccountId}
-          />
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <DateFilters {...dateFilterProps} />
+            <Button
+              onClick={() => generateGrowthReport(periodLabel)}
+              className="rounded-full"
+            >
+              Generate Report
+            </Button>
+          </div>
         }
+      />
+
+      <GrowthAccountComboBox
+        label="Ad Account"
+        value={adAccountId}
+        options={adAccountOptions}
+        onChange={setAdAccountId}
+        placeholder="Select ad account"
       />
 
       <StatsCards cards={campaignStatCards} />
 
       <GrowthSpendChart
-        title="Weekly Spend vs Clicks"
-        description="Ad spend and click volume across the selected period."
+        title="Weekly Spend vs Conversions"
+        description="Ad spend and conversions across the selected period."
         data={spendTrend}
       />
 

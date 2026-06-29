@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/shared/ui/dialog";
 
+import { GrowthStaticComboBox } from "../GrowthStaticComboBox";
 import { currencyOptions } from "../../constants/accountsData";
 import type { AdAccountDialogProps } from "../../types/components";
 
@@ -69,20 +70,13 @@ export function AdAccountDialog({
             />
           </label>
 
-          <label className="block text-xs font-semibold text-muted-foreground">
-            Currency
-            <select
-              value={values.currency}
-              onChange={(event) => onFieldChange("currency", event.target.value)}
-              className={formFieldClassName}
-            >
-              {currencyOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <GrowthStaticComboBox
+            label="Currency"
+            value={values.currency}
+            options={currencyOptions}
+            onChange={(value) => onFieldChange("currency", value)}
+            placeholder="Select currency"
+          />
 
           <label className="block text-xs font-semibold text-muted-foreground">
             Access token

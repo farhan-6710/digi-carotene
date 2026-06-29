@@ -8,6 +8,7 @@ export const clientShellConfig: ShellSidebarConfig = {
   brandName: clientMeta.name,
   brandSubtitle: clientMeta.portalLabel,
   nav: clientNav,
+  searchPlaceholder: "Search client portal pages...",
   quickAction: {
     title: "Your content",
     description: "View scheduled posts and account details for your brand.",
