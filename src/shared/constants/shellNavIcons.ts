@@ -3,9 +3,14 @@ import {
   BarChart3,
   CalendarClock,
   ClipboardCheck,
+  FileBarChart2,
   FileText,
   FolderKanban,
+  FolderOpen,
   LayoutDashboard,
+  LineChart,
+  Megaphone,
+  PlugZap,
   Settings,
   UserCog,
   UserRound,
@@ -22,7 +27,12 @@ export type ShellNavIconKey =
   | "reports"
   | "approvals"
   | "account"
-  | "settings";
+  | "settings"
+  | "contentPerformance"
+  | "campaigns"
+  | "customReport"
+  | "reportLibrary"
+  | "manageAccounts";
 
 export const shellNavIcons: Record<ShellNavIconKey, LucideIcon> = {
   dashboard: LayoutDashboard,
@@ -35,4 +45,9 @@ export const shellNavIcons: Record<ShellNavIconKey, LucideIcon> = {
   approvals: ClipboardCheck,
   account: UserRound,
   settings: Settings,
+  contentPerformance: LineChart,
+  campaigns: Megaphone,
+  customReport: FileBarChart2,
+  reportLibrary: FolderOpen,
+  manageAccounts: PlugZap,
 };

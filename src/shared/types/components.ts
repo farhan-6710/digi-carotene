@@ -125,7 +125,8 @@ export type ShellMobileNavSheetProps = {
 
 export type AppShellLayoutProps = {
   sidebarConfig: ShellSidebarConfig;
-  accountPath: string;
+  /** When omitted (e.g. public shells), the account avatar is hidden. */
+  accountPath?: string;
   headerCenter?: ReactNode;
   headerActions?: ReactNode;
   mobileNavDescription: string;

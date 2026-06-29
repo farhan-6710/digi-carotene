@@ -27,6 +27,42 @@ const AboutPage = lazyRoutePage(
   () => import("@/features/public/pages/AboutPage"),
   "AboutPage",
 );
+const GrowthLayout = lazyRoutePage(
+  () => import("@/shared/layouts/GrowthLayout"),
+  "GrowthLayout",
+);
+const GrowthDashboardPage = lazyRoutePage(
+  () => import("@/features/growth-and-analytics/pages/GrowthDashboardPage"),
+  "GrowthDashboardPage",
+);
+const GrowthContentPerformancePage = lazyRoutePage(
+  () =>
+    import(
+      "@/features/growth-and-analytics/pages/GrowthContentPerformancePage"
+    ),
+  "GrowthContentPerformancePage",
+);
+const GrowthCampaignAnalyticsPage = lazyRoutePage(
+  () =>
+    import("@/features/growth-and-analytics/pages/GrowthCampaignAnalyticsPage"),
+  "GrowthCampaignAnalyticsPage",
+);
+const GrowthCustomReportBuilderPage = lazyRoutePage(
+  () =>
+    import(
+      "@/features/growth-and-analytics/pages/GrowthCustomReportBuilderPage"
+    ),
+  "GrowthCustomReportBuilderPage",
+);
+const GrowthReportsPage = lazyRoutePage(
+  () => import("@/features/growth-and-analytics/pages/GrowthReportsPage"),
+  "GrowthReportsPage",
+);
+const GrowthManageAccountsPage = lazyRoutePage(
+  () =>
+    import("@/features/growth-and-analytics/pages/GrowthManageAccountsPage"),
+  "GrowthManageAccountsPage",
+);
 const AuthPage = lazyRoutePage(
   () => import("@/features/auth/pages/AuthPage"),
   "AuthPage",
@@ -112,6 +148,19 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
+    ],
+  },
+  {
+    path: "/growth-and-analytics",
+    element: <GrowthLayout />,
+    errorElement: <RouteErrorPage />,
+    children: [
+      { index: true, element: <GrowthDashboardPage /> },
+      { path: "content-performance", element: <GrowthContentPerformancePage /> },
+      { path: "campaigns", element: <GrowthCampaignAnalyticsPage /> },
+      { path: "custom-report", element: <GrowthCustomReportBuilderPage /> },
+      { path: "reports", element: <GrowthReportsPage /> },
+      { path: "manage-accounts", element: <GrowthManageAccountsPage /> },
     ],
   },
   { path: "/auth", element: <AuthPage /> },

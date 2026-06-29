@@ -97,24 +97,26 @@ export function AppShellLayout({
                 />
                 <Moon className="size-4" aria-hidden="true" />
               </div>
-              <Link
-                to={accountPath}
-                className={cn(
-                  "flex size-9 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-sm font-semibold text-primary transition hover:bg-primary/20",
-                  avatarUrl && "bg-transparent",
-                )}
-                aria-label={`Open account for ${displayName}`}
-              >
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt={displayName}
-                    className="size-full object-cover"
-                  />
-                ) : (
-                  initials
-                )}
-              </Link>
+              {accountPath ? (
+                <Link
+                  to={accountPath}
+                  className={cn(
+                    "flex size-9 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-sm font-semibold text-primary transition hover:bg-primary/20",
+                    avatarUrl && "bg-transparent",
+                  )}
+                  aria-label={`Open account for ${displayName}`}
+                >
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt={displayName}
+                      className="size-full object-cover"
+                    />
+                  ) : (
+                    initials
+                  )}
+                </Link>
+              ) : null}
             </div>
           </motion.header>
 
