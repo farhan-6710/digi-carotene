@@ -105,6 +105,8 @@ export async function fetchPosts(
     likes: row.likes,
     comments: row.comments,
     saves: row.saves,
+    shares: 0,
+    reposts: 0,
     engagementRate: Number(row.engagement_rate),
     postedAt: row.posted_at,
   }));

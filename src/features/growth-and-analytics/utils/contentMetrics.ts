@@ -112,6 +112,8 @@ export function mapPostRows(posts: PostRow[]): ContentPostRow[] {
     likes: post.likes,
     comments: post.comments,
     saves: post.saves,
+    shares: post.shares,
+    reposts: post.reposts,
     engagementRate: post.engagementRate,
   }));
 }

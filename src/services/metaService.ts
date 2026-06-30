@@ -173,7 +173,47 @@ export type IgMediaItem = {
   timestamp?: string;
   like_count?: number;
   comments_count?: number;
+  shares_count?: number;
+  reposts_count?: number;
+  insights?: {
+    data?: Array<{ name?: string; values?: Array<{ value?: number }> }>;
+  };
 };
+
+export type IgMediaInsightValues = {
+  reach: number;
+  views: number;
+  saved: number;
+  shares: number;
+  reposts: number;
+};
+
+export function parseIgMediaInsightBlock(
+  insights?: IgMediaItem["insights"],
+): IgMediaInsightValues {
+  const values: Record<string, number> = {};
+  for (const metric of insights?.data ?? []) {
+    values[metric.name ?? ""] = metric.values?.[0]?.value ?? 0;
+  }
+  return {
+    reach: values.reach ?? 0,
+    views: values.views ?? 0,
+    saved: values.saved ?? 0,
+    shares: values.shares ?? 0,
+    reposts: values.reposts ?? 0,
+  };
+}
+
+export function mergeIgMediaInsightValues(
+  insights: IgMediaInsightValues,
+  item: Pick<IgMediaItem, "shares_count" | "reposts_count">,
+): IgMediaInsightValues {
+  return {
+    ...insights,
+    shares: insights.shares || item.shares_count || 0,
+    reposts: insights.reposts || item.reposts_count || 0,
+  };
+}
 
 export async function fetchInstagramMedia(
   accountId: string,
@@ -181,7 +221,7 @@ export async function fetchInstagramMedia(
 ): Promise<IgMediaItem[]> {
   return graphGetAll<IgMediaItem>(META_API_VERSION.instagram, `${accountId}/media`, {
     fields:
-      "id,caption,media_type,media_product_type,timestamp,like_count,comments_count",
+      "id,caption,media_type,media_product_type,timestamp,like_count,comments_count,shares_count,reposts_count,insights.metric(views,reach,saved,shares,reposts)",
     limit: "50",
     access_token: accessToken,
   });
@@ -190,25 +230,21 @@ export async function fetchInstagramMedia(
 export async function fetchInstagramMediaInsights(
   mediaId: string,
   accessToken: string,
-): Promise<{ reach: number; views: number; saved: number }> {
+): Promise<IgMediaInsightValues> {
   try {
     const data = (await graphGet(
       META_API_VERSION.instagram,
       `${mediaId}/insights`,
-      { metric: "views,reach,saved", period: "lifetime", access_token: accessToken },
+      {
+        metric: "views,reach,saved,shares,reposts",
+        period: "lifetime",
+        access_token: accessToken,
+      },
     )) as { data?: Array<{ name?: string; values?: Array<{ value?: number }> }> };
 
-    const values: Record<string, number> = {};
-    for (const metric of data.data ?? []) {
-      values[metric.name ?? ""] = metric.values?.[0]?.value ?? 0;
-    }
-    return {
-      reach: values.reach ?? 0,
-      views: values.views ?? 0,
-      saved: values.saved ?? 0,
-    };
+    return parseIgMediaInsightBlock({ data: data.data });
   } catch {
-    return { reach: 0, views: 0, saved: 0 };
+    return { reach: 0, views: 0, saved: 0, shares: 0, reposts: 0 };
   }
 }
 
@@ -233,6 +269,9 @@ export type FbPostItem = {
   id: string;
   message?: string;
   created_time?: string;
+  shares?: { count?: number };
+  reactions?: { summary?: { total_count?: number } };
+  comments?: { summary?: { total_count?: number } };
 };
 
 export async function fetchFacebookPosts(
@@ -240,7 +279,8 @@ export async function fetchFacebookPosts(
   accessToken: string,
 ): Promise<FbPostItem[]> {
   return graphGetAll<FbPostItem>(META_API_VERSION.facebook, `${pageId}/posts`, {
-    fields: "id,message,created_time",
+    fields:
+      "id,message,created_time,shares,comments.summary(total_count),reactions.summary(total_count)",
     limit: "50",
     access_token: accessToken,
   });

@@ -35,6 +35,8 @@ export type PostRow = {
   likes: number;
   comments: number;
   saves: number;
+  shares: number;
+  reposts: number;
   engagementRate: number;
   postedAt: string;
 };
@@ -91,6 +93,8 @@ export type ContentPostRow = {
   likes: number;
   comments: number;
   saves: number;
+  shares: number;
+  reposts: number;
   engagementRate: number;
 };
 

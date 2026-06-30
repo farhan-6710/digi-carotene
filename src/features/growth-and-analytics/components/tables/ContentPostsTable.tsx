@@ -6,7 +6,7 @@ import type { ContentPostsTableProps } from "../../types/components";
 import { formatCompact, formatPercent } from "../../utils/formatters";
 
 const GRID_CLASS =
-  "grid-cols-[2fr_0.7fr_0.7fr_0.6fr_0.6fr_0.6fr_0.7fr]";
+  "grid-cols-[2fr_0.65fr_0.65fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.65fr]";
 
 export function ContentPostsTable({ rows }: ContentPostsTableProps) {
   return (
@@ -21,6 +21,8 @@ export function ContentPostsTable({ rows }: ContentPostsTableProps) {
         { label: "LIKES", align: "right" },
         { label: "COMMENTS", align: "right" },
         { label: "SAVES", align: "right" },
+        { label: "SHARES", align: "right" },
+        { label: "REPOSTS", align: "right" },
         { label: "ENG. RATE", align: "right" },
       ]}
       isLoading={false}
@@ -58,6 +60,14 @@ export function ContentPostsTable({ rows }: ContentPostsTableProps) {
           <div className="text-right font-mono text-sm text-foreground">
             <MobileLabel>SAVES</MobileLabel>
             {formatCompact(row.saves)}
+          </div>
+          <div className="text-right font-mono text-sm text-foreground">
+            <MobileLabel>SHARES</MobileLabel>
+            {formatCompact(row.shares)}
+          </div>
+          <div className="text-right font-mono text-sm text-foreground">
+            <MobileLabel>REPOSTS</MobileLabel>
+            {formatCompact(row.reposts)}
           </div>
           <div className="text-right font-mono text-sm text-primary">
             <MobileLabel>ENG. RATE</MobileLabel>

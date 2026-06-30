@@ -6,6 +6,9 @@ import {
   fetchFacebookPosts,
   fetchInstagramDashboardInsights,
   fetchInstagramMedia,
+  fetchInstagramMediaInsights,
+  mergeIgMediaInsightValues,
+  parseIgMediaInsightBlock,
 } from "@/services/metaService";
 import { supabase } from "@/services/supabaseClient";
 import { META_INITIAL_POST_SYNC_LIMIT } from "@/features/growth-and-analytics/constants/metaConfig";
@@ -67,6 +70,48 @@ async function fetchAdLiveRow(dbAdAccountId: string): Promise<AdLiveRow | null> 
 
 function inSpan(date: string, span: { from: string; to: string }): boolean {
   return date >= span.from && date <= span.to;
+}
+
+async function resolveIgPostInsights(
+  items: Array<{
+    id: string;
+    shares_count?: number;
+    reposts_count?: number;
+    insights?: { data?: Array<{ name?: string; values?: Array<{ value?: number }> }> };
+  }>,
+  token: string,
+) {
+  const byId = new Map<string, ReturnType<typeof parseIgMediaInsightBlock>>();
+  const missingIds: string[] = [];
+
+  for (const item of items) {
+    if (item.insights?.data?.length) {
+      byId.set(
+        item.id,
+        mergeIgMediaInsightValues(parseIgMediaInsightBlock(item.insights), item),
+      );
+    } else {
+      missingIds.push(item.id);
+    }
+  }
+
+  if (missingIds.length > 0) {
+    const fetched = await Promise.all(
+      missingIds.map(async (id) => {
+        const item = items.find((entry) => entry.id === id);
+        const insights = await fetchInstagramMediaInsights(id, token);
+        return [
+          id,
+          item ? mergeIgMediaInsightValues(insights, item) : insights,
+        ] as const;
+      }),
+    );
+    for (const [id, insights] of fetched) {
+      byId.set(id, insights);
+    }
+  }
+
+  return byId;
 }
 
 function mergeInsightChunks(
@@ -178,29 +223,45 @@ export async function fetchLivePosts(
 
   if (account.platform === "instagram") {
     const media = await fetchInstagramMedia(account.account_id, token);
-    return media
+    const filtered = media
       .filter((item) => {
         const date = item.timestamp?.slice(0, 10);
         return date && inSpan(date, span);
       })
-      .slice(0, META_INITIAL_POST_SYNC_LIMIT)
-      .map((item) => {
+      .slice(0, META_INITIAL_POST_SYNC_LIMIT);
+
+    const insightsById = await resolveIgPostInsights(filtered, token);
+
+    return filtered.map((item) => {
         const likes = item.like_count ?? 0;
         const comments = item.comments_count ?? 0;
-        const engagement = likes + comments;
+        const { reach: insightReach, views, saved, shares, reposts } =
+          insightsById.get(item.id) ?? {
+            reach: 0,
+            views: 0,
+            saved: 0,
+            shares: 0,
+            reposts: 0,
+          };
+        const reach = insightReach || views || likes + comments;
+        const engagement = likes + comments + saved + shares + reposts;
         const rate =
-          account.followers > 0
-            ? Number(((engagement / account.followers) * 100).toFixed(2))
-            : 0;
+          reach > 0
+            ? Number(((engagement / reach) * 100).toFixed(2))
+            : account.followers > 0
+              ? Number(((engagement / account.followers) * 100).toFixed(2))
+              : 0;
 
         return {
           id: item.id,
           caption: (item.caption ?? "Untitled post").slice(0, 500),
           mediaType: mapMediaType(item.media_type, item.media_product_type),
-          reach: engagement,
+          reach,
           likes,
           comments,
-          saves: 0,
+          saves: saved,
+          shares,
+          reposts,
           engagementRate: rate,
           postedAt: item.timestamp!.slice(0, 10),
         };
@@ -214,17 +275,29 @@ export async function fetchLivePosts(
       return date && inSpan(date, span);
     })
     .slice(0, META_INITIAL_POST_SYNC_LIMIT)
-    .map((post) => ({
-      id: post.id,
-      caption: (post.message ?? "Untitled post").slice(0, 500),
-      mediaType: "Image" as const,
-      reach: 0,
-      likes: 0,
-      comments: 0,
-      saves: 0,
-      engagementRate: 0,
-      postedAt: post.created_time!.slice(0, 10),
-    }));
+    .map((post) => {
+      const likes = post.reactions?.summary?.total_count ?? 0;
+      const comments = post.comments?.summary?.total_count ?? 0;
+      const shares = post.shares?.count ?? 0;
+      const engagement = likes + comments + shares;
+
+      return {
+        id: post.id,
+        caption: (post.message ?? "Untitled post").slice(0, 500),
+        mediaType: "Image" as const,
+        reach: 0,
+        likes,
+        comments,
+        saves: 0,
+        shares,
+        reposts: 0,
+        engagementRate:
+          account.followers > 0
+            ? Number(((engagement / account.followers) * 100).toFixed(2))
+            : 0,
+        postedAt: post.created_time!.slice(0, 10),
+      };
+    });
 }
 
 /** Campaign page: insights for the selected range only — no DB writes. */
