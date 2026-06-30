@@ -1,3 +1,12 @@
+import { buildReportableAccounts } from "../utils/reportableAccounts";
+import { DUMMY_AD_ACCOUNTS } from "./campaignData";
+import { DUMMY_DASHBOARD_ACCOUNTS } from "./dashboardData";
+
+export const DUMMY_REPORTABLE_ACCOUNTS = buildReportableAccounts(
+  DUMMY_DASHBOARD_ACCOUNTS,
+  DUMMY_AD_ACCOUNTS,
+);
+
 export const reportMetrics = [
   { id: "followers", label: "Follower growth" },
   { id: "reach", label: "Reach & impressions" },
@@ -14,7 +23,9 @@ export const reportFormatOptions = [
 ];
 
 export const defaultCustomReportForm = {
-  selectedAccountIds: [] as string[],
+  selectedAccountIds: DUMMY_REPORTABLE_ACCOUNTS.slice(0, 2).map(
+    (account) => account.id,
+  ),
   selectedMetricIds: ["followers", "reach", "engagement", "topPosts"],
   format: "pdf",
 };

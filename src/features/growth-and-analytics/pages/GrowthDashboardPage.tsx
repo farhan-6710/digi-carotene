@@ -14,8 +14,8 @@ export function GrowthDashboardPage() {
     accountId,
     setAccountId,
     statCards,
-    trend,
-    platformSplit,
+    chartRows,
+    contentTypeSplit,
     isLoading,
     error,
     dateFilterProps,
@@ -26,7 +26,7 @@ export function GrowthDashboardPage() {
     <PageContent>
       <PageHeader
         heading="Dashboard Overview"
-        description="Audience growth, reach, and engagement for the selected account."
+        description="Audience growth, reach, and interactions for the selected account."
         actions={<DateFilters {...dateFilterProps} />}
       />
 
@@ -46,18 +46,18 @@ export function GrowthDashboardPage() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <PageContent className="space-y-6 lg:col-span-2">
             <GrowthTrendChart
-              title="Audience Growth & Engagement"
-              description="Monthly followers with engagement rate overlay."
-              data={trend}
+              title="Audience Growth & Reach"
+              description="Monthly trend for the selected metric."
+              rows={chartRows}
             />
           </PageContent>
 
           <PageContent className="space-y-6 lg:col-span-1">
             <GrowthDonutChart
-              title="Followers by Platform"
-              description="Current audience for this account."
-              data={platformSplit}
-              centerLabel="Followers"
+              title="Posts by Content Type"
+              description="Posts published in the selected range."
+              data={contentTypeSplit}
+              centerLabel="Posts"
             />
           </PageContent>
         </div>

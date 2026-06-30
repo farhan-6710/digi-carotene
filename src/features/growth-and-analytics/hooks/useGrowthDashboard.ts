@@ -1,20 +1,19 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { fetchOrganicAccounts } from "@/services/growthAccountsService";
-import { fetchLiveDailyMetricsForAccount } from "@/services/growthLiveMetricsService";
-import { useFetch } from "@/shared/hooks/useFetch";
-
-import type { DailyMetricRow, OrganicAccount } from "../types/types";
 import {
-  buildDashboardStatCards,
-  buildPlatformSplit,
-  buildTrend,
-} from "../utils/dashboardMetrics";
-import { useGrowthAccountsUpdated } from "./useGrowthAccountsUpdated";
+  DUMMY_DASHBOARD_ACCOUNTS,
+  getDummyMetricsForAccount,
+  getDummyPostsForAccount,
+} from "../constants/dashboardData";
+import type { OrganicAccount } from "../types/types";
+import { buildDashboardStatCards } from "../utils/dashboardMetrics";
+import {
+  filterMetricsByRange,
+  filterPostsByRange,
+  sumInteractionTotals,
+} from "../utils/dashboardDataFilters";
+import { buildContentTypeSplit } from "../utils/contentMetrics";
 import { useGrowthDateRange } from "./useGrowthDateRange";
-
-const NO_METRICS: DailyMetricRow[] = [];
-const NO_ACCOUNTS: OrganicAccount[] = [];
 
 function platformLabel(account: OrganicAccount): string {
   return account.platform === "instagram" ? "Instagram" : "Facebook";
@@ -22,35 +21,27 @@ function platformLabel(account: OrganicAccount): string {
 
 export function useGrowthDashboard() {
   const { range, dateFilterProps, periodLabel } = useGrowthDateRange();
+  const accounts = DUMMY_DASHBOARD_ACCOUNTS;
 
-  const loadAccounts = useCallback(() => fetchOrganicAccounts(), []);
-  const {
-    data: accounts,
-    isLoading: isAccountsLoading,
-    reload: reloadAccounts,
-  } = useFetch<OrganicAccount[]>(loadAccounts, NO_ACCOUNTS);
-
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState(accounts[0]?.id ?? "");
   const activeAccount =
     accounts.find((account) => account.id === selectedId) ?? accounts[0];
   const accountId = activeAccount?.id ?? "";
 
-  const load = useCallback(
-    () =>
-      accountId
-        ? fetchLiveDailyMetricsForAccount(accountId, range)
-        : Promise.resolve(NO_METRICS),
+  const metrics = useMemo(
+    () => filterMetricsByRange(getDummyMetricsForAccount(accountId), range),
     [accountId, range],
   );
-  const { data, isLoading, error, reload } = useFetch<DailyMetricRow[]>(
-    load,
-    NO_METRICS,
+
+  const posts = useMemo(
+    () => filterPostsByRange(getDummyPostsForAccount(accountId), range),
+    [accountId, range],
   );
 
-  useGrowthAccountsUpdated(async () => {
-    await reloadAccounts();
-    await reload();
-  });
+  const interactionTotals = useMemo(
+    () => sumInteractionTotals(metrics),
+    [metrics],
+  );
 
   const accountOptions = useMemo(
     () =>
@@ -61,14 +52,22 @@ export function useGrowthDashboard() {
     [accounts],
   );
 
+  const showTotalFollowers = !range.from && !range.to;
+
   const statCards = useMemo(
-    () => buildDashboardStatCards(data, activeAccount),
-    [data, activeAccount],
+    () =>
+      buildDashboardStatCards(
+        metrics,
+        activeAccount,
+        interactionTotals,
+        showTotalFollowers,
+      ),
+    [metrics, activeAccount, interactionTotals, showTotalFollowers],
   );
-  const trend = useMemo(() => buildTrend(data), [data]);
-  const platformSplit = useMemo(
-    () => buildPlatformSplit(activeAccount),
-    [activeAccount],
+
+  const contentTypeSplit = useMemo(
+    () => buildContentTypeSplit(posts),
+    [posts],
   );
 
   return {
@@ -76,10 +75,10 @@ export function useGrowthDashboard() {
     accountId,
     setAccountId: setSelectedId,
     statCards,
-    trend,
-    platformSplit,
-    isLoading: isLoading || isAccountsLoading,
-    error,
+    chartRows: metrics,
+    contentTypeSplit,
+    isLoading: false,
+    error: null,
     dateFilterProps,
     periodLabel,
     hasAccounts: accounts.length > 0,

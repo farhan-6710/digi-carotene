@@ -1,58 +1,34 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { fetchAdAccounts } from "@/services/growthAccountsService";
-import { fetchLiveCampaignMetrics } from "@/services/growthLiveMetricsService";
-import { useFetch } from "@/shared/hooks/useFetch";
-import { showToast } from "@/shared/utils/showToast";
-
-import type { AdAccount, CampaignMetricRow } from "../types/types";
+import {
+  DUMMY_AD_ACCOUNTS,
+  getDummyCampaignMetrics,
+} from "../constants/campaignData";
 import {
   buildCampaignRows,
   buildCampaignStatCards,
   buildSpendTrend,
 } from "../utils/campaignMetrics";
+import { filterCampaignMetricsByRange } from "../utils/dashboardDataFilters";
 import { saveGrowthReport } from "../utils/generateReport";
 import { resolveGrowthReportPeriod } from "../utils/reportPeriod";
-import { useGrowthAccountsUpdated } from "./useGrowthAccountsUpdated";
 import { useGrowthDateRange } from "./useGrowthDateRange";
-
-const NO_ACCOUNTS: AdAccount[] = [];
-const NO_METRICS: CampaignMetricRow[] = [];
 
 export function useGrowthCampaigns() {
   const { range, dateFilterProps, periodLabel } = useGrowthDateRange();
+  const accounts = DUMMY_AD_ACCOUNTS;
 
-  const loadAccounts = useCallback(() => fetchAdAccounts(), []);
-  const { data: accounts, reload: reloadAccounts } = useFetch<AdAccount[]>(
-    loadAccounts,
-    NO_ACCOUNTS,
-  );
-
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState(accounts[0]?.id ?? "");
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const activeAccount =
     accounts.find((account) => account.id === selectedId) ?? accounts[0];
   const adAccountId = activeAccount?.id ?? "";
   const currency = activeAccount?.currency ?? "INR";
 
-  const loadCampaigns = useCallback(
-    () =>
-      adAccountId
-        ? fetchLiveCampaignMetrics(adAccountId, range)
-        : Promise.resolve(NO_METRICS),
+  const metrics = useMemo(
+    () => filterCampaignMetricsByRange(getDummyCampaignMetrics(adAccountId), range),
     [adAccountId, range],
   );
-  const {
-    data: metrics,
-    isLoading,
-    error,
-    reload: reloadMetrics,
-  } = useFetch<CampaignMetricRow[]>(loadCampaigns, NO_METRICS);
-
-  useGrowthAccountsUpdated(async () => {
-    await reloadAccounts();
-    await reloadMetrics();
-  });
 
   const accountOptions = useMemo(
     () =>
@@ -70,11 +46,8 @@ export function useGrowthCampaigns() {
   const spendTrend = useMemo(() => buildSpendTrend(metrics), [metrics]);
   const campaignRows = useMemo(() => buildCampaignRows(metrics), [metrics]);
 
-  const generateReport = useCallback(async () => {
-    if (!activeAccount) {
-      showToast("error", "Connect an ad account before generating a report.");
-      return;
-    }
+  const generateReport = async () => {
+    if (!activeAccount) return;
 
     const { periodStart, periodEnd } = resolveGrowthReportPeriod(range);
     setIsGeneratingReport(true);
@@ -89,7 +62,7 @@ export function useGrowthCampaigns() {
     } finally {
       setIsGeneratingReport(false);
     }
-  }, [activeAccount, range]);
+  };
 
   return {
     accountOptions,
@@ -98,8 +71,8 @@ export function useGrowthCampaigns() {
     statCards,
     spendTrend,
     campaignRows,
-    isLoading,
-    error,
+    isLoading: false,
+    error: null,
     dateFilterProps,
     periodLabel,
     generateReport,

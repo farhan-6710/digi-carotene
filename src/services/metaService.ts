@@ -109,8 +109,15 @@ export async function fetchMetaAdInfo(
 
 type IgInsightMetric = {
   name?: string;
-  values?: Array<{ value?: number; end_time?: string }>;
+  values?: Array<{ value?: number | { value?: number }; end_time?: string }>;
+  total_value?: { value?: number };
 };
+
+function parseMetaMetricValue(value?: number | { value?: number }): number {
+  if (typeof value === "number") return value;
+  if (typeof value?.value === "number") return value.value;
+  return 0;
+}
 
 async function fetchInstagramInsightMetrics(
   accountId: string,
@@ -131,6 +138,37 @@ async function fetchInstagramInsightMetrics(
   return data.data ?? [];
 }
 
+export async function fetchInstagramInteractionTotals(
+  accountId: string,
+  accessToken: string,
+  range: MetaSyncRange,
+): Promise<Record<"likes" | "comments" | "shares" | "reposts", number>> {
+  const metrics = ["likes", "comments", "shares", "reposts"] as const;
+  const data = (await graphGet(META_API_VERSION.instagram, `${accountId}/insights`, {
+    period: "day",
+    since: range.sinceUnix,
+    until: range.untilUnix,
+    metric: metrics.join(","),
+    metric_type: "total_value",
+    access_token: accessToken,
+  })) as { data?: IgInsightMetric[] };
+
+  const totals = {
+    likes: 0,
+    comments: 0,
+    shares: 0,
+    reposts: 0,
+  };
+
+  for (const metric of data.data ?? []) {
+    const name = metric.name;
+    if (!name || !(name in totals)) continue;
+    totals[name as keyof typeof totals] = parseMetaMetricValue(metric.total_value?.value);
+  }
+
+  return totals;
+}
+
 /** Dashboard: reach always; follower_count only inside Meta's 30-day window. */
 export async function fetchInstagramDashboardInsights(
   accountId: string,
@@ -139,15 +177,20 @@ export async function fetchInstagramDashboardInsights(
 ): Promise<IgInsightMetric[]> {
   const followerRange = getFollowerInsightRange(range);
 
+  const interactionMetrics = ["likes", "comments", "shares", "saves", "reposts"] as const;
+  const rangeTotalMetrics = ["views"] as const;
   const requests: Promise<IgInsightMetric[]>[] = [
     fetchInstagramInsightMetrics(accountId, accessToken, range, "reach"),
-    fetchInstagramInsightMetrics(
-      accountId,
-      accessToken,
-      range,
-      "total_interactions",
-      { metric_type: "total_value" },
-    ).catch(() => [] as IgInsightMetric[]),
+    ...interactionMetrics.map((metric) =>
+      fetchInstagramInsightMetrics(accountId, accessToken, range, metric, {
+        metric_type: "total_value",
+      }).catch(() => [] as IgInsightMetric[]),
+    ),
+    ...rangeTotalMetrics.map((metric) =>
+      fetchInstagramInsightMetrics(accountId, accessToken, range, metric, {
+        metric_type: "total_value",
+      }).catch(() => [] as IgInsightMetric[]),
+    ),
   ];
 
   if (followerRange) {
@@ -193,7 +236,7 @@ export function parseIgMediaInsightBlock(
 ): IgMediaInsightValues {
   const values: Record<string, number> = {};
   for (const metric of insights?.data ?? []) {
-    values[metric.name ?? ""] = metric.values?.[0]?.value ?? 0;
+    values[metric.name ?? ""] = parseMetaMetricValue(metric.values?.[0]?.value);
   }
   return {
     reach: values.reach ?? 0,

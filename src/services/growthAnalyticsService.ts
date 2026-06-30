@@ -64,6 +64,12 @@ export async function fetchDailyMetrics(
     reach: row.reach,
     impressions: row.impressions,
     engagement: row.engagement,
+    likes: 0,
+    comments: 0,
+    shares: 0,
+    reposts: 0,
+    saves: 0,
+    clicks: 0,
   }));
 }
 

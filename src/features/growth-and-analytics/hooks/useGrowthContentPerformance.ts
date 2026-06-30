@@ -1,24 +1,20 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { fetchOrganicAccounts } from "@/services/growthAccountsService";
-import { fetchLivePosts } from "@/services/growthLiveMetricsService";
-import { useFetch } from "@/shared/hooks/useFetch";
-import { showToast } from "@/shared/utils/showToast";
-
-import type { OrganicAccount, PostRow } from "../types/types";
+import {
+  DUMMY_DASHBOARD_ACCOUNTS,
+  getDummyPostsForAccount,
+} from "../constants/dashboardData";
+import type { OrganicAccount } from "../types/types";
 import {
   buildContentStatCards,
   buildContentTypeSplit,
   buildEngagementByType,
   mapPostRows,
 } from "../utils/contentMetrics";
+import { filterPostsByRange } from "../utils/dashboardDataFilters";
 import { saveGrowthReport } from "../utils/generateReport";
 import { resolveGrowthReportPeriod } from "../utils/reportPeriod";
-import { useGrowthAccountsUpdated } from "./useGrowthAccountsUpdated";
 import { useGrowthDateRange } from "./useGrowthDateRange";
-
-const NO_ACCOUNTS: OrganicAccount[] = [];
-const NO_POSTS: PostRow[] = [];
 
 function platformLabel(account: OrganicAccount): string {
   return account.platform === "instagram" ? "Instagram" : "Facebook";
@@ -26,34 +22,18 @@ function platformLabel(account: OrganicAccount): string {
 
 export function useGrowthContentPerformance() {
   const { range, dateFilterProps, periodLabel } = useGrowthDateRange();
+  const accounts = DUMMY_DASHBOARD_ACCOUNTS;
 
-  const loadAccounts = useCallback(() => fetchOrganicAccounts(), []);
-  const { data: accounts, reload: reloadAccounts } = useFetch<OrganicAccount[]>(
-    loadAccounts,
-    NO_ACCOUNTS,
-  );
-
-  useGrowthAccountsUpdated(reloadAccounts);
-
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState(accounts[0]?.id ?? "");
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const activeAccount =
     accounts.find((account) => account.id === selectedId) ?? accounts[0];
   const accountId = activeAccount?.id ?? "";
 
-  const loadPosts = useCallback(
-    () => (accountId ? fetchLivePosts(accountId, range) : Promise.resolve(NO_POSTS)),
+  const posts = useMemo(
+    () => filterPostsByRange(getDummyPostsForAccount(accountId), range),
     [accountId, range],
   );
-  const { data: posts, isLoading, error, reload: reloadPosts } = useFetch<PostRow[]>(
-    loadPosts,
-    NO_POSTS,
-  );
-
-  useGrowthAccountsUpdated(async () => {
-    await reloadAccounts();
-    await reloadPosts();
-  });
 
   const accountOptions = useMemo(
     () =>
@@ -69,11 +49,8 @@ export function useGrowthContentPerformance() {
   const engagementByType = useMemo(() => buildEngagementByType(posts), [posts]);
   const postRows = useMemo(() => mapPostRows(posts), [posts]);
 
-  const generateReport = useCallback(async () => {
-    if (!activeAccount) {
-      showToast("error", "Connect an organic account before generating a report.");
-      return;
-    }
+  const generateReport = async () => {
+    if (!activeAccount) return;
 
     const { periodStart, periodEnd } = resolveGrowthReportPeriod(range);
     setIsGeneratingReport(true);
@@ -88,7 +65,7 @@ export function useGrowthContentPerformance() {
     } finally {
       setIsGeneratingReport(false);
     }
-  }, [activeAccount, range]);
+  };
 
   return {
     accountOptions,
@@ -98,8 +75,8 @@ export function useGrowthContentPerformance() {
     typeSplit,
     engagementByType,
     postRows,
-    isLoading,
-    error,
+    isLoading: false,
+    error: null,
     dateFilterProps,
     periodLabel,
     generateReport,

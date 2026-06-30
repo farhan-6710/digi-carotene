@@ -1,20 +1,15 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { fetchAdAccounts, fetchOrganicAccounts } from "@/services/growthAccountsService";
-import { useUrlDateFields } from "@/shared/hooks/useUrlDateFields";
-import { useFetch } from "@/shared/hooks/useFetch";
-import { showToast } from "@/shared/utils/showToast";
-
-import { defaultCustomReportForm } from "../constants/customReportData";
+import {
+  DUMMY_REPORTABLE_ACCOUNTS,
+  defaultCustomReportForm,
+} from "../constants/customReportData";
 import type { CustomReportFormState } from "../types/components";
-import type { ReportableAccount } from "../types/types";
 import { buildCustomReportInput } from "../utils/customReportMeta";
 import { saveGrowthReport } from "../utils/generateReport";
 import { resolveGrowthReportPeriod } from "../utils/reportPeriod";
-import { buildReportableAccounts } from "../utils/reportableAccounts";
-import { useGrowthAccountsUpdated } from "./useGrowthAccountsUpdated";
-
-const NO_ACCOUNTS: ReportableAccount[] = [];
+import { useUrlDateFields } from "@/shared/hooks/useUrlDateFields";
+import { showToast } from "@/shared/utils/showToast";
 
 function toggleId(ids: string[], id: string): string[] {
   return ids.includes(id)
@@ -24,23 +19,7 @@ function toggleId(ids: string[], id: string): string[] {
 
 export function useCustomReportBuilder() {
   const { fromDate, toDate, setFromDate, setToDate } = useUrlDateFields();
-
-  const loadAccounts = useCallback(async () => {
-    const [organic, ads] = await Promise.all([
-      fetchOrganicAccounts(),
-      fetchAdAccounts(),
-    ]);
-    return buildReportableAccounts(organic, ads);
-  }, []);
-
-  const {
-    data: reportableAccounts,
-    isLoading: isAccountsLoading,
-    error: accountsError,
-    reload: reloadAccounts,
-  } = useFetch<ReportableAccount[]>(loadAccounts, NO_ACCOUNTS);
-
-  useGrowthAccountsUpdated(reloadAccounts);
+  const reportableAccounts = DUMMY_REPORTABLE_ACCOUNTS;
 
   const [localValues, setLocalValues] = useState(() => ({
     selectedAccountIds: defaultCustomReportForm.selectedAccountIds,
@@ -85,10 +64,6 @@ export function useCustomReportBuilder() {
   );
 
   const generate = useCallback(async () => {
-    if (reportableAccounts.length === 0) {
-      showToast("error", "Connect an organic or ad account before generating a report.");
-      return;
-    }
     if (values.selectedAccountIds.length === 0) {
       showToast("error", "Select at least one account to include in the report.");
       return;
@@ -124,17 +99,12 @@ export function useCustomReportBuilder() {
     values.startDate,
   ]);
 
-  const accountsEmpty = useMemo(
-    () => !isAccountsLoading && reportableAccounts.length === 0,
-    [isAccountsLoading, reportableAccounts.length],
-  );
-
   return {
     values,
     reportableAccounts,
-    isAccountsLoading,
-    accountsError,
-    accountsEmpty,
+    isAccountsLoading: false,
+    accountsError: null,
+    accountsEmpty: false,
     isGenerating,
     toggleAccount,
     toggleMetric,

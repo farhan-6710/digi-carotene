@@ -35,7 +35,9 @@ export function resolveAnalyticsDateRange(
   const fromByPeriod: Record<AnalyticsQuickPeriodId, Date> = {
     "7d": startOfDay(subDays(today, 6)),
     "1m": startOfDay(subMonths(today, 1)),
+    "3m": startOfDay(subMonths(today, 3)),
     "6m": startOfDay(subMonths(today, 6)),
+    "9m": startOfDay(subMonths(today, 9)),
     "1y": startOfDay(subYears(today, 1)),
   };
 
@@ -81,7 +83,9 @@ export function formatAnalyticsFilterLabel(
     const labels: Record<AnalyticsQuickPeriodId, string> = {
       "7d": "Last 7 days",
       "1m": "Last month",
+      "3m": "Last 3 months",
       "6m": "Last 6 months",
+      "9m": "Last 9 months",
       "1y": "Last year",
     };
 

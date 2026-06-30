@@ -5,6 +5,7 @@ import {
   fetchFacebookDashboardInsights,
   fetchFacebookPosts,
   fetchInstagramDashboardInsights,
+  fetchInstagramInteractionTotals,
   fetchInstagramMedia,
   fetchInstagramMediaInsights,
   mergeIgMediaInsightValues,
@@ -22,7 +23,7 @@ import type {
 import { formatMetaApiError } from "@/features/growth-and-analytics/utils/metaApiErrors";
 import {
   buildDailyMetricRows,
-  flattenInsightMetrics,
+  mergeInsightChunkIntoByDate,
   getMetaInsightChunksForSpan,
   mapCampaignStatus,
   mapIgMediaType as mapMediaType,
@@ -44,6 +45,13 @@ type AdLiveRow = {
   id: string;
   ad_account_id: string;
   access_token: string | null;
+};
+
+export type InteractionTotals = {
+  likes: number;
+  comments: number;
+  shares: number;
+  reposts: number;
 };
 
 async function fetchOrganicLiveRow(dbAccountId: string): Promise<OrganicLiveRow | null> {
@@ -116,14 +124,14 @@ async function resolveIgPostInsights(
 
 function mergeInsightChunks(
   byDate: Map<string, Record<string, number>>,
-  metrics: Array<{ name?: string; values?: Array<{ value?: number; end_time?: string }> }>,
-  span: { from: string; to: string },
+  metrics: Array<{
+    name?: string;
+    values?: Array<{ value?: number | { value?: number }; end_time?: string }>;
+    total_value?: { value?: number | { value?: number } };
+  }>,
+  chunk: { from: string; to: string },
 ): void {
-  for (const [date, values] of flattenInsightMetrics(metrics)) {
-    if (inSpan(date, span)) {
-      byDate.set(date, { ...(byDate.get(date) ?? {}), ...values });
-    }
-  }
+  mergeInsightChunkIntoByDate(byDate, metrics, chunk);
 }
 
 async function fetchInstagramMetricsForRange(
@@ -140,8 +148,8 @@ async function fetchInstagramMetricsForRange(
     ),
   );
 
-  for (const metrics of chunkMetrics) {
-    mergeInsightChunks(byDate, metrics, span);
+  for (let i = 0; i < chunkMetrics.length; i++) {
+    mergeInsightChunks(byDate, chunkMetrics[i], chunks[i]);
   }
 
   return buildDailyMetricRows(byDate, account.followers, {
@@ -151,11 +159,17 @@ async function fetchInstagramMetricsForRange(
     accountName: account.account_name,
     platform: account.platform,
     date: row.metric_date,
-    followers: account.followers,
+    followers: row.followers,
     newFollowers: row.new_followers,
     reach: row.reach,
     impressions: row.impressions,
     engagement: row.engagement,
+    likes: row.likes,
+    comments: row.comments,
+    shares: row.shares,
+    reposts: row.reposts,
+    saves: row.saves,
+    clicks: row.clicks,
   }));
 }
 
@@ -173,8 +187,8 @@ async function fetchFacebookMetricsForRange(
     ),
   );
 
-  for (const metrics of chunkMetrics) {
-    mergeInsightChunks(byDate, metrics, span);
+  for (let i = 0; i < chunkMetrics.length; i++) {
+    mergeInsightChunks(byDate, chunkMetrics[i], chunks[i]);
   }
 
   return buildDailyMetricRows(byDate, account.followers).map((row) => ({
@@ -182,11 +196,17 @@ async function fetchFacebookMetricsForRange(
     accountName: account.account_name,
     platform: account.platform,
     date: row.metric_date,
-    followers: account.followers,
+    followers: row.followers,
     newFollowers: row.new_followers,
     reach: row.reach,
     impressions: row.impressions,
     engagement: row.engagement,
+    likes: row.likes,
+    comments: row.comments,
+    shares: row.shares,
+    reposts: row.reposts,
+    saves: row.saves,
+    clicks: row.clicks,
   }));
 }
 
@@ -206,6 +226,48 @@ export async function fetchLiveDailyMetricsForAccount(
       : await fetchFacebookMetricsForRange(account, span);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not load metrics.";
+    throw new Error(formatMetaApiError(message, account.account_name), { cause: error });
+  }
+}
+
+export async function fetchLiveInteractionTotalsForAccount(
+  dbAccountId: string,
+  range: GrowthDateRange,
+): Promise<InteractionTotals> {
+  const account = await fetchOrganicLiveRow(dbAccountId);
+  if (!account?.access_token) {
+    return { likes: 0, comments: 0, shares: 0, reposts: 0 };
+  }
+
+  const span = resolveGrowthMetaSpan(range);
+
+  try {
+    if (account.platform !== "instagram") {
+      return { likes: 0, comments: 0, shares: 0, reposts: 0 };
+    }
+
+    const chunks = getMetaInsightChunksForSpan(span.from, span.to);
+    const totals = await Promise.all(
+      chunks.map((chunk) =>
+        fetchInstagramInteractionTotals(
+          account.account_id,
+          account.access_token!,
+          chunk,
+        ),
+      ),
+    );
+
+    return totals.reduce<InteractionTotals>(
+      (sum, chunk) => ({
+        likes: sum.likes + chunk.likes,
+        comments: sum.comments + chunk.comments,
+        shares: sum.shares + chunk.shares,
+        reposts: sum.reposts + chunk.reposts,
+      }),
+      { likes: 0, comments: 0, shares: 0, reposts: 0 },
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Could not load interactions.";
     throw new Error(formatMetaApiError(message, account.account_name), { cause: error });
   }
 }

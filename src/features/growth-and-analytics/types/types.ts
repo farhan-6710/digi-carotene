@@ -15,6 +15,13 @@ export type MetaAdInfo = {
 };
 
 // Raw rows returned by the analytics service before aggregation.
+export type InteractionTotals = {
+  likes: number;
+  comments: number;
+  shares: number;
+  reposts: number;
+};
+
 export type DailyMetricRow = {
   accountId: string;
   accountName: string;
@@ -25,6 +32,12 @@ export type DailyMetricRow = {
   reach: number;
   impressions: number;
   engagement: number;
+  likes: number;
+  comments: number;
+  shares: number;
+  reposts: number;
+  saves: number;
+  clicks: number;
 };
 
 export type PostRow = {
@@ -53,9 +66,7 @@ export type CampaignMetricRow = {
 
 export type TrendPoint = {
   label: string;
-  followers: number;
-  reach: number;
-  engagement: number;
+  value: number;
 };
 
 export type CategoryDatum = {

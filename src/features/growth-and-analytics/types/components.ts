@@ -6,6 +6,7 @@ import type {
   CampaignRow,
   CategoryDatum,
   ContentPostRow,
+  DailyMetricRow,
   LabeledValue,
   OrganicAccount,
   OrganicAccountForm,
@@ -14,7 +15,6 @@ import type {
   ReportType,
   SpendPoint,
   TopAccountRow,
-  TrendPoint,
 } from "./types";
 
 export type GrowthChartCardProps = {
@@ -30,7 +30,7 @@ export type GrowthChartCardProps = {
 export type GrowthTrendChartProps = {
   title: string;
   description?: string;
-  data: TrendPoint[];
+  rows: DailyMetricRow[];
 };
 
 export type GrowthBarChartProps = {

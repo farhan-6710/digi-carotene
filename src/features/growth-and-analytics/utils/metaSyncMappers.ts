@@ -139,8 +139,27 @@ export function getMetaSyncRange(): MetaSyncRange {
 
 export type InsightPoint = { date: string; value: number };
 
+function parseInsightValue(
+  value:
+    | number
+    | {
+        value?: number;
+      }
+    | undefined,
+): number {
+  if (typeof value === "number") return value;
+  if (typeof value?.value === "number") return value.value;
+  return 0;
+}
+
 export function flattenInsightMetrics(
-  metrics: Array<{ name?: string; values?: Array<{ value?: number; end_time?: string }> }>,
+  metrics: Array<{
+    name?: string;
+    values?: Array<{
+      value?: number | { value?: number };
+      end_time?: string;
+    }>;
+  }>,
 ): Map<string, Record<string, number>> {
   const byDate = new Map<string, Record<string, number>>();
 
@@ -150,12 +169,46 @@ export function flattenInsightMetrics(
       const date = point.end_time?.slice(0, 10);
       if (!date) continue;
       const row = byDate.get(date) ?? {};
-      row[name] = (row[name] ?? 0) + (point.value ?? 0);
+      row[name] = (row[name] ?? 0) + parseInsightValue(point.value);
       byDate.set(date, row);
     }
   }
 
   return byDate;
+}
+
+type InsightMetricBlock = {
+  name?: string;
+  values?: Array<{
+    value?: number | { value?: number };
+    end_time?: string;
+  }>;
+  total_value?: { value?: number | { value?: number } };
+};
+
+/** Merges one Meta insight chunk; range totals land on the chunk end date. */
+export function mergeInsightChunkIntoByDate(
+  byDate: Map<string, Record<string, number>>,
+  metrics: InsightMetricBlock[],
+  chunk: { from: string; to: string },
+): void {
+  for (const [date, values] of flattenInsightMetrics(metrics)) {
+    if (date >= chunk.from && date <= chunk.to) {
+      byDate.set(date, { ...(byDate.get(date) ?? {}), ...values });
+    }
+  }
+
+  for (const metric of metrics) {
+    const name = metric.name ?? "";
+    if (!name || metric.values?.length) continue;
+
+    const total = parseInsightValue(metric.total_value?.value);
+    if (!total) continue;
+
+    const row = byDate.get(chunk.to) ?? {};
+    row[name] = (row[name] ?? 0) + total;
+    byDate.set(chunk.to, row);
+  }
 }
 
 export function buildDailyMetricRows(
@@ -169,6 +222,12 @@ export function buildDailyMetricRows(
   reach: number;
   impressions: number;
   engagement: number;
+  likes: number;
+  comments: number;
+  shares: number;
+  reposts: number;
+  saves: number;
+  clicks: number;
 }> {
   const dates = [...byDate.keys()].sort();
   let prevFollowers = currentFollowerTotal;
@@ -179,6 +238,12 @@ export function buildDailyMetricRows(
     reach: number;
     impressions: number;
     engagement: number;
+    likes: number;
+    comments: number;
+    shares: number;
+    reposts: number;
+    saves: number;
+    clicks: number;
   }> = [];
 
   const followerCountIsDailyDelta = options?.followerCountIsDailyDelta ?? false;
@@ -186,10 +251,22 @@ export function buildDailyMetricRows(
   for (const date of dates) {
     const values = byDate.get(date) ?? {};
     const reach = Math.round(values.reach ?? 0);
+    const likes = Math.round(values.likes ?? 0);
+    const comments = Math.round(values.comments ?? 0);
+    const shares = Math.round(values.shares ?? 0);
+    const reposts = Math.round(values.reposts ?? 0);
+    const saves = Math.round(values.saves ?? 0);
+    const clicks = Math.round(values.clicks ?? values.page_consumptions_clicks ?? 0);
+    const interactionTotal =
+      likes +
+      comments +
+      shares +
+      reposts;
     const engagement = Math.round(
-      values.total_interactions ??
-        values.page_post_engagements ??
-        values.post_engagements ??
+      interactionTotal ||
+        values.total_interactions ||
+        values.page_post_engagements ||
+        values.post_engagements ||
         0,
     );
     const impressions = Math.round(
@@ -221,6 +298,12 @@ export function buildDailyMetricRows(
       reach,
       impressions,
       engagement,
+      likes,
+      comments,
+      shares,
+      reposts,
+      saves,
+      clicks,
     });
   }
 

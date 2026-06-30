@@ -1,18 +1,9 @@
-import { useCallback } from "react";
-
-import { fetchReports } from "@/services/growthAnalyticsService";
-import { useFetch } from "@/shared/hooks/useFetch";
-
-import type { ReportRow } from "../types/types";
-
-const NO_REPORTS: ReportRow[] = [];
+import { DUMMY_REPORTS } from "../constants/reportsData";
 
 export function useGrowthReports() {
-  const load = useCallback(() => fetchReports(), []);
-  const { data: reports, isLoading, error } = useFetch<ReportRow[]>(
-    load,
-    NO_REPORTS,
-  );
-
-  return { reports, isLoading, error };
+  return {
+    reports: DUMMY_REPORTS,
+    isLoading: false,
+    error: null,
+  };
 }
