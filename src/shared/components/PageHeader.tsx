@@ -10,7 +10,7 @@ export function PageHeader({
   const hasActionsRow = hasTitleBlock || actions;
 
   return (
-    <header className="space-y-4">
+    <header className="space-y-4 w-full">
       {backButton ? (
         <div className="flex items-center">{backButton}</div>
       ) : null}
@@ -29,7 +29,9 @@ export function PageHeader({
               ) : null}
             </div>
           ) : null}
-          {actions ? <div className="shrink-0">{actions}</div> : null}
+          {actions ? (
+            <div className={hasTitleBlock ? "shrink-0" : "w-full"}>{actions}</div>
+          ) : null}
         </div>
       ) : null}
     </header>

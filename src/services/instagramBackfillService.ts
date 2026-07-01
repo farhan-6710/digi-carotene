@@ -30,8 +30,9 @@ function mapMetaMediaTypeToDb(
 function isWithinBackfillWindow(timestamp?: string): boolean {
   if (!timestamp) return false;
   const postedAt = new Date(timestamp);
-  const cutoff = startOfDay(subDays(new Date(), INSTAGRAM_BACKFILL_DAYS));
-  return postedAt >= cutoff;
+  const windowStart = startOfDay(subDays(new Date(), INSTAGRAM_BACKFILL_DAYS));
+  const todayStart = startOfDay(new Date());
+  return postedAt >= windowStart && postedAt < todayStart;
 }
 
 function resolvePostThumbnail(

@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 
 import { fetchInstagramProfileById } from "@/services/instagramProfilesService";
-import { fetchPastPostById } from "@/services/pastPostsMetricsService";
+import {
+  fetchPastPostById,
+  fetchPastPostNeighborIds,
+} from "@/services/pastPostsMetricsService";
 import { useFetch } from "@/shared/hooks/useFetch";
 
 import type { GrowthPostDetailView } from "../types/types";
@@ -16,10 +19,13 @@ export function useGrowthPostDetailQuery(postId: string) {
     const post = await fetchPastPostById(postId);
     if (!post) return EMPTY;
 
-    const profile = await fetchInstagramProfileById(post.accountId);
+    const [profile, neighbors] = await Promise.all([
+      fetchInstagramProfileById(post.accountId),
+      fetchPastPostNeighborIds(post),
+    ]);
     const accountUsername = profile?.username ?? "Unknown account";
 
-    return buildGrowthPostDetailView(post, accountUsername);
+    return buildGrowthPostDetailView(post, accountUsername, neighbors);
   }, [postId]);
 
   const { data, isLoading, error, reload } = useFetch(load, EMPTY);

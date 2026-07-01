@@ -56,6 +56,8 @@ export type GrowthPostDetailView = {
   accountUsername: string;
   mediaTypeLabel: ContentPostRow["mediaType"];
   engagementRate: number;
+  previousPostId: string | null;
+  nextPostId: string | null;
 };
 
 export type DailyMetricRow = {

@@ -1,8 +1,11 @@
 import { Link, useParams } from "react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { GrowthPostProfileCard } from "../components/GrowthPostProfileCard";
-import { GROWTH_CONTENT_PERFORMANCE_PATH } from "../constants/routes";
+import {
+  buildGrowthPostDetailPath,
+  GROWTH_CONTENT_PERFORMANCE_PATH,
+} from "../constants/routes";
 import { useGrowthPostDetailQuery } from "../hooks/useGrowthPostDetailQuery";
 import { DetailPageLoading } from "@/shared/components/DetailPageLoading";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
@@ -21,6 +24,45 @@ function GrowthPostDetailBackButton() {
   );
 }
 
+function GrowthPostPager({
+  previousPostId,
+  nextPostId,
+}: {
+  previousPostId: string | null;
+  nextPostId: string | null;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      {previousPostId ? (
+        <Button asChild variant="outline" className="rounded-full">
+          <Link to={buildGrowthPostDetailPath(previousPostId)}>
+            <ArrowLeft className="mr-2 size-4" />
+            Prev post
+          </Link>
+        </Button>
+      ) : (
+        <Button variant="outline" className="rounded-full" disabled>
+          <ArrowLeft className="mr-2 size-4" />
+          Prev post
+        </Button>
+      )}
+      {nextPostId ? (
+        <Button asChild variant="outline" className="rounded-full">
+          <Link to={buildGrowthPostDetailPath(nextPostId)}>
+            Next post
+            <ArrowRight className="ml-2 size-4" />
+          </Link>
+        </Button>
+      ) : (
+        <Button variant="outline" className="rounded-full" disabled>
+          Next post
+          <ArrowRight className="ml-2 size-4" />
+        </Button>
+      )}
+    </div>
+  );
+}
+
 export function GrowthPostDetailPage() {
   const { postId = "" } = useParams();
   const { view, isLoading, error } = useGrowthPostDetailQuery(postId);
@@ -32,7 +74,14 @@ export function GrowthPostDetailPage() {
   if (!view) {
     return (
       <section className="space-y-4">
-        <PageHeader backButton={<GrowthPostDetailBackButton />} />
+        <PageHeader
+          actions={
+            <div className="flex w-full items-center justify-between gap-4">
+              <GrowthPostDetailBackButton />
+              <GrowthPostPager previousPostId={null} nextPostId={null} />
+            </div>
+          }
+        />
         <ErrorBanner message={error ?? "Post not found."} />
       </section>
     );
@@ -40,7 +89,17 @@ export function GrowthPostDetailPage() {
 
   return (
     <PageContent>
-      <PageHeader backButton={<GrowthPostDetailBackButton />} />
+      <PageHeader
+        actions={
+          <div className="flex w-full items-center justify-between gap-4">
+            <GrowthPostDetailBackButton />
+            <GrowthPostPager
+              previousPostId={view.previousPostId}
+              nextPostId={view.nextPostId}
+            />
+          </div>
+        }
+      />
 
       {error ? <ErrorBanner message={error} /> : null}
 

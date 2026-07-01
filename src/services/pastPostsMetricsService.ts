@@ -83,6 +83,29 @@ export async function fetchPastPostById(id: string): Promise<PastPostMetric | nu
   return data ? mapPost(data as PostRow) : null;
 }
 
+export async function fetchPastPostNeighborIds(
+  post: Pick<PastPostMetric, "id" | "accountId">,
+): Promise<{ previousPostId: string | null; nextPostId: string | null }> {
+  const { data, error } = await supabase
+    .from(DB.PAST_POSTS_METRICS.TABLE)
+    .select("id")
+    .eq("account_id", post.accountId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+
+  const ids = ((data ?? []) as Array<{ id: string | number }>).map((row) =>
+    String(row.id),
+  );
+  const index = ids.indexOf(post.id);
+
+  return {
+    previousPostId: index > 0 ? ids[index - 1] : null,
+    nextPostId:
+      index >= 0 && index < ids.length - 1 ? ids[index + 1] : null,
+  };
+}
+
 export type PastPostInsert = {
   postId: string;
   caption: string;
