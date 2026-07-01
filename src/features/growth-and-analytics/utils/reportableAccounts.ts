@@ -8,6 +8,15 @@ function organicPlatformLabel(platform: OrganicAccount["platform"]): string {
   return platform === "instagram" ? "Instagram" : "Facebook";
 }
 
+export function buildOrganicAccountOptions(
+  accounts: OrganicAccount[],
+): Array<{ value: string; label: string }> {
+  return accounts.map((account) => ({
+    value: account.id,
+    label: `${account.accountName} (${organicPlatformLabel(account.platform)})`,
+  }));
+}
+
 export function buildReportableAccounts(
   organic: OrganicAccount[],
   ads: AdAccount[],

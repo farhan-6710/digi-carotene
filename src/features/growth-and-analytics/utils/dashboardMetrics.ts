@@ -40,7 +40,6 @@ export function buildDashboardStatCards(
   const netNew =
     followersGained ??
     rows.reduce((sum, row) => sum + row.newFollowers, 0);
-
   const interactionDescription = [
     `${formatCompact(totalLikes)} likes`,
     `${formatCompact(totalComments)} comments`,

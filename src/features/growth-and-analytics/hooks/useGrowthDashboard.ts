@@ -1,6 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
-import { fetchInstagramProfiles } from "@/services/instagramProfilesService";
 import {
   fetchDailyFollowersForProfile,
   sumFollowersGained,
@@ -8,35 +7,30 @@ import {
 import { fetchPastPostsForProfile } from "@/services/pastPostsMetricsService";
 import { useFetch } from "@/shared/hooks/useFetch";
 
-import type { InstagramProfile } from "../types/types";
 import { buildDashboardStatCards } from "../utils/dashboardMetrics";
 import { buildContentTypeSplit } from "../utils/contentMetrics";
 import {
   aggregatePostsToDailyRows,
   mapPastPostToPostRow,
-  profileToOrganicAccount,
   sumPostInteractionTotals,
 } from "../utils/instagramPostMetrics";
-import { useGrowthAccountsUpdated } from "./useGrowthAccountsUpdated";
 import { useGrowthDateRange } from "./useGrowthDateRange";
-
-const NO_PROFILES: InstagramProfile[] = [];
+import { useGrowthOrganicAccountPicker } from "./useGrowthOrganicAccountPicker";
 
 export function useGrowthDashboard() {
   const { range, dateFilterProps, periodLabel } = useGrowthDateRange();
-
-  const loadProfiles = useCallback(() => fetchInstagramProfiles(), []);
   const {
-    data: profiles,
-    isLoading: isProfilesLoading,
-    error: profilesError,
-    reload: reloadProfiles,
-  } = useFetch(loadProfiles, NO_PROFILES);
+    accountOptions,
+    accountId,
+    setAccountId,
+    activeAccount,
+    activeInstagramProfile,
+    isAccountsLoading,
+    accountsError,
+    hasAccounts,
+  } = useGrowthOrganicAccountPicker();
 
-  const [selectedId, setSelectedId] = useState("");
-  const activeProfile =
-    profiles.find((profile) => profile.id === selectedId) ?? profiles[0];
-  const profileId = activeProfile?.id ?? "";
+  const profileId = activeInstagramProfile?.id ?? "";
 
   const loadPosts = useCallback(
     () =>
@@ -49,7 +43,6 @@ export function useGrowthDashboard() {
     data: pastPosts,
     isLoading: isPostsLoading,
     error: postsError,
-    reload: reloadPosts,
   } = useFetch(loadPosts, []);
 
   const loadFollowers = useCallback(
@@ -63,14 +56,7 @@ export function useGrowthDashboard() {
     data: dailyFollowers,
     isLoading: isFollowersLoading,
     error: followersError,
-    reload: reloadFollowers,
   } = useFetch(loadFollowers, []);
-
-  useGrowthAccountsUpdated(async () => {
-    await reloadProfiles();
-    await reloadPosts();
-    await reloadFollowers();
-  });
 
   const posts = useMemo(
     () => pastPosts.map(mapPastPostToPostRow),
@@ -79,27 +65,15 @@ export function useGrowthDashboard() {
 
   const postsDataRows = useMemo(
     () =>
-      activeProfile ? aggregatePostsToDailyRows(pastPosts, activeProfile) : [],
-    [pastPosts, activeProfile],
+      activeInstagramProfile
+        ? aggregatePostsToDailyRows(pastPosts, activeInstagramProfile)
+        : [],
+    [pastPosts, activeInstagramProfile],
   );
 
   const interactionTotals = useMemo(
     () => sumPostInteractionTotals(pastPosts),
     [pastPosts],
-  );
-
-  const accountOptions = useMemo(
-    () =>
-      profiles.map((profile) => ({
-        value: profile.id,
-        label: `${profile.username} (Instagram)`,
-      })),
-    [profiles],
-  );
-
-  const activeAccount = useMemo(
-    () => (activeProfile ? profileToOrganicAccount(activeProfile) : undefined),
-    [activeProfile],
   );
 
   const followersGained = useMemo(
@@ -125,15 +99,15 @@ export function useGrowthDashboard() {
 
   return {
     accountOptions,
-    accountId: profileId,
-    setAccountId: setSelectedId,
+    accountId,
+    setAccountId,
     statCards,
     postsDataRows,
     contentTypeSplit,
-    isLoading: isProfilesLoading || isPostsLoading || isFollowersLoading,
-    error: profilesError || postsError || followersError,
+    isLoading: isAccountsLoading || isPostsLoading || isFollowersLoading,
+    error: accountsError || postsError || followersError,
     dateFilterProps,
     periodLabel,
-    hasAccounts: profiles.length > 0,
+    hasAccounts,
   };
 }
