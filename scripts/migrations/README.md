@@ -31,6 +31,7 @@ Run only migrations you have **not** applied yet, in order:
 | `017_growth_account_unique.sql` | Unique constraints on growth account Meta IDs |
 | `018_instagram_growth_phase1.sql` | Drops legacy growth metric tables; adds `instagram_profiles` + `past_posts_metrics` |
 | `019_past_posts_reposts.sql` | Adds `reposts` column to `past_posts_metrics` |
+| `020_past_posts_thumbnail.sql` | Adds `post_thumbnail` column to `past_posts_metrics` |
 
 Also rename `team_members.admin_team_role` → `team_role` in Supabase (Table Editor or SQL) before running app code that expects `team_role`.
 

@@ -403,6 +403,8 @@ export type IgBackfillMediaItem = {
   timestamp?: string;
   like_count?: number;
   comments_count?: number;
+  media_url?: string;
+  thumbnail_url?: string;
 };
 
 export type IgBackfillProfile = {
@@ -446,7 +448,8 @@ export async function fetchInstagramBackfillMedia(
     META_API_VERSION.instagramBackfill,
     `${instagramId}/media`,
     {
-      fields: "id,caption,media_type,media_product_type,timestamp,like_count,comments_count",
+      fields:
+        "id,caption,media_type,media_product_type,timestamp,like_count,comments_count,media_url,thumbnail_url",
       limit: "100",
       access_token: accessToken,
     },

@@ -114,6 +114,6 @@ export const DB = {
   PAST_POSTS_METRICS: {
     TABLE: "past_posts_metrics",
     SELECT:
-      "id, account_id, post_id, caption, media_type, created_at, reach, impressions, likes, comments, saves, shares, reposts",
+      "id, account_id, post_id, caption, media_type, created_at, reach, impressions, likes, comments, saves, shares, reposts, post_thumbnail",
   },
 } as const;

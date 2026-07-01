@@ -94,6 +94,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 34,
     reposts: 18,
     engagementRate: 7.4,
+    postThumbnail: null,
     postedAt: "2026-06-18T14:30:00.000Z",
   },
   {
@@ -108,6 +109,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 22,
     reposts: 11,
     engagementRate: 6.8,
+    postThumbnail: null,
     postedAt: "2026-06-10T11:00:00.000Z",
   },
   {
@@ -122,6 +124,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 12,
     reposts: 6,
     engagementRate: 5.2,
+    postThumbnail: null,
     postedAt: "2026-05-28T09:15:00.000Z",
   },
   {
@@ -136,6 +139,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 48,
     reposts: 32,
     engagementRate: 8.1,
+    postThumbnail: null,
     postedAt: "2026-05-12T16:45:00.000Z",
   },
   {
@@ -150,6 +154,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 8,
     reposts: 2,
     engagementRate: 4.6,
+    postThumbnail: null,
     postedAt: "2026-04-22T18:20:00.000Z",
   },
   {
@@ -164,6 +169,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 19,
     reposts: 9,
     engagementRate: 5.9,
+    postThumbnail: null,
     postedAt: "2026-03-15T10:00:00.000Z",
   },
   {
@@ -178,6 +184,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 62,
     reposts: 41,
     engagementRate: 9.2,
+    postThumbnail: null,
     postedAt: "2026-02-08T13:30:00.000Z",
   },
   {
@@ -192,6 +199,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 28,
     reposts: 14,
     engagementRate: 7.0,
+    postThumbnail: null,
     postedAt: "2026-01-20T12:00:00.000Z",
   },
   {
@@ -206,6 +214,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 38,
     reposts: 12,
     engagementRate: 6.1,
+    postThumbnail: null,
     postedAt: "2026-06-14T15:00:00.000Z",
   },
   {
@@ -220,6 +229,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 26,
     reposts: 8,
     engagementRate: 5.4,
+    postThumbnail: null,
     postedAt: "2026-05-20T11:30:00.000Z",
   },
   {
@@ -234,6 +244,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 14,
     reposts: 4,
     engagementRate: 4.8,
+    postThumbnail: null,
     postedAt: "2026-04-05T09:45:00.000Z",
   },
   {
@@ -248,6 +259,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 42,
     reposts: 6,
     engagementRate: 4.2,
+    postThumbnail: null,
     postedAt: "2026-03-02T08:00:00.000Z",
   },
   {
@@ -262,6 +274,7 @@ export const DUMMY_DASHBOARD_POSTS: PostRow[] = [
     shares: 44,
     reposts: 16,
     engagementRate: 6.5,
+    postThumbnail: null,
     postedAt: "2026-02-18T17:15:00.000Z",
   },
 ];

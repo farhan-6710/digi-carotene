@@ -45,6 +45,7 @@ export function mapPastPostToPostRow(post: PastPostMetric): PostRow {
     reposts: post.reposts,
     engagementRate: calcPostEngagementRate(post),
     postedAt: post.createdAt,
+    postThumbnail: post.postThumbnail,
   };
 }
 

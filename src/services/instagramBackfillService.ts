@@ -34,14 +34,28 @@ function isWithinBackfillWindow(timestamp?: string): boolean {
   return postedAt >= cutoff;
 }
 
+function resolvePostThumbnail(
+  item: IgBackfillMediaItem,
+  mediaType: InstagramDbMediaType,
+): string | null {
+  if (mediaType === "IMAGE" || mediaType === "CAROUSEL") {
+    return item.media_url?.trim() || null;
+  }
+  if (mediaType === "REEL" || mediaType === "VIDEO") {
+    return item.thumbnail_url?.trim() || item.media_url?.trim() || null;
+  }
+  return null;
+}
+
 function mapMediaToInsert(
   item: IgBackfillMediaItem,
+  mediaType: InstagramDbMediaType,
   insights: { reach: number; impressions: number; saves: number; shares: number; reposts: number },
 ): PastPostInsert {
   return {
     postId: item.id,
     caption: item.caption?.trim() || "(No caption)",
-    mediaType: mapMetaMediaTypeToDb(item.media_type, item.media_product_type),
+    mediaType,
     createdAt: item.timestamp ?? new Date().toISOString(),
     reach: insights.reach,
     impressions: insights.impressions,
@@ -50,6 +64,7 @@ function mapMediaToInsert(
     saves: insights.saves,
     shares: insights.shares,
     reposts: insights.reposts,
+    postThumbnail: resolvePostThumbnail(item, mediaType),
   };
 }
 
@@ -64,8 +79,9 @@ export async function runInstagram29DayBackfill(
 
   const posts: PastPostInsert[] = [];
   for (const item of recentMedia) {
+    const mediaType = mapMetaMediaTypeToDb(item.media_type, item.media_product_type);
     const insights = await fetchInstagramBackfillPostInsights(item.id, accessToken);
-    posts.push(mapMediaToInsert(item, insights));
+    posts.push(mapMediaToInsert(item, mediaType, insights));
   }
 
   await replacePastPostsForProfile(profileId, posts);

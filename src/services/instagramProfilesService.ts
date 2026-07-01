@@ -75,6 +75,19 @@ export async function updateInstagramProfileToken(
   if (error) throw new Error(error.message);
 }
 
+export async function fetchInstagramProfileById(
+  profileId: string,
+): Promise<InstagramProfile | null> {
+  const { data, error } = await supabase
+    .from(DB.INSTAGRAM_PROFILES.TABLE)
+    .select(DB.INSTAGRAM_PROFILES.SELECT)
+    .eq("id", profileId)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  return data ? mapProfile(data as ProfileRow) : null;
+}
+
 export async function fetchInstagramProfileByOrganicAccountId(
   organicAccountId: string,
 ): Promise<InstagramProfile | null> {

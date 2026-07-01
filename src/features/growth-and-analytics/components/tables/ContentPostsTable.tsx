@@ -1,3 +1,6 @@
+import { Link } from "react-router";
+
+import { buildGrowthPostDetailPath } from "../../constants/routes";
 import { DirectoryTable } from "@/shared/components/DirectoryTable";
 import { cn } from "@/shared/lib/utils";
 
@@ -38,9 +41,28 @@ export function ContentPostsTable({ rows }: ContentPostsTableProps) {
             GRID_CLASS,
           )}
         >
-          <div className="text-sm font-medium text-foreground">
+          <div className="min-w-0 text-sm font-medium text-foreground">
             <MobileLabel>POST</MobileLabel>
-            <span className="line-clamp-1">{row.caption}</span>
+            <div className="flex items-center gap-3">
+              {row.postThumbnail ? (
+                <img
+                  src={row.postThumbnail}
+                  alt=""
+                  className="size-10 shrink-0 rounded-md bg-muted object-cover"
+                />
+              ) : (
+                <div
+                  className="size-10 shrink-0 rounded-md bg-muted"
+                  aria-hidden
+                />
+              )}
+              <Link
+                to={buildGrowthPostDetailPath(row.id)}
+                className="line-clamp-1 min-w-0 text-primary hover:underline"
+              >
+                {row.caption}
+              </Link>
+            </div>
           </div>
           <div className="text-sm text-muted-foreground">
             <MobileLabel>TYPE</MobileLabel>

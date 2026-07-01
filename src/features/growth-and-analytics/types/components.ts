@@ -8,6 +8,7 @@ import type {
   ContentPostRow,
   DailyMetricRow,
   LabeledValue,
+  GrowthPostDetailView,
   OrganicAccount,
   OrganicAccountForm,
   ReportableAccount,
@@ -60,6 +61,10 @@ export type TopAccountsTableProps = {
 
 export type ContentPostsTableProps = {
   rows: ContentPostRow[];
+};
+
+export type GrowthPostProfileCardProps = {
+  view: GrowthPostDetailView;
 };
 
 export type CampaignTableProps = {

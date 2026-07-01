@@ -42,6 +42,10 @@ const GrowthContentPerformancePage = lazyRoutePage(
     ),
   "GrowthContentPerformancePage",
 );
+const GrowthPostDetailPage = lazyRoutePage(
+  () => import("@/features/growth-and-analytics/pages/GrowthPostDetailPage"),
+  "GrowthPostDetailPage",
+);
 const GrowthCampaignAnalyticsPage = lazyRoutePage(
   () =>
     import("@/features/growth-and-analytics/pages/GrowthCampaignAnalyticsPage"),
@@ -157,6 +161,10 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <GrowthDashboardPage /> },
       { path: "content-performance", element: <GrowthContentPerformancePage /> },
+      {
+        path: "content-performance/posts/:postId",
+        element: <GrowthPostDetailPage />,
+      },
       { path: "campaigns", element: <GrowthCampaignAnalyticsPage /> },
       { path: "custom-report", element: <GrowthCustomReportBuilderPage /> },
       { path: "reports", element: <GrowthReportsPage /> },

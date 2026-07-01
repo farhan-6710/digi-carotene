@@ -20,6 +20,7 @@ type PostRow = {
   saves: number;
   shares: number;
   reposts: number;
+  post_thumbnail: string | null;
 };
 
 function mapPost(row: PostRow): PastPostMetric {
@@ -37,6 +38,7 @@ function mapPost(row: PostRow): PastPostMetric {
     saves: row.saves,
     shares: row.shares,
     reposts: row.reposts ?? 0,
+    postThumbnail: row.post_thumbnail ?? null,
   };
 }
 
@@ -70,6 +72,17 @@ export async function fetchPastPostsForProfile(
   return ((data ?? []) as PostRow[]).map(mapPost);
 }
 
+export async function fetchPastPostById(id: string): Promise<PastPostMetric | null> {
+  const { data, error } = await supabase
+    .from(DB.PAST_POSTS_METRICS.TABLE)
+    .select(DB.PAST_POSTS_METRICS.SELECT)
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  return data ? mapPost(data as PostRow) : null;
+}
+
 export type PastPostInsert = {
   postId: string;
   caption: string;
@@ -82,6 +95,7 @@ export type PastPostInsert = {
   saves: number;
   shares: number;
   reposts: number;
+  postThumbnail: string | null;
 };
 
 export async function replacePastPostsForProfile(
@@ -112,6 +126,7 @@ export async function replacePastPostsForProfile(
         saves: post.saves,
         shares: post.shares,
         reposts: post.reposts,
+        post_thumbnail: post.postThumbnail,
       })),
     );
 

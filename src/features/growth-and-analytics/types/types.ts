@@ -48,6 +48,14 @@ export type PastPostMetric = {
   saves: number;
   shares: number;
   reposts: number;
+  postThumbnail: string | null;
+};
+
+export type GrowthPostDetailView = {
+  post: PastPostMetric;
+  accountUsername: string;
+  mediaTypeLabel: ContentPostRow["mediaType"];
+  engagementRate: number;
 };
 
 export type DailyMetricRow = {
@@ -81,6 +89,7 @@ export type PostRow = {
   reposts: number;
   engagementRate: number;
   postedAt: string;
+  postThumbnail: string | null;
 };
 
 export type CampaignMetricRow = {
@@ -137,6 +146,7 @@ export type ContentPostRow = {
   shares: number;
   reposts: number;
   engagementRate: number;
+  postThumbnail: string | null;
 };
 
 export type CampaignRow = {

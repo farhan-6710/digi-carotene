@@ -116,5 +116,6 @@ export function mapPostRows(posts: PostRow[]): ContentPostRow[] {
     shares: post.shares,
     reposts: post.reposts,
     engagementRate: post.engagementRate,
+    postThumbnail: post.postThumbnail,
   }));
 }
