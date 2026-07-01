@@ -1,6 +1,6 @@
 import { GrowthAccountComboBox } from "../components/GrowthAccountComboBox";
 import { GrowthDonutChart } from "../components/charts/GrowthDonutChart";
-import { GrowthTrendChart } from "../components/charts/GrowthTrendChart";
+import { GrowthPostsDataChart } from "../components/charts/GrowthPostsDataChart";
 import { useGrowthDashboard } from "../hooks/useGrowthDashboard";
 import { DateFilters } from "@/shared/components/DateFilters";
 import { ErrorBanner } from "@/shared/components/ErrorBanner";
@@ -14,7 +14,7 @@ export function GrowthDashboardPage() {
     accountId,
     setAccountId,
     statCards,
-    chartRows,
+    postsDataRows,
     contentTypeSplit,
     isLoading,
     error,
@@ -45,10 +45,10 @@ export function GrowthDashboardPage() {
       {hasAccounts ? (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <PageContent className="space-y-6 lg:col-span-2">
-            <GrowthTrendChart
-              title="Audience Growth & Reach"
-              description="Monthly trend for the selected metric."
-              rows={chartRows}
+            <GrowthPostsDataChart
+              title="Posts Data"
+              description="Monthly totals from synced posts for the selected metric."
+              rows={postsDataRows}
             />
           </PageContent>
 

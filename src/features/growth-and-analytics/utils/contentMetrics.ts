@@ -109,6 +109,7 @@ export function mapPostRows(posts: PostRow[]): ContentPostRow[] {
     caption: post.caption,
     mediaType: post.mediaType,
     reach: post.reach,
+    views: post.views,
     likes: post.likes,
     comments: post.comments,
     saves: post.saves,

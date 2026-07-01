@@ -1,4 +1,9 @@
 import { DB } from "@/services/db";
+import { rerunInstagramBackfillForOrganicAccount, runInstagram29DayBackfill } from "@/services/instagramBackfillService";
+import {
+  createInstagramProfile,
+  fetchInstagramProfileByOrganicAccountId,
+} from "@/services/instagramProfilesService";
 import {
   clearAdCachedMetrics,
   clearOrganicCachedMetrics,
@@ -146,7 +151,20 @@ export async function connectOrganicAccount(
     throw new Error(error.message);
   }
 
-  return mapOrganic(data as OrganicRow);
+  const account = mapOrganic(data as OrganicRow);
+
+  if (form.platform === "instagram") {
+    const profile = await createInstagramProfile({
+      instagramId: metaAccountId,
+      username: account.accountName,
+      accessToken: token,
+      followersCount: account.followers,
+      organicAccountId: account.id,
+    });
+    await runInstagram29DayBackfill(profile.id, metaAccountId, token);
+  }
+
+  return account;
 }
 
 export async function updateOrganicAccount(
@@ -178,8 +196,13 @@ export async function updateOrganicAccount(
   if (error) throw new Error(error.message);
 
   const account = mapOrganic(data as OrganicRow);
-  if (token) {
-    await clearOrganicCachedMetrics(id);
+
+  if (form.platform === "instagram" && token) {
+    const existingProfile = await fetchInstagramProfileByOrganicAccountId(id);
+    if (existingProfile) {
+      await clearOrganicCachedMetrics(id);
+      await rerunInstagramBackfillForOrganicAccount(id, token);
+    }
   }
 
   return account;

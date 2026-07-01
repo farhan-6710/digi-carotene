@@ -11,6 +11,7 @@ export type StatCardItem = {
   label: string;
   value: string;
   description?: string;
+  descriptionTooltip?: string;
   delta?: string;
   deltaLabel?: string;
   trend?: StatCardTrend;

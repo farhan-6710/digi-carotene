@@ -18,6 +18,34 @@ export type MetaAdInfo = {
 export type InteractionTotals = {
   likes: number;
   comments: number;
+  saves: number;
+  shares: number;
+  reposts: number;
+  views: number;
+};
+
+export type InstagramDbMediaType = "REEL" | "IMAGE" | "CAROUSEL" | "VIDEO";
+
+export type InstagramProfile = {
+  id: string;
+  instagramId: string;
+  username: string;
+  followersCount: number;
+  organicAccountId: string | null;
+};
+
+export type PastPostMetric = {
+  id: string;
+  accountId: string;
+  postId: string;
+  caption: string;
+  mediaType: InstagramDbMediaType;
+  createdAt: string;
+  reach: number;
+  impressions: number;
+  likes: number;
+  comments: number;
+  saves: number;
   shares: number;
   reposts: number;
 };
@@ -45,6 +73,7 @@ export type PostRow = {
   caption: string;
   mediaType: ContentPostRow["mediaType"];
   reach: number;
+  views: number;
   likes: number;
   comments: number;
   saves: number;
@@ -101,6 +130,7 @@ export type ContentPostRow = {
   caption: string;
   mediaType: "Reel" | "Image" | "Carousel" | "Story";
   reach: number;
+  views: number;
   likes: number;
   comments: number;
   saves: number;

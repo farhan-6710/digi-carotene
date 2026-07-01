@@ -1,68 +1,92 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-import {
-  DUMMY_DASHBOARD_ACCOUNTS,
-  getDummyMetricsForAccount,
-  getDummyPostsForAccount,
-} from "../constants/dashboardData";
-import type { OrganicAccount } from "../types/types";
+import { fetchInstagramProfiles } from "@/services/instagramProfilesService";
+import { fetchPastPostsForProfile } from "@/services/pastPostsMetricsService";
+import { useFetch } from "@/shared/hooks/useFetch";
+
+import type { InstagramProfile } from "../types/types";
 import { buildDashboardStatCards } from "../utils/dashboardMetrics";
-import {
-  filterMetricsByRange,
-  filterPostsByRange,
-  sumInteractionTotals,
-} from "../utils/dashboardDataFilters";
 import { buildContentTypeSplit } from "../utils/contentMetrics";
+import {
+  aggregatePostsToDailyRows,
+  mapPastPostToPostRow,
+  profileToOrganicAccount,
+  sumPostInteractionTotals,
+} from "../utils/instagramPostMetrics";
+import { useGrowthAccountsUpdated } from "./useGrowthAccountsUpdated";
 import { useGrowthDateRange } from "./useGrowthDateRange";
 
-function platformLabel(account: OrganicAccount): string {
-  return account.platform === "instagram" ? "Instagram" : "Facebook";
-}
+const NO_PROFILES: InstagramProfile[] = [];
 
 export function useGrowthDashboard() {
   const { range, dateFilterProps, periodLabel } = useGrowthDateRange();
-  const accounts = DUMMY_DASHBOARD_ACCOUNTS;
 
-  const [selectedId, setSelectedId] = useState(accounts[0]?.id ?? "");
-  const activeAccount =
-    accounts.find((account) => account.id === selectedId) ?? accounts[0];
-  const accountId = activeAccount?.id ?? "";
+  const loadProfiles = useCallback(() => fetchInstagramProfiles(), []);
+  const {
+    data: profiles,
+    isLoading: isProfilesLoading,
+    error: profilesError,
+    reload: reloadProfiles,
+  } = useFetch(loadProfiles, NO_PROFILES);
 
-  const metrics = useMemo(
-    () => filterMetricsByRange(getDummyMetricsForAccount(accountId), range),
-    [accountId, range],
+  const [selectedId, setSelectedId] = useState("");
+  const activeProfile =
+    profiles.find((profile) => profile.id === selectedId) ?? profiles[0];
+  const profileId = activeProfile?.id ?? "";
+
+  const loadPosts = useCallback(
+    () =>
+      profileId
+        ? fetchPastPostsForProfile(profileId, range)
+        : Promise.resolve([]),
+    [profileId, range],
   );
+  const {
+    data: pastPosts,
+    isLoading: isPostsLoading,
+    error: postsError,
+    reload: reloadPosts,
+  } = useFetch(loadPosts, []);
+
+  useGrowthAccountsUpdated(async () => {
+    await reloadProfiles();
+    await reloadPosts();
+  });
 
   const posts = useMemo(
-    () => filterPostsByRange(getDummyPostsForAccount(accountId), range),
-    [accountId, range],
+    () => pastPosts.map(mapPastPostToPostRow),
+    [pastPosts],
+  );
+
+  const postsDataRows = useMemo(
+    () =>
+      activeProfile ? aggregatePostsToDailyRows(pastPosts, activeProfile) : [],
+    [pastPosts, activeProfile],
   );
 
   const interactionTotals = useMemo(
-    () => sumInteractionTotals(metrics),
-    [metrics],
+    () => sumPostInteractionTotals(pastPosts),
+    [pastPosts],
   );
 
   const accountOptions = useMemo(
     () =>
-      accounts.map((account) => ({
-        value: account.id,
-        label: `${account.accountName} (${platformLabel(account)})`,
+      profiles.map((profile) => ({
+        value: profile.id,
+        label: `${profile.username} (Instagram)`,
       })),
-    [accounts],
+    [profiles],
   );
 
-  const showTotalFollowers = !range.from && !range.to;
+  const activeAccount = useMemo(
+    () => (activeProfile ? profileToOrganicAccount(activeProfile) : undefined),
+    [activeProfile],
+  );
 
   const statCards = useMemo(
     () =>
-      buildDashboardStatCards(
-        metrics,
-        activeAccount,
-        interactionTotals,
-        showTotalFollowers,
-      ),
-    [metrics, activeAccount, interactionTotals, showTotalFollowers],
+      buildDashboardStatCards(postsDataRows, activeAccount, interactionTotals),
+    [postsDataRows, activeAccount, interactionTotals],
   );
 
   const contentTypeSplit = useMemo(
@@ -72,15 +96,15 @@ export function useGrowthDashboard() {
 
   return {
     accountOptions,
-    accountId,
+    accountId: profileId,
     setAccountId: setSelectedId,
     statCards,
-    chartRows: metrics,
+    postsDataRows,
     contentTypeSplit,
-    isLoading: false,
-    error: null,
+    isLoading: isProfilesLoading || isPostsLoading,
+    error: profilesError || postsError,
     dateFilterProps,
     periodLabel,
-    hasAccounts: accounts.length > 0,
+    hasAccounts: profiles.length > 0,
   };
 }

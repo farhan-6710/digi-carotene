@@ -27,7 +27,7 @@ export type GrowthChartCardProps = {
   children: ReactNode;
 };
 
-export type GrowthTrendChartProps = {
+export type GrowthPostsDataChartProps = {
   title: string;
   description?: string;
   rows: DailyMetricRow[];

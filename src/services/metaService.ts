@@ -395,4 +395,97 @@ export function getDefaultSyncRange(): MetaSyncRange {
   return getMetaSyncRange();
 }
 
+export type IgBackfillMediaItem = {
+  id: string;
+  caption?: string;
+  media_type?: string;
+  media_product_type?: string;
+  timestamp?: string;
+  like_count?: number;
+  comments_count?: number;
+};
+
+export type IgBackfillProfile = {
+  username: string;
+  followersCount: number;
+};
+
+function parseInsightMetricValue(
+  metrics: Array<{ name?: string; values?: Array<{ value?: number }> }> | undefined,
+  name: string,
+): number {
+  const metric = metrics?.find((item) => item.name === name);
+  const value = metric?.values?.[0]?.value;
+  return typeof value === "number" ? value : 0;
+}
+
+export async function fetchInstagramBackfillProfile(
+  instagramId: string,
+  accessToken: string,
+): Promise<IgBackfillProfile> {
+  const data = await graphGet(
+    META_API_VERSION.instagramBackfill,
+    instagramId,
+    {
+      fields: "followers_count,username",
+      access_token: accessToken,
+    },
+  );
+
+  return {
+    username: (data.username as string) ?? "",
+    followersCount: (data.followers_count as number) ?? 0,
+  };
+}
+
+export async function fetchInstagramBackfillMedia(
+  instagramId: string,
+  accessToken: string,
+): Promise<IgBackfillMediaItem[]> {
+  return graphGetAll<IgBackfillMediaItem>(
+    META_API_VERSION.instagramBackfill,
+    `${instagramId}/media`,
+    {
+      fields: "id,caption,media_type,media_product_type,timestamp,like_count,comments_count",
+      limit: "100",
+      access_token: accessToken,
+    },
+  );
+}
+
+export async function fetchInstagramBackfillPostInsights(
+  mediaId: string,
+  accessToken: string,
+): Promise<{ reach: number; impressions: number; saves: number; shares: number; reposts: number }> {
+  async function fetchMetric(metric: string): Promise<number> {
+    try {
+      const data = (await graphGet(
+        META_API_VERSION.instagramBackfill,
+        `${mediaId}/insights`,
+        {
+          metric,
+          period: "lifetime",
+          access_token: accessToken,
+        },
+      )) as { data?: Array<{ name?: string; values?: Array<{ value?: number }> }> };
+
+      return parseInsightMetricValue(data.data, metric);
+    } catch {
+      return 0;
+    }
+  }
+
+  // v24+ deprecated `impressions` on newer media — use `views` and store as impressions.
+  // One metric per request avoids a single unsupported metric 400'ing the whole batch.
+  const [reach, views, saves, shares, reposts] = await Promise.all([
+    fetchMetric("reach"),
+    fetchMetric("views"),
+    fetchMetric("saved"),
+    fetchMetric("shares"),
+    fetchMetric("reposts"),
+  ]);
+
+  return { reach, impressions: views, saves, shares, reposts };
+}
+
 export { mapIgMediaType };

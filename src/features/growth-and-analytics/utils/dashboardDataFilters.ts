@@ -50,9 +50,11 @@ export function sumInteractionTotals(rows: DailyMetricRow[]): InteractionTotals 
     (totals, row) => ({
       likes: totals.likes + row.likes,
       comments: totals.comments + row.comments,
+      saves: totals.saves + row.saves,
       shares: totals.shares + row.shares,
       reposts: totals.reposts + row.reposts,
+      views: totals.views + row.impressions,
     }),
-    { likes: 0, comments: 0, shares: 0, reposts: 0 },
+    { likes: 0, comments: 0, saves: 0, shares: 0, reposts: 0, views: 0 },
   );
 }

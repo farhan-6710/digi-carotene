@@ -107,23 +107,13 @@ export const DB = {
     TABLE: "growth_ad_accounts",
     SELECT: "id, client_name, account_name, ad_account_id, currency, created_at",
   },
-  GROWTH_DAILY_METRICS: {
-    TABLE: "growth_daily_metrics",
-    SELECT:
-      "account_id, metric_date, followers, new_followers, reach, impressions, engagement",
+  INSTAGRAM_PROFILES: {
+    TABLE: "instagram_profiles",
+    SELECT: "id, instagram_id, username, followers_count, organic_account_id, created_at",
   },
-  GROWTH_POSTS: {
-    TABLE: "growth_posts",
+  PAST_POSTS_METRICS: {
+    TABLE: "past_posts_metrics",
     SELECT:
-      "id, account_id, caption, media_type, reach, likes, comments, saves, engagement_rate, posted_at",
-  },
-  GROWTH_CAMPAIGN_METRICS: {
-    TABLE: "growth_campaign_metrics",
-    SELECT:
-      "ad_account_id, campaign_name, status, spend, impressions, clicks, conversions, metric_date",
-  },
-  GROWTH_REPORTS: {
-    TABLE: "growth_reports",
-    SELECT: "id, title, type, platform, period_start, period_end, created_at",
+      "id, account_id, post_id, caption, media_type, created_at, reach, impressions, likes, comments, saves, shares, reposts",
   },
 } as const;

@@ -28,6 +28,9 @@ Run only migrations you have **not** applied yet, in order:
 | `013_post_approval_requests.sql` | Backdated post approval requests for executives |
 | `015_ensure_profile_link_triggers.sql` | Re-create profile auto-link triggers + signup hook; ensure `link_profile_by_email` sets `profiles.role = 'team'` and grant its execute (idempotent) |
 | `016_growth_and_analytics.sql` | Growth & Analytics tables (schema only, no seed data) with anon-accessible RLS |
+| `017_growth_account_unique.sql` | Unique constraints on growth account Meta IDs |
+| `018_instagram_growth_phase1.sql` | Drops legacy growth metric tables; adds `instagram_profiles` + `past_posts_metrics` |
+| `019_past_posts_reposts.sql` | Adds `reposts` column to `past_posts_metrics` |
 
 Also rename `team_members.admin_team_role` → `team_role` in Supabase (Table Editor or SQL) before running app code that expects `team_role`.
 

@@ -6,7 +6,7 @@ import type { ContentPostsTableProps } from "../../types/components";
 import { formatCompact, formatPercent } from "../../utils/formatters";
 
 const GRID_CLASS =
-  "grid-cols-[2fr_0.65fr_0.65fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.65fr]";
+  "grid-cols-[2fr_0.65fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.55fr_0.65fr]";
 
 export function ContentPostsTable({ rows }: ContentPostsTableProps) {
   return (
@@ -18,6 +18,7 @@ export function ContentPostsTable({ rows }: ContentPostsTableProps) {
         { label: "POST" },
         { label: "TYPE" },
         { label: "REACH", align: "right" },
+        { label: "VIEWS", align: "right" },
         { label: "LIKES", align: "right" },
         { label: "COMMENTS", align: "right" },
         { label: "SAVES", align: "right" },
@@ -48,6 +49,10 @@ export function ContentPostsTable({ rows }: ContentPostsTableProps) {
           <div className="text-right font-mono text-sm text-foreground">
             <MobileLabel>REACH</MobileLabel>
             {formatCompact(row.reach)}
+          </div>
+          <div className="text-right font-mono text-sm text-foreground">
+            <MobileLabel>VIEWS</MobileLabel>
+            {formatCompact(row.views)}
           </div>
           <div className="text-right font-mono text-sm text-foreground">
             <MobileLabel>LIKES</MobileLabel>

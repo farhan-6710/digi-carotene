@@ -1,47 +1,74 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-import {
-  DUMMY_DASHBOARD_ACCOUNTS,
-  getDummyPostsForAccount,
-} from "../constants/dashboardData";
-import type { OrganicAccount } from "../types/types";
+import { fetchInstagramProfiles } from "@/services/instagramProfilesService";
+import { fetchPastPostsForProfile } from "@/services/pastPostsMetricsService";
+import { useFetch } from "@/shared/hooks/useFetch";
+
+import type { InstagramProfile } from "../types/types";
 import {
   buildContentStatCards,
   buildContentTypeSplit,
   buildEngagementByType,
   mapPostRows,
 } from "../utils/contentMetrics";
-import { filterPostsByRange } from "../utils/dashboardDataFilters";
+import {
+  mapPastPostToPostRow,
+} from "../utils/instagramPostMetrics";
 import { saveGrowthReport } from "../utils/generateReport";
 import { resolveGrowthReportPeriod } from "../utils/reportPeriod";
+import { useGrowthAccountsUpdated } from "./useGrowthAccountsUpdated";
 import { useGrowthDateRange } from "./useGrowthDateRange";
 
-function platformLabel(account: OrganicAccount): string {
-  return account.platform === "instagram" ? "Instagram" : "Facebook";
-}
+const NO_PROFILES: InstagramProfile[] = [];
 
 export function useGrowthContentPerformance() {
   const { range, dateFilterProps, periodLabel } = useGrowthDateRange();
-  const accounts = DUMMY_DASHBOARD_ACCOUNTS;
 
-  const [selectedId, setSelectedId] = useState(accounts[0]?.id ?? "");
+  const loadProfiles = useCallback(() => fetchInstagramProfiles(), []);
+  const {
+    data: profiles,
+    isLoading: isProfilesLoading,
+    error: profilesError,
+    reload: reloadProfiles,
+  } = useFetch(loadProfiles, NO_PROFILES);
+
+  const [selectedId, setSelectedId] = useState("");
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
-  const activeAccount =
-    accounts.find((account) => account.id === selectedId) ?? accounts[0];
-  const accountId = activeAccount?.id ?? "";
+  const activeProfile =
+    profiles.find((profile) => profile.id === selectedId) ?? profiles[0];
+  const profileId = activeProfile?.id ?? "";
+
+  const loadPosts = useCallback(
+    () =>
+      profileId
+        ? fetchPastPostsForProfile(profileId, range)
+        : Promise.resolve([]),
+    [profileId, range],
+  );
+  const {
+    data: pastPosts,
+    isLoading: isPostsLoading,
+    error: postsError,
+    reload: reloadPosts,
+  } = useFetch(loadPosts, []);
+
+  useGrowthAccountsUpdated(async () => {
+    await reloadProfiles();
+    await reloadPosts();
+  });
 
   const posts = useMemo(
-    () => filterPostsByRange(getDummyPostsForAccount(accountId), range),
-    [accountId, range],
+    () => pastPosts.map(mapPastPostToPostRow),
+    [pastPosts],
   );
 
   const accountOptions = useMemo(
     () =>
-      accounts.map((account) => ({
-        value: account.id,
-        label: `${account.accountName} (${platformLabel(account)})`,
+      profiles.map((profile) => ({
+        value: profile.id,
+        label: `${profile.username} (Instagram)`,
       })),
-    [accounts],
+    [profiles],
   );
 
   const statCards = useMemo(() => buildContentStatCards(posts), [posts]);
@@ -50,15 +77,15 @@ export function useGrowthContentPerformance() {
   const postRows = useMemo(() => mapPostRows(posts), [posts]);
 
   const generateReport = async () => {
-    if (!activeAccount) return;
+    if (!activeProfile) return;
 
     const { periodStart, periodEnd } = resolveGrowthReportPeriod(range);
     setIsGeneratingReport(true);
     try {
       await saveGrowthReport({
-        title: `${activeAccount.accountName} — Content Performance`,
+        title: `${activeProfile.username} — Content Performance`,
         type: "content_performance",
-        platform: activeAccount.platform,
+        platform: "instagram",
         periodStart,
         periodEnd,
       });
@@ -69,18 +96,18 @@ export function useGrowthContentPerformance() {
 
   return {
     accountOptions,
-    accountId,
+    accountId: profileId,
     setAccountId: setSelectedId,
     statCards,
     typeSplit,
     engagementByType,
     postRows,
-    isLoading: false,
-    error: null,
+    isLoading: isProfilesLoading || isPostsLoading,
+    error: profilesError || postsError,
     dateFilterProps,
     periodLabel,
     generateReport,
     isGeneratingReport,
-    hasAccounts: accounts.length > 0,
+    hasAccounts: profiles.length > 0,
   };
 }

@@ -1,36 +1,11 @@
-import { DB } from "@/services/db";
-import { supabase } from "@/services/supabaseClient";
+import { clearPastPostsForOrganicAccount } from "@/services/pastPostsMetricsService";
 
-async function clearDailyMetrics(accountId: string): Promise<void> {
-  const { error } = await supabase
-    .from(DB.GROWTH_DAILY_METRICS.TABLE)
-    .delete()
-    .eq("account_id", accountId);
-  if (error) throw new Error(error.message);
-}
-
-async function clearPosts(accountId: string): Promise<void> {
-  const { error } = await supabase
-    .from(DB.GROWTH_POSTS.TABLE)
-    .delete()
-    .eq("account_id", accountId);
-  if (error) throw new Error(error.message);
-}
-
-async function clearAdMetrics(adAccountId: string): Promise<void> {
-  const { error } = await supabase
-    .from(DB.GROWTH_CAMPAIGN_METRICS.TABLE)
-    .delete()
-    .eq("ad_account_id", adAccountId);
-  if (error) throw new Error(error.message);
-}
-
-/** Clears stale cached metrics after a token refresh (pages fetch live from Meta). */
+/** Clears stored post metrics after a token refresh (re-backfill runs separately). */
 export async function clearOrganicCachedMetrics(accountId: string): Promise<void> {
-  await clearDailyMetrics(accountId);
-  await clearPosts(accountId);
+  await clearPastPostsForOrganicAccount(accountId);
 }
 
 export async function clearAdCachedMetrics(adAccountId: string): Promise<void> {
-  await clearAdMetrics(adAccountId);
+  void adAccountId;
+  // Phase 1 — ad campaign metrics remain UI-only dummy data.
 }

@@ -10,32 +10,34 @@ import {
 import { ComboBox } from "@/shared/ui/ComboBox";
 
 import { GrowthChartCard } from "./GrowthChartCard";
-import type { GrowthTrendChartProps } from "../../types/components";
+import type { GrowthPostsDataChartProps } from "../../types/components";
 import {
-  DASHBOARD_TREND_METRICS,
-  type DashboardTrendMetric,
-} from "../../constants/dashboardTrend";
-import { buildTrend } from "../../utils/dashboardMetrics";
+  DASHBOARD_POSTS_DATA_METRICS,
+  type DashboardPostsDataMetric,
+} from "../../constants/dashboardPostsData";
+import { buildPostsDataTrend } from "../../utils/dashboardPostsData";
 import { formatCompact } from "../../utils/formatters";
 
-const metricOptions = DASHBOARD_TREND_METRICS.map((metric) => ({
+const metricOptions = DASHBOARD_POSTS_DATA_METRICS.map((metric) => ({
   value: metric.id,
   label: metric.label,
 }));
 
-export function GrowthTrendChart({
+export function GrowthPostsDataChart({
   title,
   description,
   rows,
-}: GrowthTrendChartProps) {
-  const [metric, setMetric] = useState<DashboardTrendMetric>("reach");
+}: GrowthPostsDataChartProps) {
+  const [metric, setMetric] = useState<DashboardPostsDataMetric>("reach");
 
-  const data = useMemo(() => buildTrend(rows, metric), [rows, metric]);
+  const data = useMemo(() => buildPostsDataTrend(rows, metric), [rows, metric]);
 
   const chartConfig = useMemo<ChartConfig>(
     () => ({
       value: {
-        label: metricOptions.find((option) => option.value === metric)?.label ?? "Value",
+        label:
+          metricOptions.find((option) => option.value === metric)?.label ??
+          "Value",
         color: "var(--chart-1)",
       },
     }),
@@ -54,7 +56,7 @@ export function GrowthTrendChart({
         <div className="w-[160px]">
           <ComboBox
             value={metric}
-            onChange={(value) => setMetric(value as DashboardTrendMetric)}
+            onChange={(value) => setMetric(value as DashboardPostsDataMetric)}
             options={metricOptions}
             listTitle="Metric"
             mode="value"
@@ -65,7 +67,7 @@ export function GrowthTrendChart({
       <ChartContainer config={chartConfig} className="aspect-auto h-[300px] w-full">
         <AreaChart data={data} margin={{ left: -8, right: 8, top: 8 }}>
           <defs>
-            <linearGradient id="growthTrendMetric" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="growthPostsDataMetric" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="var(--color-value)" stopOpacity={0.3} />
               <stop offset="95%" stopColor="var(--color-value)" stopOpacity={0} />
             </linearGradient>
@@ -98,7 +100,7 @@ export function GrowthTrendChart({
             dataKey="value"
             stroke="var(--color-value)"
             strokeWidth={2}
-            fill="url(#growthTrendMetric)"
+            fill="url(#growthPostsDataMetric)"
           />
         </AreaChart>
       </ChartContainer>
